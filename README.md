@@ -4,7 +4,7 @@ A dashboard displaying air quality data collected from sensors across Wollongong
 
 ## Quick start
 
-#### Install dependencies
+### Install dependencies
 
 ```powershell
 # server dependencies
@@ -14,15 +14,20 @@ npm install
 npm run client-install
 ```
 
-#### Start
+### Create `.env` file with credentials in root directory
+
+```
+PGUSER=dbuser
+PGHOST=database.server.com
+PGPASSWORD=secretpassword
+PGDATABASE=mydb
+PGPORT=3211
+```
+
+### Start
 
 ```powershell
-# insert database user credentials then run server and client concurrently
-PGUSER=dbuser \
-PGHOST=database.server.com \
-PGPASSWORD=secretpassword \
-PGDATABASE=mydb \
-PGPORT=3211 \
+# run server and client concurrently
 npm run dev
 ```
 
