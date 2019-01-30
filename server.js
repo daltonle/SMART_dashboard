@@ -17,6 +17,11 @@ if (app.get('env') === 'production')
   app.use(morgan('combined'))
 else app.use(morgan('dev', {stream: accessLogStream}))
 
+// immport routers
+const sensors = require('./routes/sensors')
+
+app.use('/sensors', sensors)
+
 
 // start server
 const server = app.listen(port, () => {
