@@ -15,12 +15,4 @@ if (app.get('env') === 'production')
   app.use(morgan('combined'))
 else app.use(morgan('dev', {stream: accessLogStream}))
 
-const db = require('./db/index');
-db.query('SELECT * FROM aq_sensor', (err, res) => {
-  if (err) {
-    console.log(err)
-  }
-  console.log(res)
-})
-
 
