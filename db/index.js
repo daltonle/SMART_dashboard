@@ -1,3 +1,14 @@
+/**
+ * @file db/index.js
+ * Start a pool to connect to remote database using node-postgres npm package.
+ * 
+ * Environment variables are used as credentials to avoid leaving sensitive information
+ * hardcoded in the source file.
+ * 
+ * Manages all database interactions for benefits suggested in 
+ * https://node-postgres.com/guides/project-structure#example
+ */
+
 const { Pool } = require('pg')
 
 const config = {
