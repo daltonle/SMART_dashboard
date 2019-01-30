@@ -1,0 +1,9 @@
+@import './styles/colors.scss';
+@import './styles/font.scss';
+
+.App {
+  text-align: center;
+  color: $red;
+  font-family: $font-family;
+  font-weight: $font-weight-light;
+}
