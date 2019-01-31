@@ -19,11 +19,12 @@ import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS } from "./types";
       }
     ]
   }
- */
+
+**/
 
 const initialState = {}
 
-export default mapReducer = (state = initialState, action) => {
+const mapReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_AIR_MARKERS:
       return {
@@ -38,6 +39,9 @@ export default mapReducer = (state = initialState, action) => {
       }
       break
     default:
+      return state
       break
   }
 }
+
+export default mapReducer
