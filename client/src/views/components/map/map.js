@@ -1,13 +1,27 @@
 import React, { Component } from 'react'
-//import PropTypes from 'prop-types'
-//import { connect } from 'react-redux'
-import { withGoogleMap, GoogleMap } from 'react-google-maps'
-import { InfoBox } from 'react-google-maps/lib/components/addons/InfoBox'
+import propTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { addAirMarkers } from '../../../state/ducks/map/actions'
+import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { mapStyles } from './MapStyles'
 import './map.module.scss'
 
 class Map extends Component {
+  componentDidMount = () => {
+    this.props.addAirMarkers()
+  }
+
   render() {
+    let markers
+    if (this.props.airMarkers !== undefined) {
+      markers = this.props.airMarkers.map( (marker, index) => (
+        <Marker
+          key = {index}
+          position = {{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
+          icon = {{url:require('../../../assets/img/marker_lvl1.svg')}}
+        />
+      ))
+    }
     const StyledMap = withGoogleMap(props => (
       <GoogleMap
         defaultCenter = { { lat: -34.4054, lng: 150.8784 } }
@@ -18,6 +32,7 @@ class Map extends Component {
           mapTypeControl: false
         }}
       >
+        { markers }
       </GoogleMap>
     ));
 
@@ -32,4 +47,18 @@ class Map extends Component {
   }
 }
 
-export default Map
+Map.propTypes = {
+  airMarkers: propTypes.array,
+  visualMarkers: propTypes.array
+}
+
+const mapStateToProps = state => ({
+  airMarkers: state.map.airMarkers,
+  visualMarkers: state.map.visualMarkers
+});
+
+const mapDispatchToProps = {
+  addAirMarkers
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map)

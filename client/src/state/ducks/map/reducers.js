@@ -31,16 +31,13 @@ const mapReducer = (state = initialState, action) => {
         ...state,
         airMarkers: action.payload
       }
-      break
     case ADD_VISUAL_MARKERS:
       return {
         ...state,
         visualMarkers: action.payload
       }
-      break
     default:
       return state
-      break
   }
 }
 
