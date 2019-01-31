@@ -19,9 +19,10 @@ else app.use(morgan('dev', {stream: accessLogStream}))
 
 // immport routers
 const sensors = require('./routes/sensors')
+const sensorData = require('./routes/sensorData')
 
 app.use('/sensors', sensors)
-
+app.use('/sensor-data', sensorData)
 
 // start server
 const server = app.listen(port, () => {
