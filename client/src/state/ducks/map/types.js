@@ -1,0 +1,2 @@
+export const ADD_AIR_MARKERS = 'map/ADD_AIR_MARKERS'
+export const ADD_VISUAL_MARKERS  = 'map/ADD_VISUAL_MARKERS'
