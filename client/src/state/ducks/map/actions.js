@@ -1,6 +1,7 @@
 import {
   ADD_AIR_MARKERS,
-  ADD_VISUAL_MARKERS 
+  ADD_VISUAL_MARKERS,
+  CHANGE_LAYER
 } from './types'
 
 export const addAirMarkers = () => dispatch => {
@@ -21,4 +22,11 @@ export const addVisualMarkers = () => dispatch => {
     payload: res
   }))
   .catch(err => console.log(err))
+}
+
+export const changeLayer = () => (dispatch, getState) => {
+  dispatch({
+    type: CHANGE_LAYER,
+    payload: !getState().map.isAirLayer
+  })
 }

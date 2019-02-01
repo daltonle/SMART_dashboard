@@ -2,35 +2,51 @@ import React, { Component } from 'react'
 import propTypes from 'prop-types'
 import { compose, withProps, withHandlers } from 'recompose'
 import { connect } from 'react-redux'
-import { addAirMarkers } from '../../../state/ducks/map/actions'
-import { withGoogleMap, withScriptjs, GoogleMap, Marker } from 'react-google-maps'
+import { addAirMarkers, addVisualMarkers } from '../../../state/ducks/map/actions'
+import { withGoogleMap, GoogleMap, Marker, ControlPosition } from 'react-google-maps'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import { mapStyles } from './MapStyles'
 import './map.module.scss'
 
-
-
 class Map extends Component {
   componentDidMount = () => {
     this.props.addAirMarkers()
+    this.props.addVisualMarkers()
   }
 
   render() {
     // load markers
     let markers
-    if (this.props.airMarkers !== undefined) {
-      markers = this.props.airMarkers.map( (marker, index) => (
+    if (this.props.isAirLayer && this.props.airMarkers !== undefined) {
+      // some fake data
+      // TODO: remove fake data
+      let airMarkers = [
+        {lat: -34.4054, long: 150.8784},
+        {lat: -40.4054, long: 160.8784},
+        ...this.props.airMarkers
+      ]
+
+      markers = airMarkers.map( (marker, index) => (
         <Marker
           key = {index}
           position = {{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
-          icon = {{url:require('../../../assets/img/marker_lvl1.svg')}}
+          icon = {{url:require('../../../assets/icons/marker_lvl1.svg')}}
+        />
+      ))
+    }
+    else if (!this.props.isAirLayer && this.props.visualMarkers !== undefined) {
+      markers = this.props.visualMarkers.map( (marker, index) => (
+        <Marker
+          key = {index}
+          position = {{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
+          icon = {{url:require('../../../assets/icons/marker_lvl1.svg')}}
         />
       ))
     }
 
     const StyledMap = compose(
       withProps({
-        loadingElement: <div style={{ height: `100%` }} /> ,
+        loadingElement: <div style={{ height: `100%` }} />,
         containerElement: <div style={{ height: `100vh` }} />,
         mapElement: <div style={{ height: `100%` }} />,
       }),
@@ -49,7 +65,11 @@ class Map extends Component {
         defaultOptions = {{
           styles: mapStyles, 
           streetViewControl: false,
-          mapTypeControl: false
+          mapTypeControl: false,
+          fullscreenControl: false
+        }}
+        zoomControlOptions = {{
+          position: window.google.maps.ControlPosition.TOP_RIGHT
         }}
       >
         <MarkerClusterer
@@ -57,6 +77,16 @@ class Map extends Component {
           averageCenter
           enableRetinaIcons
           gridSize={60}
+          styles={[
+            {
+              url: require('../../../assets/icons/marker_clusterer.svg'),
+              width: 56,
+              height: 56,
+              textColor: '#ffffff',
+              textSize: 12,
+              anchorText: [0,0]
+            }
+          ]}
         >
           { markers }
         </MarkerClusterer>
@@ -64,25 +94,26 @@ class Map extends Component {
     )
 
     return(
-      <div>
-        <StyledMap />
-      </div>
+      <StyledMap />
     );
   }
 }
 
 Map.propTypes = {
   airMarkers: propTypes.array,
-  visualMarkers: propTypes.array
+  visualMarkers: propTypes.array,
+  isAirLayer: propTypes.bool
 }
 
 const mapStateToProps = state => ({
   airMarkers: state.map.airMarkers,
-  visualMarkers: state.map.visualMarkers
-});
+  visualMarkers: state.map.visualMarkers,
+  isAirLayer: state.map.isAirLayer
+})
 
 const mapDispatchToProps = {
-  addAirMarkers
+  addAirMarkers,
+  addVisualMarkers
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map)

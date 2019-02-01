@@ -1,4 +1,4 @@
-import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS } from "./types";
+import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS, CHANGE_LAYER } from "./types";
 
 /**
   State tree
@@ -22,7 +22,9 @@ import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS } from "./types";
 
 **/
 
-const initialState = {}
+const initialState = {
+  isAirLayer: true
+}
 
 const mapReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -35,6 +37,11 @@ const mapReducer = (state = initialState, action) => {
       return {
         ...state,
         visualMarkers: action.payload
+      }
+    case CHANGE_LAYER:
+      return {
+        ...state,
+        isAirLayer: action.payload
       }
     default:
       return state
