@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './App.scss'
 import { Provider } from 'react-redux'
 import store from './state/store'
-import Map from './views/components/map/Map'
+import Map from './views/components/map/map'
 
 class App extends Component {
   render() {
