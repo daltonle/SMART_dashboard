@@ -6,7 +6,6 @@ import { addAirMarkers, addVisualMarkers } from '../../../state/ducks/map/action
 import { withGoogleMap, GoogleMap, Marker, ControlPosition } from 'react-google-maps'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import { mapStyles } from './MapStyles'
-import './map.module.scss'
 
 class Map extends Component {
   componentDidMount = () => {
