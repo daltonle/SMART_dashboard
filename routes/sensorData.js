@@ -24,7 +24,7 @@ router.get('/air/:id', (req, res, next) => {
 // retrieve visual data of a sensor
 router.get('/visual/:id', (req, res, next) => {
   let query = {
-    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss'), type, count FROM vs_data
+    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss'), type, count FROM vs_count
       WHERE id_vs=$1::text
       ORDER BY ts
       LIMIT 200`,
@@ -75,7 +75,7 @@ router.get('/visual/:id/:year-:month-:day', (req, res, next) => {
   let d_start = moment(date).subtract(15, 'days')
 
   let query = {
-    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss'), type, count FROM vs_data
+    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss'), type, count FROM vs_count
       WHERE id_vs = $1::text AND '[${d_start.format('YYYY-MM-DD')}, ${d_end.format('YYYY-MM-DD')}]'::daterange @> ts::date`,
     values: [id]
   }
