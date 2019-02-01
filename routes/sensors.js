@@ -39,7 +39,6 @@ router.get('/air/:id', (req, res, next) => {
 // retrieve a specific visual sensor by id
 router.get('/visual/:id', (req, res, next) => {
   let id = req.params.id
-  console.log(id)
   let query = {
     text: `SELECT * FROM vs_sensor
     WHERE id=$1`,
