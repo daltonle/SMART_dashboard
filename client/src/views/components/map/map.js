@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import propTypes from 'prop-types'
+import { compose, withProps, withHandlers } from 'recompose'
 import { connect } from 'react-redux'
 import { addAirMarkers } from '../../../state/ducks/map/actions'
-import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
+import { withGoogleMap, withScriptjs, GoogleMap, Marker } from 'react-google-maps'
+import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import { mapStyles } from './MapStyles'
 import './map.module.scss'
+
+
 
 class Map extends Component {
   componentDidMount = () => {
@@ -12,6 +16,7 @@ class Map extends Component {
   }
 
   render() {
+    // load markers
     let markers
     if (this.props.airMarkers !== undefined) {
       markers = this.props.airMarkers.map( (marker, index) => (
@@ -22,7 +27,22 @@ class Map extends Component {
         />
       ))
     }
-    const StyledMap = withGoogleMap(props => (
+
+    const StyledMap = compose(
+      withProps({
+        loadingElement: <div style={{ height: `100%` }} /> ,
+        containerElement: <div style={{ height: `100vh` }} />,
+        mapElement: <div style={{ height: `100%` }} />,
+      }),
+      withHandlers({
+        onMarkerClustererClick: () => (markerClusterer) => {
+          const clickedMarkers = markerClusterer.getMarkers()
+          console.log(`Current clicked markers length: ${clickedMarkers.length}`)
+          console.log(clickedMarkers)
+        }
+      }),
+      withGoogleMap
+    )(props => 
       <GoogleMap
         defaultCenter = { { lat: -34.4054, lng: 150.8784 } }
         defaultZoom = { 15 }
@@ -32,16 +52,20 @@ class Map extends Component {
           mapTypeControl: false
         }}
       >
-        { markers }
+        <MarkerClusterer
+          onClick={props.onMarkerClustererClick}
+          averageCenter
+          enableRetinaIcons
+          gridSize={60}
+        >
+          { markers }
+        </MarkerClusterer>
       </GoogleMap>
-    ));
+    )
 
     return(
       <div>
-        <StyledMap
-          containerElement={ <div style={{ height: `100vh`, width: '100vw' }} /> }
-          mapElement={ <div style={{ height: `100%` }} /> }
-        />
+        <StyledMap />
       </div>
     );
   }
