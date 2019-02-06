@@ -5,6 +5,7 @@ import Map from '../../components/map/Map'
 import { AppBar } from '../../components/appbar/AppBar'
 import { DESK } from '../../../utils/const'
 import styles from './Dashboard_desktop.module.scss'
+import { LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
 
 export default class Dashboard_desktop extends Component {
   static propTypes = {
@@ -19,6 +20,10 @@ export default class Dashboard_desktop extends Component {
         </div>
         <div className={ styles.mapContainer }>
           <Map />
+          <div className={styles.controlButton} >
+            <LayersBttn />
+            <LegendsBttn />
+          </div>
         </div>
       </div>
     )

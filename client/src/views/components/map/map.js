@@ -3,7 +3,7 @@ import propTypes from 'prop-types'
 import { compose, withProps, withHandlers } from 'recompose'
 import { connect } from 'react-redux'
 import { addAirMarkers, addVisualMarkers } from '../../../state/ducks/map/actions'
-import { withGoogleMap, GoogleMap, Marker, ControlPosition } from 'react-google-maps'
+import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
 import { mapStyles } from './MapStyles'
 

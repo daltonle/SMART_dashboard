@@ -11,8 +11,8 @@ import SettingsIcon from 'react-feather/dist/icons/settings'
  * Static component at the moment. Needs to configure router and redux in future development
  */
 export const AppBar = (props) => {
-  if (props.media == DESK) return (<AppBar_desktop />)
-  else if (props.media == MOBILE) return (<AppBar_mobile />)
+  if (props.media === DESK) return (<AppBar_desktop />)
+  else if (props.media === MOBILE) return (<AppBar_mobile />)
 }
 
 const AppBar_desktop = () => (

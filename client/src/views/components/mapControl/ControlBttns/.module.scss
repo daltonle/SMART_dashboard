@@ -1,0 +1,20 @@
+@import '../../../../styles/colors.scss';
+
+.icon {
+  color: $primary-color;
+  width: 1.25em;
+  height: 1.25em;
+}
+
+.bttn {
+  background-color: $background-color;
+  height: 2.5em;
+  width: 2.5em;
+  border-radius: .2em;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-block-end: 1em;
+  box-shadow: 0.185em 0.1875em 0.75em rgba(0, 0, 0, .3);
+}
