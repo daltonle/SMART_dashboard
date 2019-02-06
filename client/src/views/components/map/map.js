@@ -70,7 +70,7 @@ class Map extends Component {
     )(props =>
       <GoogleMap
         defaultCenter={this.props.mapCentre}
-        defaultZoom={15}
+        defaultZoom={13}
         defaultOptions={{
           styles: mapStyles,
           streetViewControl: false,
@@ -78,7 +78,7 @@ class Map extends Component {
           fullscreenControl: false
         }}
         zoomControlOptions={{
-          position: window.google.maps.ControlPosition.TOP_RIGHT
+          borderRadius: `.2em`
         }}
       >
         <MarkerClusterer
