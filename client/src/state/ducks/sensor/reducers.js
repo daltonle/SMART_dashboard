@@ -36,6 +36,9 @@ const sensorReducer = (state = initialState, action) => {
         ...state,
         visual: action.payload
       }
-    default: break
+    default: 
+      return state
   }
 }
+
+export default sensorReducer
