@@ -52,17 +52,16 @@ router.get('/visual/:id', (req, res, next) => {
 })
 
 // retrieve a specific air sensor by coordinates
-router.get('/air/:long.:lat.:alt', (req, res, next) => {
+router.get('/air/:long,:lat', (req, res, next) => {
   let {
     long,
-    lat,
-    alt
+    lat
   } = req.params
 
   let query = {
     text: `SELECT * FROM aq_sensor
-    WHERE long=$1::text AND lat=$2::text AND alt=$3::text`,
-    values: [long, lat, alt]
+    WHERE long=$1::text AND lat=$2::text`,
+    values: [long, lat]
   }
   
   db.query(query)
@@ -71,7 +70,7 @@ router.get('/air/:long.:lat.:alt', (req, res, next) => {
 })
 
 // retrieve a specific visual sensor by coordinates
-router.get('/visual/:long.:lat.:alt', (req, res, next) => {
+router.get('/visual/:long,:lat', (req, res, next) => {
   let {
     long,
     lat,
@@ -79,8 +78,8 @@ router.get('/visual/:long.:lat.:alt', (req, res, next) => {
   } = req.params
   let query = {
     text: `SELECT * FROM vs_sensor
-    WHERE long=$1::text AND lat=$2::text AND alt=$3::text`,
-    values: [long, lat, alt]
+    WHERE long=$1::text AND lat=$2::text`,
+    values: [long, lat]
   }
   
   db.query(query)
