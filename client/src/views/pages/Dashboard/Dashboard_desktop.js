@@ -5,7 +5,7 @@ import Map from '../../components/map/Map'
 import { AppBar } from '../../components/appbar/AppBar'
 import { DESK } from '../../../utils/const'
 import styles from './Dashboard_desktop.module.scss'
-import { LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
+import { LayersBttn, LegendsBttn, CompareBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
 import { changeLayer } from '../../../state/ducks/map/actions'
 
 class Dashboard_desktop extends Component {
@@ -32,6 +32,9 @@ class Dashboard_desktop extends Component {
             </div>
             <div>
               <LegendsBttn />
+            </div>
+            <div>
+              <CompareBttn />
             </div>
           </div>
         </div>
