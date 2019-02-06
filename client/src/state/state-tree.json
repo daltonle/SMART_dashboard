@@ -1,6 +1,8 @@
 {
   "map": {
     "airMarkers": [],
-    "visualMarkers": []
+    "visualMarkers": [],
+    "isAirLayer": true,
+    "centre": {}
   }
 }

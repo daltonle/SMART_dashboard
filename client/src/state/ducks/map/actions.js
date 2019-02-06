@@ -1,7 +1,8 @@
 import {
   ADD_AIR_MARKERS,
   ADD_VISUAL_MARKERS,
-  CHANGE_LAYER
+  CHANGE_LAYER,
+  CHANGE_CENTRE
 } from './types'
 
 export const addAirMarkers = () => dispatch => {
@@ -29,5 +30,12 @@ export const changeLayer = () => (dispatch, getState) => {
   dispatch({
     type: CHANGE_LAYER,
     payload: !isAirLayer
+  })
+}
+
+export const changeCentre = (position) => (dispatch, position) => {
+  dispatch({
+    type: CHANGE_CENTRE,
+    payload: position
   })
 }

@@ -12,6 +12,7 @@ class Map extends Component {
     airMarkers: propTypes.array,
     visualMarkers: propTypes.array,
     isAirLayer: propTypes.bool,
+    centre: propTypes.object,
     addAirMarkers: propTypes.func,
     addVisualMarkers: propTypes.func
   }
@@ -68,7 +69,7 @@ class Map extends Component {
       withGoogleMap
     )(props =>
       <GoogleMap
-        defaultCenter={{ lat: -34.4054, lng: 150.8784 }}
+        defaultCenter={this.props.mapCentre}
         defaultZoom={15}
         defaultOptions={{
           styles: mapStyles,
@@ -110,7 +111,8 @@ class Map extends Component {
 const mapStateToProps = state => ({
   airMarkers: state.map.airMarkers,
   visualMarkers: state.map.visualMarkers,
-  isAirLayer: state.map.isAirLayer
+  isAirLayer: state.map.isAirLayer,
+  mapCentre: state.map.centre
 })
 
 const mapDispatchToProps = {
