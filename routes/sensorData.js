@@ -49,7 +49,7 @@ router.get('/air/live/:long,:lat', (req, res, next) => {
   } = req.params
 
   let query = {
-    text: `SELECT pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:mm:ss') FROM aq_sensor
+    text: `SELECT name, description, pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:mm:ss') FROM aq_sensor
     WHERE aq_sensor.long=$1::numeric AND aq_sensor.lat=$2::numeric`,
     values: [long, lat]
   }
@@ -102,7 +102,7 @@ router.get('/visual/live/:long,:lat', (req, res, next) => {
   } = req.params
 
   let query = {
-    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss'), pedestrians, vehicles, bicycles FROM vs_sensor
+    text: `SELECT name, description, to_char(ts, 'DD-MM-YYYY HH24:mm:ss'), pedestrians, vehicles, bicycles FROM vs_sensor
     WHERE vs_sensor.long=$1::numeric AND vs_sensor.lat=$2::numeric`,
     values: [long, lat]
   }
