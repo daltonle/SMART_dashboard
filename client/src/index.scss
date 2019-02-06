@@ -16,9 +16,11 @@ body {
 
 * {
   font-family: $font-family;
-  font-size: 87.5%;
-  color: $neutral-color-9;
+  font-weight: $font-weight-regular;
+  font-size: 100%;
+  color: $black;
   line-height: $font-height;
+  z-index: 0;
 }
 
 // typography

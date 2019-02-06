@@ -12,7 +12,7 @@ class App extends Component {
     return (
       <Provider store={ store }>
         <div className="App">
-          <Media query="(max-width: 599px)">
+          <Media query="(max-width: 820px)">
             { matches =>
               matches ? (
                 <Switch>
