@@ -8,13 +8,13 @@ import styles from './.module.scss'
  */
 
 export const LegendsBttn = () => (
-  <div className={styles.bttn}>
-    <InfoIcon className={styles.icon} />
-  </div>
+  <button className={styles.bttn}>
+    <InfoIcon className={styles.icon}/>
+  </button>
 )
 
 export const LayersBttn = () => (
-  <div className={styles.bttn}>
+  <button className={styles.bttn}>
     <LayersIcon className={styles.icon} />
-  </div>
+  </button>
 )

@@ -25,8 +25,9 @@ export const addVisualMarkers = () => dispatch => {
 }
 
 export const changeLayer = () => (dispatch, getState) => {
+  const { isAirLayer } = getState().map
   dispatch({
     type: CHANGE_LAYER,
-    payload: !getState().map.isAirLayer
+    payload: !isAirLayer
   })
 }

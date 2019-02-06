@@ -17,4 +17,10 @@
   justify-content: center;
   margin-block-end: 1em;
   box-shadow: 0.185em 0.1875em 0.75em rgba(0, 0, 0, .3);
+  border: 0;
+  text-decoration: none;
+}
+
+.bttn:hover {
+  cursor: pointer;
 }

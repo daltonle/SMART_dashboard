@@ -11,7 +11,9 @@ class Map extends Component {
   static propTypes = {
     airMarkers: propTypes.array,
     visualMarkers: propTypes.array,
-    isAirLayer: propTypes.bool
+    isAirLayer: propTypes.bool,
+    addAirMarkers: propTypes.func,
+    addVisualMarkers: propTypes.func
   }
 
   componentDidMount = () => {  

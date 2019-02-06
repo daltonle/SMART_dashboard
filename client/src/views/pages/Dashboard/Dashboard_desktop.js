@@ -1,15 +1,21 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Map from '../../components/map/Map'
 import { AppBar } from '../../components/appbar/AppBar'
 import { DESK } from '../../../utils/const'
 import styles from './Dashboard_desktop.module.scss'
 import { LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
+import { changeLayer } from '../../../state/ducks/map/actions'
 
-export default class Dashboard_desktop extends Component {
+class Dashboard_desktop extends Component {
   static propTypes = {
-    
+    changeLayer: propTypes.func
+  }
+
+  handleLayerClick = (e) => {
+    e.preventDefault()
+    this.props.changeLayer()
   }
 
   render() {
@@ -20,12 +26,22 @@ export default class Dashboard_desktop extends Component {
         </div>
         <div className={ styles.mapContainer }>
           <Map />
-          <div className={styles.controlButton} >
-            <LayersBttn />
-            <LegendsBttn />
+          <div className={styles.controlButton}>
+            <div onClick={this.handleLayerClick}>
+              <LayersBttn />
+            </div>
+            <div>
+              <LegendsBttn />
+            </div>
           </div>
         </div>
       </div>
     )
   }
 }
+
+const mapDispatchToProps = {
+  changeLayer
+}
+
+export default connect(null, mapDispatchToProps)(Dashboard_desktop)
