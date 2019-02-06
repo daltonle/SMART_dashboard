@@ -1,7 +1,7 @@
-import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS, CHANGE_LAYER, CHANGE_CENTRE } from "./types";
+import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS, CHANGE_LAYER, CHANGE_CENTRE } from "./types"
 
 /**
-  State tree
+  store.state.map
 
   {
     airMarkers: [
