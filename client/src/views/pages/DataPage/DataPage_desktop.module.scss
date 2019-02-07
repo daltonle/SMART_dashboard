@@ -1,4 +1,5 @@
 @import '../../../styles/colors';
+@import '../../../styles/font.scss';
 
 .outer {
   height: 100vh;
@@ -29,10 +30,32 @@
     z-index: 1;
     box-shadow: 0.1875em 0 2em rgba(0, 0, 0, .3);
     width: 26.5em;
+
+    h3 {
+      margin: 2.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: $font-weight-heavy;
+    }
   }
 
   .mapContainer {
     flex-grow: 1;
+  }
+}
+
+div.airDataContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+
+  & > div {
+    text-align: center;
+
+    h5 {
+      margin: 0;
+      margin-top: .5rem;
+    }
   }
 }
 

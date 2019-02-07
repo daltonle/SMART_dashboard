@@ -10,6 +10,7 @@ import styles from './DataPage_desktop.module.scss';
 import { TitleCard } from '../../components/titleCard/TitleCard'
 import ArrowLeftIcon from 'react-feather/dist/icons/arrow-left'
 import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/actions'
+import { ParticleData } from '../../components/particleData/ParticleData';
 
 
 class DataPage extends Component {
@@ -59,6 +60,8 @@ class DataPage extends Component {
   }
 
   render() {
+    let { airSensor, visualSensor } = this.props
+
     if (this.props.media === DESK)
       return (
         <div className={styles.outer}>
@@ -69,6 +72,7 @@ class DataPage extends Component {
             <div className={styles.data}>
               <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick}/>
               <div className={styles.titleCard}>
+                {/* TODO: render TitleCard dynamically based on props.airSensor (or visualSensor)*/}
                 <TitleCard
                   name='Name not found.'
                   suburb='No location data'
@@ -77,6 +81,25 @@ class DataPage extends Component {
                     lat: this.props.mapCentre.lat
                   }}
                 />
+              </div>
+              <h3>Live feed</h3>
+              <div className={styles.airDataContainer}>
+                <div>
+                  <ParticleData
+                    data={airSensor === undefined ? -1 : airSensor.pm2_5}
+                    level={1}
+                    unit="ug/m3"
+                  />
+                  <h5>PM2.5</h5>
+                </div>
+                <div>
+                  <ParticleData
+                    data={airSensor === undefined ? -1 : airSensor.pm10}
+                    level={1}
+                    unit="ug/m3"
+                  />
+                  <h5>PM10</h5>
+                </div>
               </div>
             </div>
             <div className={styles.mapContainer}>
