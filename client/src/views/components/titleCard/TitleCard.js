@@ -19,7 +19,7 @@ export const TitleCard = (props) => {
       </div>
       <div className={styles.info}>
         <CompassIcon className={styles.icon} />
-        <h5>{`${position.long}, ${position.lat}`}</h5>
+        <h5>{`${position.lat}, ${position.lng}`}</h5>
       </div>
     </div>
   )
