@@ -30,7 +30,7 @@ class DataPage extends Component {
     getAirDataLive: PropTypes.func,
     getVisualDataLive: PropTypes.func
   }
-
+  
   // After component mounted, change map centre to the new position,
   // then fetch live data of sensors
   componentDidMount = () => {
@@ -53,6 +53,14 @@ class DataPage extends Component {
     if (isAirLayer)
       getAirDataLive(newCentre)
     else getVisualDataLive(newCentre)
+  }
+
+  componentDidUpdate = (prevProps) => {
+    if (this.props.mapCentre !== prevProps.mapCentre) {
+      if (this.props.isAirLayer)
+        this.props.getAirDataLive(this.props.mapCentre)
+      else this.props.getVisualDataLive(this.props.mapCentre)
+    }
   }
 
   handleLayerClick = (e) => {
