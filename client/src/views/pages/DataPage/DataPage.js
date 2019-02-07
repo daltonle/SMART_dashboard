@@ -10,6 +10,7 @@ import styles from './DataPage_desktop.module.scss'
 import m_styles from './DataPage_mobile.module.scss'
 import { TitleCard } from '../../components/titleCard/TitleCard'
 import ArrowLeftIcon from 'react-feather/dist/icons/arrow-left'
+import ExpandIcon from 'react-feather/dist/icons/chevron-right'
 import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/actions'
 import { ParticleData } from '../../components/particleData/ParticleData'
 import { BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts'
@@ -123,6 +124,9 @@ class DataPage extends Component {
               </div>
             </div>
             <div className={styles.mapContainer}>
+              <div className={styles.expandButton}>
+                <ExpandIcon className={styles.icon}/>
+              </div>
               <Map />
               <div className={styles.controlButton}>
                 <div onClick={this.handleLayerClick}>
