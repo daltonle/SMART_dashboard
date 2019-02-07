@@ -24,9 +24,6 @@ class Map extends Component {
   }
 
   handleMarkerClick = (marker, e) => {
-    let lng = marker.long
-    let lat = marker.lat
-    this.props.changeCentre({ lng, lat })
     this.props.history.push(`/dashboard/${marker.lat},${marker.long}`)
   }
 

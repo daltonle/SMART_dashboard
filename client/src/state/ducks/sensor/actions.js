@@ -6,7 +6,6 @@ import {
 // and the data of the closest visual sensor in a 10m radius
 // REVIEW: At the moment only getting visual sensor with exact same coordinates
 export const getAirDataLive = (sensor) => (dispatch) => {
-  console.log(sensor)
   fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.json())
     .then(res => dispatch({

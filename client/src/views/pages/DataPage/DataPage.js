@@ -5,7 +5,7 @@ import { DESK, MOBILE } from '../../../utils/const';
 import { AppBar } from '../../components/appbar/AppBar';
 import Map from '../../components/map/Map';
 import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns';
-import { changeLayer } from '../../../state/ducks/map/actions'
+import { changeLayer, changeCentre } from '../../../state/ducks/map/actions'
 import styles from './DataPage_desktop.module.scss';
 import { TitleCard } from '../../components/titleCard/TitleCard'
 import ArrowLeftIcon from 'react-feather/dist/icons/arrow-left'
@@ -21,6 +21,8 @@ class DataPage extends Component {
     visualSensor: PropTypes.object,
     mapCentre: PropTypes.object,
     
+    changeLayer: PropTypes.func,
+    changeCentre: PropTypes.func,
     getAirDataLive: PropTypes.func,
     getVisualDataLive: PropTypes.func
   }
@@ -28,14 +30,20 @@ class DataPage extends Component {
   componentDidMount = () => {
     let { 
       isAirLayer,
+      match,
+      mapCentre,
       getAirDataLive,
       getVisualDataLive,
-      mapCentre
+      changeCentre
     } = this.props
 
+    let lng = parseFloat(match.params.long)
+    let lat = parseFloat(match.params.lat)
+    changeCentre({ lng, lat })
+
     if (isAirLayer)
-      this.props.getAirDataLive(mapCentre)
-    else this.props.getVisualDataLive(mapCentre)
+      getAirDataLive({lng, lat})
+    else getVisualDataLive({lng, lat})
   }
 
   handleLayerClick = (e) => {
@@ -95,8 +103,18 @@ class DataPage extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  isAirLayer: state.map.isAirLayer,
+  airSensor: state.sensor.air,
+  visualSensor: state.sensor.visual,
+  mapCentre: state.map.centre
+})
+
 const mapDispatchToProps = {
-  changeLayer
+  changeLayer,
+  changeCentre,
+  getAirDataLive,
+  getVisualDataLive
 }
 
-export default connect(null, mapDispatchToProps)(DataPage)
+export default connect(mapStateToProps, mapDispatchToProps)(DataPage)
