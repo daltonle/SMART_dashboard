@@ -27,7 +27,7 @@ class Map extends Component {
     let lng = marker.long
     let lat = marker.lat
     this.props.changeCentre({ lng, lat })
-    this.props.history.push(`/dashboard/${marker.long},${marker.lat}`)
+    this.props.history.push(`/dashboard/${marker.lat},${marker.long}`)
   }
 
   render() {

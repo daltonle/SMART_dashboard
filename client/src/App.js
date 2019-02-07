@@ -21,7 +21,7 @@ class App extends Component {
                   render={(props) => <DashboardMain {...props} media={matches ? MOBILE : DESK} />}
                 />
                 <Route 
-                  path='/dashboard/:long,:lat'
+                  path='/dashboard/:lat,:long'
                   render={(props) => <DataPage {...props} media={matches ? MOBILE : DESK} />}
                 />
               </Switch>
