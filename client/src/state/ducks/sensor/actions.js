@@ -5,8 +5,9 @@ import {
 // get live data of air sensor at given position,
 // and the data of the closest visual sensor in a 10m radius
 // REVIEW: At the moment only getting visual sensor with exact same coordinates
-export const getAirDataLive = (sensor) => (dispatch, sensor) => {
-  fetch(`/sensor-data/air/${sensor.long},${sensor.lat}`)
+export const getAirDataLive = (sensor) => (dispatch) => {
+  console.log(sensor)
+  fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.json())
     .then(res => dispatch({
       type: GET_AIR_DATA_LIVE,
@@ -14,7 +15,7 @@ export const getAirDataLive = (sensor) => (dispatch, sensor) => {
     }))
     .catch(err => console.log(err))
 
-  fetch(`/sensor-data/visual/${sensor.long},${sensor.lat}`)
+  fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.json())
     .then(res => dispatch({
       type: GET_VISUAL_DATA_LIVE,
@@ -26,8 +27,8 @@ export const getAirDataLive = (sensor) => (dispatch, sensor) => {
 // get live data of visual sensor at given position,
 // and the data of the closest air sensor in a 10m radius
 // REVIEW: At the moment only getting air sensor with exact same coordinates
-export const getVisualDataLive = (sensor) => (dispatch, sensor) => {
-  fetch(`/sensor-data/visual/${sensor.long},${sensor.lat}`)
+export const getVisualDataLive = (sensor) => (dispatch) => {
+  fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.json())
     .then(res => dispatch({
       type: GET_VISUAL_DATA_LIVE,
@@ -35,7 +36,7 @@ export const getVisualDataLive = (sensor) => (dispatch, sensor) => {
     }))
     .catch(err => console.log(err))
 
-    fetch(`/sensor-data/air/${sensor.long},${sensor.lat}`)
+    fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.json())
     .then(res => dispatch({
       type: GET_AIR_DATA_LIVE,
