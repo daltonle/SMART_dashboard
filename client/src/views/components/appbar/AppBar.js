@@ -1,21 +1,20 @@
-import React, { Component } from 'react'
-import { DESK, MOBILE } from '../../../utils/const'
-import styles from './AppBar.module.scss'
-
-import BellIcon from 'react-feather/dist/icons/bell'
-import UserIcon from 'react-feather/dist/icons/user'
-import ActivityIcon from 'react-feather/dist/icons/activity'
-import SettingsIcon from 'react-feather/dist/icons/settings'
+import React from 'react';
+import ActivityIcon from 'react-feather/dist/icons/activity';
+import BellIcon from 'react-feather/dist/icons/bell';
+import SettingsIcon from 'react-feather/dist/icons/settings';
+import UserIcon from 'react-feather/dist/icons/user';
+import { DESK, MOBILE } from '../../../utils/const';
+import styles from './AppBar.module.scss';
 
 /**
  * Static component at the moment. Needs to configure router and redux in future development
  */
 export const AppBar = (props) => {
-  if (props.media === DESK) return (<AppBar_desktop />)
-  else if (props.media === MOBILE) return (<AppBar_mobile />)
+  if (props.media === DESK) return (<AppBarDesktop />)
+  else if (props.media === MOBILE) return (<AppBarMobile />)
 }
 
-const AppBar_desktop = () => (
+const AppBarDesktop = () => (
   <div className={styles.container}>
     <span className={styles.menuItems}>SETTINGS</span>
     <span className={styles.menuItems}>PROFILE</span>
@@ -24,7 +23,7 @@ const AppBar_desktop = () => (
   </div>
 )
 
-const AppBar_mobile = () => (
+const AppBarMobile = () => (
   <div className={styles.m_background}>
     <div className={styles.m_container}>
       <div className={`${styles.m_menuActive} ${styles.m_menuItems}`}>

@@ -33,7 +33,7 @@ export const changeLayer = () => (dispatch, getState) => {
   })
 }
 
-export const changeCentre = (position) => (dispatch, position) => {
+export const changeCentre = (position) => (dispatch) => {
   dispatch({
     type: CHANGE_CENTRE,
     payload: position

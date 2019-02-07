@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import propTypes from 'prop-types'
 import { compose, withProps, withHandlers } from 'recompose'
 import { connect } from 'react-redux'
-import { addAirMarkers, addVisualMarkers } from '../../../state/ducks/map/actions'
+import { withRouter } from 'react-router-dom'
+import { addAirMarkers, addVisualMarkers, changeCentre } from '../../../state/ducks/map/actions'
 import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
 import { mapStyles } from './MapStyles'
@@ -22,6 +23,13 @@ class Map extends Component {
     this.props.addVisualMarkers()
   }
 
+  handleMarkerClick = (marker, e) => {
+    let lng = marker.long
+    let lat = marker.lat
+    this.props.changeCentre({ lng, lat })
+    this.props.history.push(`/dashboard/${marker.long},${marker.lat}`)
+  }
+
   render() {
     // load markers
     let markers
@@ -39,6 +47,7 @@ class Map extends Component {
           key={index}
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
           icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
+          onClick={(e) => this.handleMarkerClick(marker, e)}
         />
       ))
     }
@@ -117,7 +126,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   addAirMarkers,
-  addVisualMarkers
+  addVisualMarkers,
+  changeCentre
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Map)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Map))
