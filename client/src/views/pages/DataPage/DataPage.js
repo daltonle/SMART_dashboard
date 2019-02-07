@@ -6,11 +6,13 @@ import { AppBar } from '../../components/appbar/AppBar';
 import Map from '../../components/map/Map';
 import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns';
 import { changeLayer, changeCentre } from '../../../state/ducks/map/actions'
-import styles from './DataPage_desktop.module.scss';
+import styles from './DataPage_desktop.module.scss'
+import m_styles from './DataPage_mobile.module.scss'
 import { TitleCard } from '../../components/titleCard/TitleCard'
 import ArrowLeftIcon from 'react-feather/dist/icons/arrow-left'
 import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/actions'
-import { ParticleData } from '../../components/particleData/ParticleData';
+import { ParticleData } from '../../components/particleData/ParticleData'
+import { BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts'
 
 
 class DataPage extends Component {
@@ -65,6 +67,11 @@ class DataPage extends Component {
 
   render() {
     let { airSensor, visualSensor } = this.props
+    let visualData = [
+      { name: "Pesdestrians", counter: visualSensor === undefined ? 0 : parseFloat(visualSensor.pedestrians)},
+      { name: "Bicycles", counter: visualSensor === undefined ? 0 : parseFloat(visualSensor.bicycles)},
+      { name: "Others", counter: visualSensor === undefined ? 0 : parseFloat(visualSensor.vehicles)},
+    ]
 
     if (this.props.media === DESK)
       return (
@@ -105,6 +112,15 @@ class DataPage extends Component {
                   <h5>PM10</h5>
                 </div>
               </div>
+              <div className={styles.visualDataContainer}>
+                  <BarChart width={300} height={160} data={visualData}
+                    layout='vertical' margin={{top: 24, left: 50}}>
+                    <Bar dataKey='counter' fill='#02A27F' />
+                    <YAxis dataKey='name' type='category' tickLine={false} />
+                    <XAxis type='number' />
+                    <Tooltip />
+                  </BarChart>
+              </div>
             </div>
             <div className={styles.mapContainer}>
               <Map />
@@ -125,8 +141,13 @@ class DataPage extends Component {
       );
     else if (this.props.media === MOBILE)
       return (
-        <div>
-
+        <div className={ m_styles.outer }>
+          <div className={ m_styles.mapContainer }>
+            <Map />
+          </div>
+          <div className={ m_styles.appbar }>
+            <AppBar media={this.props.media} />
+          </div>
         </div>
       )
   }
