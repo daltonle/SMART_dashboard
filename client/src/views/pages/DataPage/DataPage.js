@@ -34,18 +34,22 @@ class DataPage extends Component {
     let { 
       isAirLayer,
       match,
+      mapCentre,
       getAirDataLive,
       getVisualDataLive,
       changeCentre
     } = this.props
 
-    let lng = parseFloat(match.params.long)
-    let lat = parseFloat(match.params.lat)
-    changeCentre({ lng, lat })
+    let newCentre = {
+      lng: parseFloat(match.params.long),
+      lat: parseFloat(match.params.lat)
+    }
+    if (mapCentre !== newCentre)
+    changeCentre(newCentre)
 
     if (isAirLayer)
-      getAirDataLive({ lng, lat })
-    else getVisualDataLive({lng, lat})
+      getAirDataLive(newCentre)
+    else getVisualDataLive(newCentre)
   }
 
   handleLayerClick = (e) => {
@@ -77,7 +81,7 @@ class DataPage extends Component {
                   name='Name not found.'
                   suburb='No location data'
                   position={{
-                    long: this.props.mapCentre.lng,
+                    lng: this.props.mapCentre.lng,
                     lat: this.props.mapCentre.lat
                   }}
                 />
