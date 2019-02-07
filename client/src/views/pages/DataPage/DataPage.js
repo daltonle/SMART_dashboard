@@ -7,17 +7,45 @@ import Map from '../../components/map/Map';
 import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns';
 import { changeLayer } from '../../../state/ducks/map/actions'
 import styles from './DataPage_desktop.module.scss';
+import { TitleCard } from '../../components/titleCard/TitleCard'
+import ArrowLeftIcon from 'react-feather/dist/icons/arrow-left'
+import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/actions'
 
 
 class DataPage extends Component {
   static propTypes = {
     media: PropTypes.string,
-    match: PropTypes.object
+    match: PropTypes.object,
+    isAirLayer: PropTypes.bool,
+    airSensor: PropTypes.object,
+    visualSensor: PropTypes.object,
+    mapCentre: PropTypes.object,
+    
+    getAirDataLive: PropTypes.func,
+    getVisualDataLive: PropTypes.func
+  }
+
+  componentDidMount = () => {
+    let { 
+      isAirLayer,
+      getAirDataLive,
+      getVisualDataLive,
+      mapCentre
+    } = this.props
+
+    if (isAirLayer)
+      this.props.getAirDataLive(mapCentre)
+    else this.props.getVisualDataLive(mapCentre)
   }
 
   handleLayerClick = (e) => {
     e.preventDefault()
     this.props.changeLayer()
+  }
+
+  handleBackClick = (e) => {
+    e.preventDefault()
+    this.props.history.push('/dashboard')
   }
 
   render() {
@@ -29,7 +57,17 @@ class DataPage extends Component {
           </div>
           <div className={styles.content}>
             <div className={styles.data}>
-
+              <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick}/>
+              <div className={styles.titleCard}>
+                <TitleCard
+                  name='University of Wollongong'
+                  suburb='Wollongong NSW 2522'
+                  position={{
+                    long: 150.8784,
+                    lat: -34.4054
+                  }}
+                />
+              </div>
             </div>
             <div className={styles.mapContainer}>
               <Map />
