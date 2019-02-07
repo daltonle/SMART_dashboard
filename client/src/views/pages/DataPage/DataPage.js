@@ -70,11 +70,11 @@ class DataPage extends Component {
               <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick}/>
               <div className={styles.titleCard}>
                 <TitleCard
-                  name='University of Wollongong'
-                  suburb='Wollongong NSW 2522'
+                  name='Name not found.'
+                  suburb='No location data'
                   position={{
-                    long: 150.8784,
-                    lat: -34.4054
+                    long: this.props.mapCentre.lng,
+                    lat: this.props.mapCentre.lat
                   }}
                 />
               </div>
