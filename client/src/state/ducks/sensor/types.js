@@ -1,0 +1,4 @@
+export const GET_AIR_DATA_LIVE = 'sensor/GET_AIR_DATA_LIVE'
+export const GET_VISUAL_DATA_LIVE = 'sensor/GET_VISUAL_DATA_LIVE'
+export const GET_AIR_DATA_HISTORY = 'sensor/GET_AIR_DATA_HISTORY'
+export const GET_VISUAL_DATA_HISTORY = 'sensor/GET_VISUAL_DATA_HISTORY'

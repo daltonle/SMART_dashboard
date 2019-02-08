@@ -1,7 +1,7 @@
-import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS, CHANGE_LAYER } from "./types";
+import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS, CHANGE_LAYER, CHANGE_CENTRE } from "./types"
 
 /**
-  State tree
+  store.state.map
 
   {
     airMarkers: [
@@ -17,13 +17,19 @@ import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS, CHANGE_LAYER } from "./types";
         lat: '',
         alt: ''
       }
-    ]
+    ],
+    isAirLayer: bool,
+    centre: {
+      lat,
+      long
+    }
   }
 
 **/
 
 const initialState = {
-  isAirLayer: true
+  isAirLayer: true,
+  centre: { lat: -34.4054, lng: 150.8784 }
 }
 
 const mapReducer = (state = initialState, action) => {
@@ -42,6 +48,11 @@ const mapReducer = (state = initialState, action) => {
       return {
         ...state,
         isAirLayer: action.payload
+      }
+    case CHANGE_CENTRE:
+      return {
+        ...state,
+        centre: action.payload
       }
     default:
       return state

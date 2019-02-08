@@ -3,9 +3,10 @@ import './App.scss'
 import { Provider } from 'react-redux'
 import { Route, Switch } from 'react-router-dom'
 import Media from 'react-media'
+import { DESK, MOBILE } from './utils/const'
 import store from './state/store'
-import Dashboard_desktop from './views/pages/Dashboard/Dashboard_desktop'
-import Dashboard_mobile from './views/pages/Dashboard/Dashboard_mobile';
+import DashboardMain from './views/pages/DashboardMain/DashboardMain'
+import DataPage from './views/pages/DataPage/DataPage'
 
 class App extends Component {
   render() {
@@ -13,17 +14,18 @@ class App extends Component {
       <Provider store={ store }>
         <div className="App">
           <Media query="(max-width: 820px)">
-            { matches =>
-              matches ? (
-                <Switch>
-                  <Route exact path='/' component={Dashboard_mobile} />
-                </Switch>
-              ) : (
-                <Switch>
-                  <Route exact path='/' component={Dashboard_desktop} />
-                </Switch>
-              )
-            }
+            {matches => (
+              <Switch>
+                <Route
+                  exact path='/dashboard'
+                  render={(props) => <DashboardMain {...props} media={matches ? MOBILE : DESK} />}
+                />
+                <Route 
+                  path='/dashboard/:lat,:long'
+                  render={(props) => <DataPage {...props} media={matches ? MOBILE : DESK} />}
+                />
+              </Switch>
+            )}
           </Media>
         </div>
       </Provider>

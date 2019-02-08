@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import propTypes from 'prop-types'
 import { compose, withProps, withHandlers } from 'recompose'
 import { connect } from 'react-redux'
-import { addAirMarkers, addVisualMarkers } from '../../../state/ducks/map/actions'
-import { withGoogleMap, GoogleMap, Marker, ControlPosition } from 'react-google-maps'
+import { withRouter } from 'react-router-dom'
+import { addAirMarkers, addVisualMarkers, changeCentre } from '../../../state/ducks/map/actions'
+import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
 import { mapStyles } from './MapStyles'
 
@@ -11,12 +12,24 @@ class Map extends Component {
   static propTypes = {
     airMarkers: propTypes.array,
     visualMarkers: propTypes.array,
-    isAirLayer: propTypes.bool
+    isAirLayer: propTypes.bool,
+    centre: propTypes.object,
+    addAirMarkers: propTypes.func,
+    addVisualMarkers: propTypes.func
   }
 
   componentDidMount = () => {  
     this.props.addAirMarkers()
     this.props.addVisualMarkers()
+  }
+
+  handleMarkerClick = (marker, e) => {
+    let newCentre = {
+      lng: marker.long,
+      lat: marker.lat
+    }
+    this.props.changeCentre(newCentre)
+    this.props.history.push(`/dashboard/${marker.lat},${marker.long}`)
   }
 
   render() {
@@ -36,6 +49,7 @@ class Map extends Component {
           key={index}
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
           icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
+          onClick={(e) => this.handleMarkerClick(marker, e)}
         />
       ))
     }
@@ -59,15 +73,13 @@ class Map extends Component {
       withHandlers({
         onMarkerClustererClick: () => (markerClusterer) => {
           const clickedMarkers = markerClusterer.getMarkers()
-          console.log(`Current clicked markers length: ${clickedMarkers.length}`)
-          console.log(clickedMarkers)
         }
       }),
       withGoogleMap
     )(props =>
       <GoogleMap
-        defaultCenter={{ lat: -34.4054, lng: 150.8784 }}
-        defaultZoom={15}
+        defaultCenter={this.props.mapCentre}
+        defaultZoom={13}
         defaultOptions={{
           styles: mapStyles,
           streetViewControl: false,
@@ -75,7 +87,7 @@ class Map extends Component {
           fullscreenControl: false
         }}
         zoomControlOptions={{
-          position: window.google.maps.ControlPosition.TOP_RIGHT
+          borderRadius: `.2em`
         }}
       >
         <MarkerClusterer
@@ -108,12 +120,14 @@ class Map extends Component {
 const mapStateToProps = state => ({
   airMarkers: state.map.airMarkers,
   visualMarkers: state.map.visualMarkers,
-  isAirLayer: state.map.isAirLayer
+  isAirLayer: state.map.isAirLayer,
+  mapCentre: state.map.centre
 })
 
 const mapDispatchToProps = {
   addAirMarkers,
-  addVisualMarkers
+  addVisualMarkers,
+  changeCentre
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Map)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Map))
