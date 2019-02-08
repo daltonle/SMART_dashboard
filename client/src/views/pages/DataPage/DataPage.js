@@ -57,6 +57,8 @@ class DataPage extends Component {
 
   componentDidUpdate = (prevProps) => {
     if (this.props.mapCentre !== prevProps.mapCentre) {
+      console.log(this.props.mapCentre)
+      console.log(prevProps.mapCentre)
       if (this.props.isAirLayer)
         this.props.getAirDataLive(this.props.mapCentre)
       else this.props.getVisualDataLive(this.props.mapCentre)
