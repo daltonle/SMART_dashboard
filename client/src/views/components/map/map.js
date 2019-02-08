@@ -25,8 +25,8 @@ class Map extends Component {
 
   handleMarkerClick = (marker, e) => {
     let newCentre = {
-      lng: marker.long,
-      lat: marker.lat
+      lng: parseFloat(marker.long),
+      lat: parseFloat(marker.lat)
     }
     this.props.changeCentre(newCentre)
     this.props.history.push(`/dashboard/${marker.lat},${marker.long}`)
@@ -59,6 +59,7 @@ class Map extends Component {
           key={index}
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
           icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
+          onClick={(e) => this.handleMarkerClick(marker, e)}
         />
       ))
     }
@@ -72,7 +73,7 @@ class Map extends Component {
       }),
       withHandlers({
         onMarkerClustererClick: () => (markerClusterer) => {
-          const clickedMarkers = markerClusterer.getMarkers()
+          markerClusterer.getMarkers()
         }
       }),
       withGoogleMap
