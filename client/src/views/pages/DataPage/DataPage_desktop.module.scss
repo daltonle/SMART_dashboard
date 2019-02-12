@@ -42,6 +42,14 @@
       margin-bottom: 2rem;
       font-weight: $font-weight-heavy;
     }
+
+    .visualBriefDimensionWrapper {
+      margin-left: 2.5rem;
+      margin-right: 2.5rem;
+      width: initial;
+      flex-grow: 1;
+      overflow: hidden;
+    }
   }
 
   .mapContainer {
