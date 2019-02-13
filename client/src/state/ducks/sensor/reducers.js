@@ -1,4 +1,4 @@
-import { GET_AIR_DATA_LIVE, GET_VISUAL_DATA_LIVE } from "./types"
+import { GET_AIR_DATA_LIVE, GET_VISUAL_DATA_LIVE, GET_AIR_DATA_HISTORY, GET_VISUAL_DATA_HISTORY } from "./types"
 
 /**
   store.state.sensor
@@ -35,6 +35,22 @@ const sensorReducer = (state = initialState, action) => {
       return {
         ...state,
         visual: action.payload
+      }
+    case GET_AIR_DATA_HISTORY:
+      return {
+        ...state,
+        air: {
+          ...state.air,
+          history: action.payload
+        }
+      }
+    case GET_VISUAL_DATA_HISTORY:
+      return {
+        ...state,
+        visual: {
+          ...state.visual,
+          history: action.payload
+        }
       }
     default: 
       return state
