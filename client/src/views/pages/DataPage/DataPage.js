@@ -1,16 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import withDimensions from 'react-dimensions';
 import ArrowLeftIcon from 'react-feather/dist/icons/arrow-left';
 import ExpandIcon from 'react-feather/dist/icons/chevron-right';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
-import { VictoryBar, VictoryChart, VictoryAxis } from 'victory';
 import { changeCentre, changeLayer } from '../../../state/ducks/map/actions';
 import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/actions';
 import { DESK, MOBILE } from '../../../utils/const';
-import { MyVictoryTheme } from '../../../utils/victoryTheme';
 import { AppBar } from '../../components/appbar/AppBar';
+import { VisualLiveChart } from '../../components/charts';
 import Map from '../../components/map/Map';
 import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns';
 import { ParticleData } from '../../components/particleData/ParticleData';
@@ -79,32 +76,6 @@ class DataPage extends Component {
 
   render() {
     let { airSensor, visualSensor, isAirLayer } = this.props
-    let visualData = [
-      { type: "Pesdestrians", counter: visualSensor === undefined ? 0 : parseFloat(visualSensor.pedestrians)},
-      { type: "Bicycles", counter: visualSensor === undefined ? 0 : parseFloat(visualSensor.bicycles)},
-      { type: "Others", counter: visualSensor === undefined ? 0 : parseFloat(visualSensor.vehicles)},
-    ]
-
-    const VisualChart = compose(
-      withDimensions({
-        className: styles.visualBriefDimensionWrapper
-      })
-    )(props => 
-      <VictoryChart
-        horizontal
-        theme={MyVictoryTheme}
-        domainPadding={32}
-        height={props.containerHeight}
-        width={props.containerWidth}
-        padding={{left: 88, right: 100, top: 24, bottom: 80}}
-      >
-        <VictoryBar
-          data={visualData}
-          x='type'
-          y='counter'
-        />
-      </VictoryChart>
-    )
 
     if (this.props.media === DESK)
       return (
@@ -146,7 +117,7 @@ class DataPage extends Component {
                   <h5>PM10</h5>
                 </div>
               </div>
-                <VisualChart />
+              <VisualLiveChart />
             </div>
             <div className={styles.mapContainer}>
               <div className={styles.expandButton}>
