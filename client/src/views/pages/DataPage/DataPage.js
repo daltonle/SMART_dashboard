@@ -1,19 +1,19 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import ArrowLeftIcon from 'react-feather/dist/icons/arrow-left';
+import ExpandIcon from 'react-feather/dist/icons/chevron-right';
+import { connect } from 'react-redux';
+import { changeCentre, changeLayer } from '../../../state/ducks/map/actions';
+import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/actions';
 import { DESK, MOBILE } from '../../../utils/const';
 import { AppBar } from '../../components/appbar/AppBar';
+import { VisualLiveChart } from '../../components/charts';
 import Map from '../../components/map/Map';
 import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns';
-import { changeLayer, changeCentre } from '../../../state/ducks/map/actions'
-import styles from './DataPage_desktop.module.scss'
-import m_styles from './DataPage_mobile.module.scss'
-import { TitleCard } from '../../components/titleCard/TitleCard'
-import ArrowLeftIcon from 'react-feather/dist/icons/arrow-left'
-import ExpandIcon from 'react-feather/dist/icons/chevron-right'
-import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/actions'
-import { ParticleData } from '../../components/particleData/ParticleData'
-import { BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts'
+import { ParticleData } from '../../components/particleData/ParticleData';
+import { TitleCard } from '../../components/titleCard/TitleCard';
+import styles from './DataPage_desktop.module.scss';
+import m_styles from './DataPage_mobile.module.scss';
 
 
 class DataPage extends Component {
@@ -75,12 +75,7 @@ class DataPage extends Component {
   }
 
   render() {
-    let { airSensor, visualSensor } = this.props
-    let visualData = [
-      { name: "Pesdestrians", counter: visualSensor === undefined ? 0 : parseFloat(visualSensor.pedestrians)},
-      { name: "Bicycles", counter: visualSensor === undefined ? 0 : parseFloat(visualSensor.bicycles)},
-      { name: "Others", counter: visualSensor === undefined ? 0 : parseFloat(visualSensor.vehicles)},
-    ]
+    let { airSensor, visualSensor, isAirLayer } = this.props
 
     if (this.props.media === DESK)
       return (
@@ -92,9 +87,10 @@ class DataPage extends Component {
             <div className={styles.data}>
               <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick}/>
               <div className={styles.titleCard}>
-                {/* TODO: render TitleCard dynamically based on props.airSensor (or visualSensor)*/}
                 <TitleCard
-                  name='Name not found.'
+                  name={isAirLayer ? 
+                    (airSensor===undefined ? 'No name.' : airSensor.description) : 
+                    (visualSensor===undefined ? 'No name.' : visualSensor.description) }
                   suburb='No location data'
                   position={{
                     lng: this.props.mapCentre.lng,
@@ -121,15 +117,7 @@ class DataPage extends Component {
                   <h5>PM10</h5>
                 </div>
               </div>
-              <div className={styles.visualDataContainer}>
-                  <BarChart width={300} height={160} data={visualData}
-                    layout='vertical' margin={{top: 24, left: 50}}>
-                    <Bar dataKey='counter' fill='#02A27F' />
-                    <YAxis dataKey='name' type='category' tickLine={false} />
-                    <XAxis type='number' />
-                    <Tooltip />
-                  </BarChart>
-              </div>
+              <VisualLiveChart />
             </div>
             <div className={styles.mapContainer}>
               <div className={styles.expandButton}>
