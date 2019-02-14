@@ -1,4 +1,10 @@
-import { SHOW_DETAILS, HIDE_DETAILS, CHANGE_ZOOM_DOMAINS_HISTORY } from './types'
+import { 
+  SHOW_DETAILS, 
+  HIDE_DETAILS, 
+  CHANGE_ZOOM_DOMAINS_HISTORY, 
+  CHANGE_AIR_DOW_HOUR_CHART, 
+  CHANGE_VISUAL_DOW_HOUR_CHART 
+} from './types'
 
 /**
   store.state.charts:
@@ -7,7 +13,8 @@ import { SHOW_DETAILS, HIDE_DETAILS, CHANGE_ZOOM_DOMAINS_HISTORY } from './types
     showDetails: bool
     history: {
       zoomDomain: { x: [] }
-    }
+    },
+    airDow: number
   }
 
  */
@@ -16,7 +23,9 @@ const initialState = {
   showDetails: false,
   history: {
     zoomDomain: { x: [new Date(2019, 1, 1), new Date()] }
-  }
+  },
+  airDow: new Date().getDay(),
+  visualDow: new Date().getDay()
 }
 
 const chartsReducer = (state = initialState, action) => {
@@ -38,6 +47,16 @@ const chartsReducer = (state = initialState, action) => {
           ...state.history,
           zoomDomain: action.payload
         }
+      }
+    case CHANGE_AIR_DOW_HOUR_CHART:
+      return {
+        ...state,
+        airDow: action.payload
+      }
+    case CHANGE_VISUAL_DOW_HOUR_CHART:
+      return {
+        ...state,
+        visualDow: action.payload
       }
     default:
       return state
