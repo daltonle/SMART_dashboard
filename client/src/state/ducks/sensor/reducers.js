@@ -1,4 +1,11 @@
-import { GET_AIR_DATA_LIVE, GET_VISUAL_DATA_LIVE, GET_AIR_DATA_HISTORY, GET_VISUAL_DATA_HISTORY } from "./types"
+import { 
+  GET_AIR_DATA_LIVE, 
+  GET_VISUAL_DATA_LIVE, 
+  GET_AIR_DATA_HISTORY, 
+  GET_VISUAL_DATA_HISTORY, 
+  GET_AIR_DATA_BY_HOUR,
+  GET_VISUAL_DATA_BY_HOUR
+} from "./types"
 
 /**
   store.state.sensor
@@ -11,13 +18,17 @@ import { GET_AIR_DATA_LIVE, GET_VISUAL_DATA_LIVE, GET_AIR_DATA_HISTORY, GET_VISU
       pedestrians: "",
       bicycles: "",
       vehicles: ""
+      history: [],
+      byHour: []
     },
     air: {
       name: "",
       description: "",
       to_char: "",
       pm2_5: "",
-      pm10: ""
+      pm10: "",
+      history: [],
+      byHour: []
     }
   }
  */
@@ -50,6 +61,22 @@ const sensorReducer = (state = initialState, action) => {
         visual: {
           ...state.visual,
           history: action.payload
+        }
+      }
+    case GET_AIR_DATA_BY_HOUR:
+      return {
+        ...state,
+        air: {
+          ...state.air,
+          byHour: action.payload
+        }
+      }
+    case GET_VISUAL_DATA_BY_HOUR:
+      return {
+        ...state,
+        visual: {
+          ...state.visual,
+          byHour: action.payload
         }
       }
     default: 

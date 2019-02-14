@@ -1,5 +1,10 @@
 import {
-  GET_AIR_DATA_LIVE, GET_VISUAL_DATA_LIVE, GET_AIR_DATA_HISTORY, GET_VISUAL_DATA_HISTORY
+  GET_AIR_DATA_LIVE, 
+  GET_VISUAL_DATA_LIVE, 
+  GET_AIR_DATA_HISTORY, 
+  GET_VISUAL_DATA_HISTORY, 
+  GET_AIR_DATA_BY_HOUR, 
+  GET_VISUAL_DATA_BY_HOUR
 } from './types'
 
 // get live data of air sensor at given position,
@@ -70,4 +75,28 @@ export const getVisualDataHistory = id => dispatch => {
       payload: res
     }))
     .catch(err => console.log(err))
+}
+
+// get air data history by hour
+export const getAirDataByHour = id => dispatch => {
+  fetch(`/sensor-data/air/by-hour/${id}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_AIR_DATA_BY_HOUR,
+    payload: res
+  }))
+  .catch(err => console.log(err))
+}
+
+// get visual data history by hour
+export const getVisualDataByHour = id => dispatch => {
+  fetch(`/sensor-data/visual/by-hour/${id}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_VISUAL_DATA_BY_HOUR,
+    payload: res
+  }))
+  .catch(err => console.log(err))
 }
