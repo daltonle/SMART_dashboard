@@ -10,7 +10,7 @@ import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/a
 import { showDataDetails, hideDataDetails } from '../../../state/ducks/charts/actions'
 import { DESK, MOBILE } from '../../../utils/const'
 import { AppBar } from '../../components/appbar/AppBar'
-import { VisualLiveChart, HistoryChart, HistoryBrush, AirByHourChart } from '../../components/charts'
+import { VisualLiveChart, HistoryChart, HistoryBrush, AirByHourChart, VisualByHourChart } from '../../components/charts'
 import Map from '../../components/map/Map'
 import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
 import { ParticleData } from '../../components/particleData/ParticleData'
@@ -141,7 +141,8 @@ class DataPage extends Component {
                 <HistoryBrush />
                 {(airSensor !== undefined) ? <h3>Air data by hour</h3>: <div></div>}
                 {(airSensor !== undefined) ? <AirByHourChart />: <div></div>}
-                <h3>Vehicles per hour</h3>
+                {(visualSensor !== undefined) ? <h3>Vehicles by hour</h3>: <div></div>}
+                {(visualSensor !== undefined) ? <VisualByHourChart />: <div></div>}
               </div> :
               <div className={styles.mapContainer}>
                 <div className={styles.expandButton} onClick={this.props.showDataDetails}>
