@@ -6,10 +6,10 @@ const db = require('../db')
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(bodyParser.json())
 
-// retrieve air quality data of a sensor
+// retrieve air quality data history of a sensor
 router.get('/air/:id', (req, res, next) => {
   let query = {
-    text: `SELECT pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:mm:ss') as timestamp FROM aq_data
+    text: `SELECT pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp FROM aq_data
       WHERE id_aq=$1::text
       ORDER BY ts DESC
       LIMIT 500`,
@@ -21,7 +21,7 @@ router.get('/air/:id', (req, res, next) => {
     .catch(next)
 })
 
-// retrieve air quality data of a sensor based on coordinates
+// retrieve air quality data history of a sensor based on coordinates
 router.get('/air/:long,:lat', (req, res, next) => {
   let {
     long,
@@ -29,7 +29,7 @@ router.get('/air/:long,:lat', (req, res, next) => {
   } = req.params
 
   let query = {
-    text: `SELECT pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:mm:ss') as timestamp FROM aq_data
+    text: `SELECT pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp FROM aq_data
     WHERE aq_sensor.id=aq_data.id AND aq_sensor.long=$1::numeric AND aq_sensor.lat=$2::numeric
     ORDER BY aq_data.ts DESC
     LIMIT BY 500`,
@@ -49,7 +49,7 @@ router.get('/air/live/:long,:lat', (req, res, next) => {
   } = req.params
 
   let query = {
-    text: `SELECT id, name, description, pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:mm:ss') FROM aq_sensor
+    text: `SELECT id, name, description, pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') FROM aq_sensor
     WHERE aq_sensor.long=$1::numeric AND aq_sensor.lat=$2::numeric`,
     values: [long, lat]
   }
@@ -59,10 +59,10 @@ router.get('/air/live/:long,:lat', (req, res, next) => {
     .catch(next)
 })
 
-// retrieve visual data of a sensor
+// retrieve visual data history of a sensor
 router.get('/visual/:id', (req, res, next) => {
   let query = {
-    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss') as timestamp, type, counter FROM vs_count
+    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp, type, counter FROM vs_count
       WHERE id_vs=$1::text
       ORDER BY ts DESC
       LIMIT 500`,
@@ -82,7 +82,7 @@ router.get('/visual/:long,:lat', (req, res, next) => {
   } = req.params
 
   let query = {
-    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss') as timestamp, type, counter FROM vs_count
+    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp, type, counter FROM vs_count
     WHERE vs_count.id=vs_sensor.id AND vs_sensor.long=$1::numeric AND vs_sensor.lat=$2::numeric
     ORDER BY vs_count.ts DESC
     LIMIT BY 500`,
@@ -102,7 +102,7 @@ router.get('/visual/live/:long,:lat', (req, res, next) => {
   } = req.params
 
   let query = {
-    text: `SELECT id, name, description, to_char(ts, 'DD-MM-YYYY HH24:mm:ss'), pedestrians, vehicles, bicycles FROM vs_sensor
+    text: `SELECT id, name, description, to_char(ts, 'DD-MM-YYYY HH24:MI:SS'), pedestrians, vehicles, bicycles FROM vs_sensor
     WHERE vs_sensor.long=$1::numeric AND vs_sensor.lat=$2::numeric`,
     values: [long, lat]
   }
@@ -126,7 +126,7 @@ router.get('/air/:id/:year-:month-:day', (req, res, next) => {
   let d_start = moment(date).subtract(15, 'days')
 
   let query = {
-    text: `SELECT pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:mm:ss') FROM aq_data
+    text: `SELECT pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') FROM aq_data
       WHERE id_aq = $1::text AND '[${d_start.format('YYYY-MM-DD')}, ${d_end.format('YYYY-MM-DD')}]'::daterange @> ts::date`,
     values: [id]
   }
@@ -151,7 +151,7 @@ router.get('/visual/:id/:year-:month-:day', (req, res, next) => {
   let d_start = moment(date).subtract(15, 'days')
 
   let query = {
-    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss'), type, count FROM vs_count
+    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS'), type, count FROM vs_count
       WHERE id_vs = $1::text AND '[${d_start.format('YYYY-MM-DD')}, ${d_end.format('YYYY-MM-DD')}]'::daterange @> ts::date`,
     values: [id]
   }
