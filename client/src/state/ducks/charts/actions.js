@@ -1,4 +1,4 @@
-import { SHOW_DETAILS, HIDE_DETAILS } from './types'
+import { SHOW_DETAILS, HIDE_DETAILS, CHANGE_ZOOM_DOMAINS_HISTORY } from './types'
 
 export const showDataDetails = () => dispatch => {
   dispatch({
@@ -9,5 +9,12 @@ export const showDataDetails = () => dispatch => {
 export const hideDataDetails = () => dispatch => {
   dispatch({
     type: HIDE_DETAILS
+  })
+}
+
+export const changeZoomDomain = domain => dispatch => {
+  dispatch({
+    type: CHANGE_ZOOM_DOMAINS_HISTORY,
+    payload: domain
   })
 }

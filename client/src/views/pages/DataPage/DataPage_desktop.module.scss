@@ -82,8 +82,8 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    overflow-y: auto;
     background-color: $background-color;
+    overflow-y: scroll;
 
     .exitButton {
       stroke: $black;
@@ -120,6 +120,13 @@ div.airDataContainer {
       margin-top: .5rem;
     }
   }
+}
+
+h5.noVisual, h5.noAir {
+  margin-left: 2.5rem;
+  align-self: center;
+  color: $neutral-color-5;
+  font-style: italic;
 }
 
 div.visualDataContainer {

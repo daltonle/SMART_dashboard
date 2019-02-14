@@ -1,16 +1,22 @@
-import { SHOW_DETAILS, HIDE_DETAILS } from './types'
+import { SHOW_DETAILS, HIDE_DETAILS, CHANGE_ZOOM_DOMAINS_HISTORY } from './types'
 
 /**
   store.state.charts:
   
   {
     showDetails: bool
+    history: {
+      zoomDomain: { x: [] }
+    }
   }
 
  */
 
 const initialState = {
-  showDetails: false
+  showDetails: false,
+  history: {
+    zoomDomain: { x: [new Date(2019, 1, 1), new Date()] }
+  }
 }
 
 const chartsReducer = (state = initialState, action) => {
@@ -24,6 +30,14 @@ const chartsReducer = (state = initialState, action) => {
       return {
         ...state,
         showDetails: false
+      }
+    case CHANGE_ZOOM_DOMAINS_HISTORY:
+      return {
+        ...state,
+        history: {
+          ...state.history,
+          zoomDomain: action.payload
+        }
       }
     default:
       return state

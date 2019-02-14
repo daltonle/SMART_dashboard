@@ -36,14 +36,7 @@ class Map extends Component {
     // load markers
     let markers
     if (this.props.isAirLayer && this.props.airMarkers !== undefined) {
-      // some fake data
-      // TODO: remove fake data
-      let airMarkers = [
-        { lat: -34.4054, long: 150.8784 },
-        { lat: -40.4054, long: 160.8784 },
-        ...this.props.airMarkers
-      ]
-
+      let { airMarkers } = this.props
       markers = airMarkers.map((marker, index) => (
         <Marker
           key={index}

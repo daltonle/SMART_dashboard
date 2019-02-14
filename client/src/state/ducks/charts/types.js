@@ -1,2 +1,3 @@
 export const SHOW_DETAILS = 'charts/SHOW_DETAILS'
 export const HIDE_DETAILS = 'charts/HIDE_DETAILS'
+export const CHANGE_ZOOM_DOMAINS_HISTORY = 'charts/CHANGE_ZOOM_DOMAINS_HISTORY'

@@ -10,7 +10,7 @@ import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/a
 import { showDataDetails, hideDataDetails } from '../../../state/ducks/charts/actions'
 import { DESK, MOBILE } from '../../../utils/const'
 import { AppBar } from '../../components/appbar/AppBar'
-import { VisualLiveChart, HistoryChart } from '../../components/charts'
+import { VisualLiveChart, HistoryChart, HistoryBrush } from '../../components/charts'
 import Map from '../../components/map/Map'
 import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
 import { ParticleData } from '../../components/particleData/ParticleData'
@@ -104,25 +104,32 @@ class DataPage extends Component {
                 />
               </div>
               <h3>Live feed</h3>
-              <div className={styles.airDataContainer}>
-                <div>
-                  <ParticleData
-                    data={airSensor === undefined ? -1 : airSensor.pm2_5}
-                    level={1}
-                    unit="ug/m3"
-                  />
-                  <h5>PM2.5</h5>
+              { airSensor === undefined ? 
+                <h5 className={styles.noAir}>No air data.</h5> : 
+                <div className={styles.airDataContainer}>
+                  <div>
+                    <ParticleData
+                      data={airSensor === undefined ? -1 : airSensor.pm2_5}
+                      level={1}
+                      unit="ug/m3"
+                    />
+                    <h5>PM2.5</h5>
+                  </div>
+                  <div>
+                    <ParticleData
+                      data={airSensor === undefined ? -1 : airSensor.pm10}
+                      level={1}
+                      unit="ug/m3"
+                    />
+                    <h5>PM10</h5>
+                  </div>
                 </div>
-                <div>
-                  <ParticleData
-                    data={airSensor === undefined ? -1 : airSensor.pm10}
-                    level={1}
-                    unit="ug/m3"
-                  />
-                  <h5>PM10</h5>
-                </div>
-              </div>
-              <VisualLiveChart />
+              }
+              
+              { visualSensor === undefined ? 
+                <h5 className={styles.noVisual}>No visual data.</h5> :
+                <VisualLiveChart />
+              }
             </div>
             { doShowDetails ? 
               <div className={styles.chartDetails}>
@@ -131,6 +138,7 @@ class DataPage extends Component {
                 </div>
                 <h3>History</h3>
                 <HistoryChart />
+                <HistoryBrush />
                 <h3>Vehicles per hour</h3>
               </div> :
               <div className={styles.mapContainer}>
