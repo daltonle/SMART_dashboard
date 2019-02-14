@@ -1,21 +1,24 @@
 // *
 // * Colors
 // *
-const yellow200 = "#FFF59D";
-const deepOrange600 = "#F4511E";
-const lime300 = "#DCE775";
-const lightGreen500 = "#8BC34A";
-const teal700 = "#00796B";
-const cyan900 = "#006064";
-const colors = [deepOrange600, yellow200, lime300, lightGreen500, teal700, cyan900];
+const primaryColor = "#068FAB"
+const red = "#FF595E"
+const green = "#02A27F"
+const yellow = "#FFCA3A"
+const orange = "#E66337"
+const purple = "#5E50B5"
+const maroon = "#692D39"
+const colors = [green, red, yellow, orange, purple, primaryColor, maroon];
 const blueGrey50 = "#ECEFF1";
 const blueGrey300 = "#90A4AE";
 const blueGrey700 = "#455A64";
 const grey900 = "#212121";
+const dividerColor = "#C1C1C2"
+const labelColor = "#565659"
 // *
 // * Typography
 // *
-const sansSerif = "'Roboto', 'Helvetica Neue', Helvetica, sans-serif";
+const sansSerif = "'Open Sans', 'Helvetica Neue', Helvetica, sans-serif";
 const letterSpacing = "normal";
 const fontSize = 12;
 // *
@@ -35,7 +38,7 @@ const baseLabelStyles = {
   fontSize,
   letterSpacing,
   padding,
-  fill: blueGrey700,
+  fill: labelColor,
   stroke: "transparent",
   strokeWidth: 0
 };
@@ -44,9 +47,10 @@ const centeredLabelStyles = Object.assign({ textAnchor: "middle" }, baseLabelSty
 // *
 // * Strokes
 // *
-const strokeDasharray = "10, 5";
-const strokeLinecap = "round";
-const strokeLinejoin = "round";
+const strokeWidth = ".5"
+const strokeDasharray = "1, 0"
+const strokeLinecap = "round"
+const strokeLinejoin = "round"
 
 export const MyVictoryTheme = {
   area: Object.assign(
@@ -65,7 +69,7 @@ export const MyVictoryTheme = {
       style: {
         axis: {
           fill: "transparent",
-          stroke: blueGrey300,
+          stroke: dividerColor,
           strokeWidth: 2,
           strokeLinecap,
           strokeLinejoin
@@ -76,7 +80,8 @@ export const MyVictoryTheme = {
         }),
         grid: {
           fill: "none",
-          stroke: blueGrey50,
+          stroke: dividerColor,
+          strokeWidth,
           strokeDasharray,
           strokeLinecap,
           strokeLinejoin,
@@ -85,13 +90,13 @@ export const MyVictoryTheme = {
         ticks: {
           fill: "transparent",
           size: 5,
-          stroke: blueGrey300,
+          stroke: dividerColor,
           strokeWidth: 1,
           strokeLinecap,
           strokeLinejoin
         },
         tickLabels: Object.assign({}, baseLabelStyles, {
-          fill: blueGrey700
+          fill: labelColor
         })
       }
     },
@@ -101,7 +106,7 @@ export const MyVictoryTheme = {
     {
       style: {
         data: {
-          fill: blueGrey700,
+          fill: green,
           padding,
           strokeWidth: 0
         },
@@ -113,15 +118,15 @@ export const MyVictoryTheme = {
   boxplot: Object.assign(
     {
       style: {
-        max: { padding, stroke: blueGrey700, strokeWidth: 1 },
+        max: { padding, stroke: primaryColor, strokeWidth: 1 },
         maxLabels: baseLabelStyles,
-        median: { padding, stroke: blueGrey700, strokeWidth: 1 },
+        median: { padding, stroke: primaryColor, strokeWidth: 1 },
         medianLabels: baseLabelStyles,
-        min: { padding, stroke: blueGrey700, strokeWidth: 1 },
+        min: { padding, stroke: primaryColor, strokeWidth: 1 },
         minLabels: baseLabelStyles,
-        q1: { padding, fill: blueGrey700 },
+        q1: { padding, fill: primaryColor },
         q1Labels: baseLabelStyles,
-        q3: { padding, fill: blueGrey700 },
+        q3: { padding, fill: primaryColor },
         q3Labels: baseLabelStyles
       },
       boxWidth: 20
@@ -132,13 +137,13 @@ export const MyVictoryTheme = {
     {
       style: {
         data: {
-          stroke: blueGrey700
+          stroke: primaryColor
         },
         labels: centeredLabelStyles
       },
       candleColors: {
         positive: "#ffffff",
-        negative: blueGrey700
+        negative: primaryColor
       }
     },
     baseProps
@@ -151,7 +156,7 @@ export const MyVictoryTheme = {
         data: {
           fill: "transparent",
           opacity: 1,
-          stroke: blueGrey700,
+          stroke: primaryColor,
           strokeWidth: 2
         },
         labels: centeredLabelStyles
@@ -167,14 +172,17 @@ export const MyVictoryTheme = {
   ),
   legend: {
     colorScale: colors,
-    gutter: 10,
-    orientation: "vertical",
+    gutter: 24,
+    orientation: "horizontal",
     titleOrientation: "top",
     style: {
       data: {
         type: "circle"
       },
-      labels: baseLabelStyles,
+      labels: {
+        ...baseLabelStyles,
+        fontSize: 14
+      },
       title: Object.assign({}, baseLabelStyles, { padding: 5 })
     }
   },
@@ -184,7 +192,7 @@ export const MyVictoryTheme = {
         data: {
           fill: "transparent",
           opacity: 1,
-          stroke: blueGrey700,
+          stroke: primaryColor,
           strokeWidth: 2
         },
         labels: centeredLabelStyles
@@ -198,7 +206,7 @@ export const MyVictoryTheme = {
       style: {
         data: {
           padding,
-          stroke: blueGrey50,
+          stroke: dividerColor,
           strokeWidth: 1
         },
         labels: Object.assign({}, baseLabelStyles, { padding: 20 })
@@ -210,7 +218,7 @@ export const MyVictoryTheme = {
     {
       style: {
         data: {
-          fill: blueGrey700,
+          fill: primaryColor,
           opacity: 1,
           stroke: "transparent",
           strokeWidth: 0
