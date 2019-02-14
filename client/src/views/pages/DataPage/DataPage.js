@@ -1,20 +1,22 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import ArrowLeftIcon from 'react-feather/dist/icons/arrow-left';
-import ExpandIcon from 'react-feather/dist/icons/chevron-right';
-import { connect } from 'react-redux';
-import { changeCentre, changeLayer } from '../../../state/ducks/map/actions';
-import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/actions';
-import { DESK, MOBILE } from '../../../utils/const';
-import { AppBar } from '../../components/appbar/AppBar';
-import { VisualLiveChart } from '../../components/charts';
-import Map from '../../components/map/Map';
-import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns';
-import { ParticleData } from '../../components/particleData/ParticleData';
-import { TitleCard } from '../../components/titleCard/TitleCard';
-import styles from './DataPage_desktop.module.scss';
-import m_styles from './DataPage_mobile.module.scss';
-
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import ArrowLeftIcon from 'react-feather/dist/icons/arrow-left'
+import ExpandIcon from 'react-feather/dist/icons/chevron-right'
+import ExitIcon from 'react-feather/dist/icons/x'
+import classNames from 'classnames'
+import { connect } from 'react-redux'
+import { changeCentre, changeLayer } from '../../../state/ducks/map/actions'
+import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/actions'
+import { showDataDetails, hideDataDetails } from '../../../state/ducks/charts/actions'
+import { DESK, MOBILE } from '../../../utils/const'
+import { AppBar } from '../../components/appbar/AppBar'
+import { VisualLiveChart, HistoryChart } from '../../components/charts'
+import Map from '../../components/map/Map'
+import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
+import { ParticleData } from '../../components/particleData/ParticleData'
+import { TitleCard } from '../../components/titleCard/TitleCard'
+import styles from './DataPage_desktop.module.scss'
+import m_styles from './DataPage_mobile.module.scss'
 
 class DataPage extends Component {
   static propTypes = {
@@ -24,11 +26,14 @@ class DataPage extends Component {
     airSensor: PropTypes.object,
     visualSensor: PropTypes.object,
     mapCentre: PropTypes.object,
+    doShowDetails: PropTypes.bool,
     
     changeLayer: PropTypes.func,
     changeCentre: PropTypes.func,
     getAirDataLive: PropTypes.func,
-    getVisualDataLive: PropTypes.func
+    getVisualDataLive: PropTypes.func,
+    showDataDetails: PropTypes.func,
+    hideDataDetails: PropTypes.func
   }
   
   // After component mounted, change map centre to the new position,
@@ -75,7 +80,7 @@ class DataPage extends Component {
   }
 
   render() {
-    let { airSensor, visualSensor, isAirLayer } = this.props
+    let { airSensor, visualSensor, isAirLayer, doShowDetails } = this.props
 
     if (this.props.media === DESK)
       return (
@@ -84,7 +89,7 @@ class DataPage extends Component {
             <AppBar media={this.props.media} />
           </div>
           <div className={styles.content}>
-            <div className={styles.data}>
+            <div className={classNames(styles.data, { [styles.detailsShown]: this.props.doShowDetails })}>
               <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick}/>
               <div className={styles.titleCard}>
                 <TitleCard
@@ -119,23 +124,34 @@ class DataPage extends Component {
               </div>
               <VisualLiveChart />
             </div>
-            <div className={styles.mapContainer}>
-              <div className={styles.expandButton}>
-                <ExpandIcon className={styles.icon}/>
+            { doShowDetails ? 
+              <div className={styles.chartDetails}>
+                <div className={styles.exitButton} onClick={this.props.hideDataDetails}>
+                  <ExitIcon className={styles.icon}/>
+                </div>
+                <h3>History</h3>
+                <HistoryChart />
+                <h3>Vehicles per hour</h3>
+              </div> :
+              <div className={styles.mapContainer}>
+                <div className={styles.expandButton} onClick={this.props.showDataDetails}>
+                  <ExpandIcon className={styles.icon} />
+                </div>
+                <Map />
+                <div className={styles.controlButton}>
+                  <div onClick={this.handleLayerClick}>
+                    <LayersBttn />
+                  </div>
+                  <div>
+                    <LegendsBttn />
+                  </div>
+                  <div>
+                    <CompareBttn />
+                  </div>
+                </div>
               </div>
-              <Map />
-              <div className={styles.controlButton}>
-                <div onClick={this.handleLayerClick}>
-                  <LayersBttn />
-                </div>
-                <div>
-                  <LegendsBttn />
-                </div>
-                <div>
-                  <CompareBttn />
-                </div>
-              </div>
-            </div>
+            }
+            
           </div>
         </div>
       );
@@ -157,14 +173,17 @@ const mapStateToProps = state => ({
   isAirLayer: state.map.isAirLayer,
   airSensor: state.sensor.air,
   visualSensor: state.sensor.visual,
-  mapCentre: state.map.centre
+  mapCentre: state.map.centre,
+  doShowDetails: state.charts.showDetails
 })
 
 const mapDispatchToProps = {
   changeLayer,
   changeCentre,
   getAirDataLive,
-  getVisualDataLive
+  getVisualDataLive,
+  showDataDetails,
+  hideDataDetails
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DataPage)

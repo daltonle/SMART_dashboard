@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { VictoryBar, VictoryChart } from 'victory'
+import { VictoryBar, VictoryChart, VictoryAxis } from 'victory'
 import withDimension from 'react-dimensions'
 import { MyVictoryTheme } from '../../../utils/victoryTheme'
 import styles from './VisualLiveChart.module.scss'
@@ -28,6 +28,8 @@ class VisualLiveChart extends Component {
         width={containerWidth}
         padding={{left: 88, right: 100, top: 24, bottom: 80}}
       >
+        <VictoryAxis />
+        <VictoryAxis dependentAxis />
         <VictoryBar
           data={liveData}
           x='type'
