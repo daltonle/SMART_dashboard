@@ -12,7 +12,7 @@ router.get('/air/:id', (req, res, next) => {
     text: `SELECT pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp FROM aq_data
       WHERE id_aq=$1::text
       ORDER BY ts DESC
-      LIMIT 500`,
+      LIMIT 5000`,
     values: [req.params.id]
   }
 
@@ -32,7 +32,7 @@ router.get('/air/:long,:lat', (req, res, next) => {
     text: `SELECT pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp FROM aq_data
     WHERE aq_sensor.id=aq_data.id AND aq_sensor.long=$1::numeric AND aq_sensor.lat=$2::numeric
     ORDER BY aq_data.ts DESC
-    LIMIT BY 500`,
+    LIMIT 5000`,
     values: [long, lat]
   }
   
@@ -65,7 +65,7 @@ router.get('/visual/:id', (req, res, next) => {
     text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp, type, counter FROM vs_count
       WHERE id_vs=$1::text
       ORDER BY ts DESC
-      LIMIT 500`,
+      LIMIT 5000`,
     values: [req.params.id]
   }
 
@@ -85,7 +85,7 @@ router.get('/visual/:long,:lat', (req, res, next) => {
     text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp, type, counter FROM vs_count
     WHERE vs_count.id=vs_sensor.id AND vs_sensor.long=$1::numeric AND vs_sensor.lat=$2::numeric
     ORDER BY vs_count.ts DESC
-    LIMIT BY 500`,
+    LIMIT 5000`,
     values: [long, lat]
   }
   
