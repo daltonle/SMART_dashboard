@@ -85,7 +85,7 @@ class AirByHourChart extends Component {
                 margin: 10
               }}
               animate={{
-                duration: 1000,
+                duration: 400,
                 onLoad: false
               }}
               barRatio={1}
@@ -96,7 +96,7 @@ class AirByHourChart extends Component {
             />
             <VictoryBar
               animate={{
-                duration: 1000,
+                duration: 400,
                 onLoad: false
               }}
               barRatio={1}
