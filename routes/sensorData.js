@@ -163,7 +163,7 @@ router.get('/visual/by-time/:id/:year-:month-:day', (req, res, next) => {
 })
 
 // retrieve average air quality by hour
-router.get('/air/by-hour/:id', (req, res, next) => {
+router.get('/air/by-hour/avg/:id', (req, res, next) => {
   let query = {
     text: `SELECT extract(dow from ts) as dow,
                   extract(hour from ts) as hour,
@@ -180,13 +180,85 @@ router.get('/air/by-hour/:id', (req, res, next) => {
     .catch(next)
 })
 
+// retrieve min air quality by hour
+router.get('/air/by-hour/min/:id', (req, res, next) => {
+  let query = {
+    text: `SELECT extract(dow from ts) as dow,
+                  extract(hour from ts) as hour,
+                  min(pm2_5) as pm2_5,
+                  min(pm10) as pm10
+          FROM aq_data
+          WHERE id_aq = $1
+          GROUP BY 1,2`,
+    values: [req.params.id]
+  }
+
+  db.query(query)
+    .then(result => res.json(result.rows))
+    .catch(next)
+})
+
+// retrieve max air quality by hour
+router.get('/air/by-hour/max/:id', (req, res, next) => {
+  let query = {
+    text: `SELECT extract(dow from ts) as dow,
+                  extract(hour from ts) as hour,
+                  max(pm2_5) as pm2_5,
+                  max(pm10) as pm10
+          FROM aq_data
+          WHERE id_aq = $1
+          GROUP BY 1,2`,
+    values: [req.params.id]
+  }
+
+  db.query(query)
+    .then(result => res.json(result.rows))
+    .catch(next)
+})
+
 // retrieve average vehicle count by hour
-router.get('/visual/by-hour/:id', (req, res, next) => {
+router.get('/visual/by-hour/avg/:id', (req, res, next) => {
   let query = {
     text: `SELECT extract(dow from ts) as dow,
                   extract(hour from ts) as hour,
                   type,
                   avg(counter) as counter
+          FROM vs_count
+          WHERE id_vs = $1
+          GROUP BY 1,2,3`,
+    values: [req.params.id]
+  }
+
+  db.query(query)
+    .then(result => res.json(result.rows))
+    .catch(next)
+})
+
+// retrieve min vehicle count by hour
+router.get('/visual/by-hour/min/:id', (req, res, next) => {
+  let query = {
+    text: `SELECT extract(dow from ts) as dow,
+                  extract(hour from ts) as hour,
+                  type,
+                  min(counter) as counter
+          FROM vs_count
+          WHERE id_vs = $1
+          GROUP BY 1,2,3`,
+    values: [req.params.id]
+  }
+
+  db.query(query)
+    .then(result => res.json(result.rows))
+    .catch(next)
+})
+
+// retrieve max vehicle count by hour
+router.get('/visual/by-hour/max/:id', (req, res, next) => {
+  let query = {
+    text: `SELECT extract(dow from ts) as dow,
+                  extract(hour from ts) as hour,
+                  type,
+                  max(counter) as counter
           FROM vs_count
           WHERE id_vs = $1
           GROUP BY 1,2,3`,
