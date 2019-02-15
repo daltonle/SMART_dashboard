@@ -4,7 +4,7 @@ import InfoIcon from 'react-feather/dist/icons/info'
 import LayersIcon from 'react-feather/dist/icons/layers'
 import CompareIcon from 'react-feather/dist/icons/bar-chart-2'
 import ReactTooltip from 'react-tooltip'
-import styles from './.module.scss'
+import styles from './ControlBttns.module.scss'
 
 /**
  * Control buttons used for desktop map
@@ -21,7 +21,7 @@ export const LegendsBttn = ({ media }) => {
       </button>
     )
   else return (
-    <button className={styles.bttn} data-tip data-for='legends'>
+    <button className={styles.bttnMobile}>
       <InfoIcon className={styles.icon} />
     </button>
   )
@@ -38,7 +38,7 @@ export const LayersBttn = ({ media }) => {
       </button>
     )
   else return (
-    <button className={styles.bttn} data-tip data-for='layers'>
+    <button className={styles.bttnMobile}>
       <LayersIcon className={styles.icon} />
     </button>
   )
@@ -55,7 +55,7 @@ export const CompareBttn = ({ media }) => {
       </button>
     )
   else return (
-    <button className={styles.bttn} data-tip data-for='compare'>
+    <button className={styles.bttnMobile}>
       <CompareIcon className={styles.icon} />
     </button>
   )
