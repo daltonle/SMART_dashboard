@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { DESK } from '../../../utils/const'
+import Media from 'react-media'
+import { BREAK_POINT } from '../../../utils/const'
 import { VictoryBar, VictoryChart, VictoryAxis } from 'victory'
 import withDimension from 'react-dimensions'
 import { MyVictoryTheme } from '../../../utils/victoryTheme'
@@ -22,22 +23,47 @@ class VisualLiveChart extends Component {
     ]
 
     return (
-      <VictoryChart
-        horizontal
-        theme={MyVictoryTheme}
-        domainPadding={media===DESK ? 32 : 10}
-        height={containerHeight}
-        width={containerWidth}
-        padding={{left: 88, right: 100, top: 24, bottom: 80}}
-      >
-        <VictoryAxis />
-        <VictoryAxis dependentAxis />
-        <VictoryBar
-          data={liveData}
-          x='type'
-          y='counter'
-        />
-      </VictoryChart>
+      <Media query={`(max-width: ${BREAK_POINT}px)`}>
+        { matches => {
+          if (matches)
+            return (
+              <VictoryChart
+                horizontal
+                theme={MyVictoryTheme}
+                domainPadding={10}
+                height={containerHeight}
+                width={containerWidth}
+                padding={{left: 88, right: 100, top: 24, bottom: 80}}
+              >
+                <VictoryAxis />
+                <VictoryAxis dependentAxis />
+                <VictoryBar
+                  data={liveData}
+                  x='type'
+                  y='counter'
+                />
+              </VictoryChart>
+            )
+          else return (
+            <VictoryChart
+              horizontal
+              theme={MyVictoryTheme}
+              domainPadding={32}
+              height={containerHeight}
+              width={containerWidth}
+              padding={{left: 88, right: 100, top: 24, bottom: 80}}
+            >
+              <VictoryAxis />
+              <VictoryAxis dependentAxis />
+              <VictoryBar
+                data={liveData}
+                x='type'
+                y='counter'
+              />
+            </VictoryChart>
+          )
+        }}
+      </Media>
     )
   }
 }

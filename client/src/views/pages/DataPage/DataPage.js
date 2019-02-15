@@ -223,7 +223,7 @@ class DataPage extends Component {
               }
               { visualSensor === undefined ? 
                 <h5 className={m_styles.noVisual}>No visual data.</h5> :
-                <VisualLiveChart media={this.props.media}/>
+                <VisualLiveChart />
               }
             </div>
           </div>
