@@ -14,7 +14,7 @@ export const TitleCard = (props) => {
   
   return (
     <div>
-      {media===DESK ? <h1>{name}</h1> : <h2>{name.length > 30 ? `${name.substring(0, 32)}...` : name}</h2>}
+      {media===DESK ? <h1>{name}</h1> : <h2>{name.length > 25 ? `${name.substring(0, 25)}...` : name}</h2>}
       <div className={styles.info}>
         <MapPinIcon className={styles.icon} />
         <h5>{suburb}</h5>
