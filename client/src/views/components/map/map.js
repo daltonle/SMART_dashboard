@@ -3,6 +3,7 @@ import propTypes from 'prop-types'
 import { compose, withProps, withHandlers } from 'recompose'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { DESK, MOBILE } from '../../../utils/const'
 import { addAirMarkers, addVisualMarkers, changeCentre } from '../../../state/ducks/map/actions'
 import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
@@ -10,6 +11,7 @@ import { mapStyles } from './MapStyles'
 
 class Map extends Component {
   static propTypes = {
+    media: propTypes.string,
     airMarkers: propTypes.array,
     visualMarkers: propTypes.array,
     isAirLayer: propTypes.bool,
@@ -78,7 +80,8 @@ class Map extends Component {
           styles: mapStyles,
           streetViewControl: false,
           mapTypeControl: false,
-          fullscreenControl: false
+          fullscreenControl: false,
+          zoomControl: (this.props.media === DESK ? true : false)
         }}
         zoomControlOptions={{
           borderRadius: `.2em`

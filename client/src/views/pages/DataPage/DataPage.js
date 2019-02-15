@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import ArrowLeftIcon from 'react-feather/dist/icons/arrow-left'
 import ExpandIcon from 'react-feather/dist/icons/chevron-right'
+import ExpandUpIcon from 'react-feather/dist/icons/chevron-up'
 import ExitIcon from 'react-feather/dist/icons/x'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
@@ -17,6 +18,7 @@ import { ParticleData } from '../../components/particleData/ParticleData'
 import { TitleCard } from '../../components/titleCard/TitleCard'
 import styles from './DataPage_desktop.module.scss'
 import m_styles from './DataPage_mobile.module.scss'
+import { timingSafeEqual } from 'crypto';
 
 class DataPage extends Component {
   static propTypes = {
@@ -101,6 +103,7 @@ class DataPage extends Component {
                     lng: this.props.mapCentre.lng,
                     lat: this.props.mapCentre.lat
                   }}
+                  media={this.props.media}
                 />
               </div>
               <h3>Live feed</h3>
@@ -148,16 +151,16 @@ class DataPage extends Component {
                 <div className={styles.expandButton} onClick={this.props.showDataDetails}>
                   <ExpandIcon className={styles.icon} />
                 </div>
-                <Map />
+                <Map media={this.props.media}/>
                 <div className={styles.controlButton}>
                   <div onClick={this.handleLayerClick}>
-                    <LayersBttn />
+                    <LayersBttn media={this.props.media} />
                   </div>
                   <div>
-                    <LegendsBttn />
+                    <LegendsBttn media={this.props.media} />
                   </div>
                   <div>
-                    <CompareBttn />
+                    <CompareBttn media={this.props.media} />
                   </div>
                 </div>
               </div>
@@ -169,8 +172,60 @@ class DataPage extends Component {
     else if (this.props.media === MOBILE)
       return (
         <div className={ m_styles.outer }>
-          <div className={ m_styles.mapContainer }>
-            <Map />
+          <div className={m_styles.content}>
+            <div className={ m_styles.mapContainer }>
+              <Map media={this.props.media}/>
+              <div className={m_styles.backButton} onClick={this.handleBackClick}>
+                <ArrowLeftIcon className={m_styles.icon} />
+              </div>
+              <div className={m_styles.layerButton} onClick={this.handleLayerClick}>
+                <LayersBttn media={this.props.media}/>
+              </div>
+            </div>
+            <div className={m_styles.data}>
+              <div className={m_styles.expandButton} onClick={this.props.showDataDetails}>
+                <ExpandUpIcon className={m_styles.icon} />
+              </div>
+              <div className={m_styles.titleCard}>
+                <TitleCard
+                  name={isAirLayer ? 
+                    (airSensor===undefined ? 'No name.' : airSensor.description) : 
+                    (visualSensor===undefined ? 'No name.' : visualSensor.description) }
+                  suburb='No location data'
+                  position={{
+                    lng: this.props.mapCentre.lng,
+                    lat: this.props.mapCentre.lat
+                  }}
+                  media={this.props.media}
+                />
+              </div>
+              <h4>Live feed</h4>
+              { airSensor === undefined ? 
+                <h5 className={m_styles.noAir}>No air data.</h5> : 
+                <div className={styles.airDataContainer}>
+                  <div>
+                    <ParticleData
+                      data={airSensor === undefined ? -1 : airSensor.pm2_5}
+                      level={1}
+                      unit="ug/m3"
+                    />
+                    <h5>PM2.5</h5>
+                  </div>
+                  <div>
+                    <ParticleData
+                      data={airSensor === undefined ? -1 : airSensor.pm10}
+                      level={1}
+                      unit="ug/m3"
+                    />
+                    <h5>PM10</h5>
+                  </div>
+                </div>
+              }
+              { visualSensor === undefined ? 
+                <h5 className={m_styles.noVisual}>No visual data.</h5> :
+                <VisualLiveChart media={this.props.media}/>
+              }
+            </div>
           </div>
           <div className={ m_styles.appbar }>
             <AppBar media={this.props.media} />
