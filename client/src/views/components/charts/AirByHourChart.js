@@ -25,33 +25,9 @@ class AirByHourChart extends Component {
   }
   
   componentDidMount = () => {
-    const {type} = this.props
-    if (type === "avg")
-      this.props.getAvgAirDataByHour(this.props.sensor.id)
-    switch (this.props.type) {
-      case "avg": this.props.getAvgAirDataByHour(this.props.sensor.id)
-        break
-      case "min": this.props.getMinAirDataByHour(this.props.sensor.id)
-        break
-      case "max": this.props.getMaxAirDataByHour(this.props.sensor.id)
-        break
-      default: break
-    }
-  }
-
-  componentDidUpdate = () => {
-    const {type} = this.props
-    if (type === "avg")
-      this.props.getAvgAirDataByHour(this.props.sensor.id)
-    switch (this.props.type) {
-      case "avg": this.props.getAvgAirDataByHour(this.props.sensor.id)
-        break
-      case "min": this.props.getMinAirDataByHour(this.props.sensor.id)
-        break
-      case "max": this.props.getMaxAirDataByHour(this.props.sensor.id)
-        break
-      default: break
-    }
+    this.props.getAvgAirDataByHour(this.props.sensor.id)
+    this.props.getMinAirDataByHour(this.props.sensor.id)
+    this.props.getMaxAirDataByHour(this.props.sensor.id)
   }
 
   handleDayDecreased = (day, e) => {
