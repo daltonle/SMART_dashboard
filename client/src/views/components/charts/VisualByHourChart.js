@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getAvgVisualDataByHour } from '../../../state/ducks/sensor/actions'
-import { changeVisualDowChart } from '../../../state/ducks/charts/actions'
+import { getAvgVisualDataByHour, getMinVisualDataByHour, getMaxVisualDataByHour } from '../../../state/ducks/sensor/actions'
+import { changeVisualDowChart, changeVisualTypeHourChart } from '../../../state/ducks/charts/actions'
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryGroup, VictoryLegend, VictoryTooltip } from 'victory'
+import Select from 'react-select'
 import LeftIcon from 'react-feather/dist/icons/chevron-left'
 import RightIcon from 'react-feather/dist/icons/chevron-right'
 import withDimension from 'react-dimensions'
@@ -14,13 +15,19 @@ class VisualByHourChart extends Component {
   static propTypes = {
     sensor: PropTypes.object,
     day: PropTypes.number,
+    type: PropTypes.string,
 
     getAvgVisualDataByHour: PropTypes.func,
-    changeVisualDowChart: PropTypes.func
+    getMinVisualDataByHour: PropTypes.func,
+    getMaxVisualDataByHour: PropTypes.func,
+    changeVisualDowChart: PropTypes.func,
+    changeVisualTypeHourChart: PropTypes.func
   }
   
   componentDidMount = () => {
     this.props.getAvgVisualDataByHour(this.props.sensor.id)
+    this.props.getMinVisualDataByHour(this.props.sensor.id)
+    this.props.getMaxVisualDataByHour(this.props.sensor.id)
   }
 
   handleDayDecreased = (day, e) => {
@@ -34,7 +41,7 @@ class VisualByHourChart extends Component {
   }
 
   render() {
-    const { sensor, containerHeight, containerWidth, day } = this.props
+    const { sensor, containerHeight, containerWidth, day, type } = this.props
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     let dataPedestrians = [],
         dataBicycle = [],
@@ -45,32 +52,45 @@ class VisualByHourChart extends Component {
       dataOthers[i] = []
     }
     if (sensor.byHour !== undefined) {
-      sensor.byHour
-        .filter(d => d.type === 'pedestrian')
-        .map(d => dataPedestrians[d.dow].push({
-          hour: d.hour,
-          counter: Math.round(parseFloat(d.counter))
-        }))
-      sensor.byHour
-        .filter(d => d.type === 'bicycle')
-        .map(d => dataBicycle[d.dow].push({
-          hour: d.hour,
-          counter: Math.round(parseFloat(d.counter))
-        }))
-      sensor.byHour
-        .filter(d => d.type === 'vehicle')
-        .map(d => dataOthers[d.dow].push({
-          hour: d.hour,
-          counter: Math.round(parseFloat(d.counter))
-        }))
+      if (sensor.byHour[type] !== undefined) {
+        sensor.byHour[type]
+          .filter(d => d.type === 'pedestrian')
+          .map(d => dataPedestrians[d.dow].push({
+            hour: d.hour,
+            counter: Math.round(parseFloat(d.counter))
+          }))
+        sensor.byHour[type]
+          .filter(d => d.type === 'bicycle')
+          .map(d => dataBicycle[d.dow].push({
+            hour: d.hour,
+            counter: Math.round(parseFloat(d.counter))
+          }))
+        sensor.byHour[type]
+          .filter(d => d.type === 'vehicle')
+          .map(d => dataOthers[d.dow].push({
+            hour: d.hour,
+            counter: Math.round(parseFloat(d.counter))
+          }))
+      }
     }
 
     return (
       <div>
-        <div className={styles.dayPicker}>
+        <div className={styles.options}>
           <LeftIcon className={styles.icon} onClick={e => this.handleDayDecreased(day, e)}/>
           <h5>{days[day]}</h5>
           <RightIcon className={styles.icon} onClick={e => this.handleDayIncreased(day, e)}/>
+          <div className={styles.dropdown}>
+            <Select
+              defaultValue={{ value: `${type}`, label: type==="avg" ? "average" : (type==="min" ? "minimum" : "maximum") }}
+              onChange={this.handleTypeChanged}
+              options={[
+                { value: "avg", label: "average" },
+                { value: "min", label: "minimum" },
+                { value: "max", label: "maximum" }
+              ]}
+            />
+          </div>
         </div>
         <VictoryChart
           theme={MyVictoryTheme}
@@ -88,10 +108,10 @@ class VisualByHourChart extends Component {
             offsetX={88} 
           />
           <VictoryGroup
-            offset={10}
+            offset={6}
             style={{
               data: {
-                width: 8
+                width: 4
               }
             }}
             
@@ -147,12 +167,16 @@ class VisualByHourChart extends Component {
 
 const mapStateToProps = (state) => ({
   sensor: state.sensor.visual,
-  day: state.charts.byHour.visual.dow
+  day: state.charts.byHour.visual.dow,
+  type: state.charts.byHour.visual.type
 })
 
 const mapDispatchToProps = {
   getAvgVisualDataByHour,
-  changeVisualDowChart
+  getMaxVisualDataByHour,
+  getMinVisualDataByHour,
+  changeVisualDowChart,
+  changeVisualTypeHourChart
 }
 
 export default withDimension({
