@@ -3,7 +3,7 @@ import './App.scss'
 import { Provider } from 'react-redux'
 import { Route, Switch } from 'react-router-dom'
 import Media from 'react-media'
-import { DESK, MOBILE } from './utils/const'
+import { DESK, MOBILE, BREAK_POINT } from './utils/const'
 import store from './state/store'
 import DashboardMain from './views/pages/DashboardMain/DashboardMain'
 import DataPage from './views/pages/DataPage/DataPage'
@@ -13,7 +13,7 @@ class App extends Component {
     return (
       <Provider store={ store }>
         <div className="App">
-          <Media query="(max-width: 820px)">
+          <Media query={`(max-width: ${BREAK_POINT}px)`}>
             {matches => (
               <Switch>
                 <Route

@@ -1,4 +1,5 @@
 import React from 'react'
+import { DESK } from '../../../utils/const'
 import MapPinIcon from 'react-feather/dist/icons/map-pin'
 import CompassIcon from 'react-feather/dist/icons/compass'
 import styles from './TitleCard.module.scss'
@@ -7,12 +8,13 @@ export const TitleCard = (props) => {
   let {
     name,
     suburb,
-    position
+    position,
+    media
   } = props
   
   return (
     <div>
-      <h1>{name}</h1>
+      {media===DESK ? <h1>{name}</h1> : <h2>{name.length > 25 ? `${name.substring(0, 25)}...` : name}</h2>}
       <div className={styles.info}>
         <MapPinIcon className={styles.icon} />
         <h5>{suburb}</h5>

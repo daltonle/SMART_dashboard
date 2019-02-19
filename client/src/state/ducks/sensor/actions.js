@@ -1,5 +1,14 @@
 import {
-  GET_AIR_DATA_LIVE, GET_VISUAL_DATA_LIVE
+  GET_AIR_DATA_LIVE, 
+  GET_VISUAL_DATA_LIVE, 
+  GET_AIR_DATA_HISTORY, 
+  GET_VISUAL_DATA_HISTORY,
+  GET_AVG_AIR_DATA_BY_HOUR,
+  GET_MIN_AIR_DATA_BY_HOUR,
+  GET_MAX_AIR_DATA_BY_HOUR,
+  GET_AVG_VISUAL_DATA_BY_HOUR,
+  GET_MIN_VISUAL_DATA_BY_HOUR,
+  GET_MAX_VISUAL_DATA_BY_HOUR
 } from './types'
 
 // get live data of air sensor at given position,
@@ -46,4 +55,100 @@ export const getVisualDataLive = (sensor) => (dispatch) => {
       payload: res
     }))
     .catch(err => console.log(err))
+}
+
+// get air data history of a sensor by id
+export const getAirDataHistory = id => dispatch => {
+  fetch(`/sensor-data/air/${id}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_AIR_DATA_HISTORY,
+      payload: res
+    }))
+    .catch(err => console.log(err))
+}
+
+// get visual data history of a sensor by id
+export const getVisualDataHistory = id => dispatch => {
+  fetch(`/sensor-data/visual/${id}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_VISUAL_DATA_HISTORY,
+      payload: res
+    }))
+    .catch(err => console.log(err))
+}
+
+// get average air data by hour
+export const getAvgAirDataByHour = id => dispatch => {
+  fetch(`/sensor-data/air/by-hour/avg/${id}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_AVG_AIR_DATA_BY_HOUR,
+    payload: res
+  }))
+  .catch(err => console.log(err))
+}
+
+// get min air data by hour
+export const getMinAirDataByHour = id => dispatch => {
+  fetch(`/sensor-data/air/by-hour/min/${id}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_MIN_AIR_DATA_BY_HOUR,
+    payload: res
+  }))
+  .catch(err => console.log(err))
+}
+
+// get max air data by hour
+export const getMaxAirDataByHour = id => dispatch => {
+  fetch(`/sensor-data/air/by-hour/max/${id}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_MAX_AIR_DATA_BY_HOUR,
+    payload: res
+  }))
+  .catch(err => console.log(err))
+}
+
+// get average visual data history by hour
+export const getAvgVisualDataByHour = id => dispatch => {
+  fetch(`/sensor-data/visual/by-hour/avg/${id}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_AVG_VISUAL_DATA_BY_HOUR,
+    payload: res
+  }))
+  .catch(err => console.log(err))
+}
+
+// get min visual data history by hour
+export const getMinVisualDataByHour = id => dispatch => {
+  fetch(`/sensor-data/visual/by-hour/min/${id}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_MIN_VISUAL_DATA_BY_HOUR,
+    payload: res
+  }))
+  .catch(err => console.log(err))
+}
+
+// get max visual data history by hour
+export const getMaxVisualDataByHour = id => dispatch => {
+  fetch(`/sensor-data/visual/by-hour/max/${id}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_MAX_VISUAL_DATA_BY_HOUR,
+    payload: res
+  }))
+  .catch(err => console.log(err))
 }

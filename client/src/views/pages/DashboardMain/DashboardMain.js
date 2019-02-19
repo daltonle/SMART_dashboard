@@ -28,7 +28,7 @@ class DashboardMain extends Component {
             <AppBar media={this.props.media}/>
           </div>
           <div className={ styles.mapContainer }>
-            <Map />
+            <Map media={this.props.media}/>
             <div className={styles.controlButton}>
               <div onClick={this.handleLayerClick}>
                 <LayersBttn />
@@ -47,7 +47,20 @@ class DashboardMain extends Component {
       return (
         <div className={ m_styles.outer }>
           <div className={ m_styles.mapContainer }>
-            <Map />
+            <Map media={this.props.media}/>
+            <div className={m_styles.layerButton}>
+              <div onClick={this.handleLayerClick}>
+                <LayersBttn />
+              </div>
+            </div>
+            <div className={m_styles.controlButton}>
+              <div>
+                <CompareBttn />
+              </div>
+              <div>
+                <LegendsBttn />
+              </div>
+            </div>
           </div>
           <div className={ m_styles.appbar }>
             <AppBar media={this.props.media} />
