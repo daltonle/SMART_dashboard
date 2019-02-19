@@ -8,12 +8,14 @@
   max-height: 30rem;
 }
 
-.dayPicker {
+.options {
   margin-left: 2.5rem;
   display: flex;
   align-items: center;
   height: 1.5rem;
   margin-bottom: 1rem;
+  position: relative;
+  z-index: 1 !important;
 
   h5 {
     width: 5rem;
@@ -25,5 +27,10 @@
     width: 1rem;
     stroke: $black;
     margin: 0 .625rem;
-  } 
+  }
+
+  .dropdown {
+    width: 8.5rem;
+    font-size: .875rem;
+  }
 }

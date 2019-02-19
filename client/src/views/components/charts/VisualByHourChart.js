@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getVisualDataByHour } from '../../../state/ducks/sensor/actions'
+import { getAvgVisualDataByHour } from '../../../state/ducks/sensor/actions'
 import { changeVisualDowChart } from '../../../state/ducks/charts/actions'
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryGroup, VictoryLegend, VictoryTooltip } from 'victory'
 import LeftIcon from 'react-feather/dist/icons/chevron-left'
@@ -15,12 +15,12 @@ class VisualByHourChart extends Component {
     sensor: PropTypes.object,
     day: PropTypes.number,
 
-    getVisualDataByHour: PropTypes.func,
+    getAvgVisualDataByHour: PropTypes.func,
     changeVisualDowChart: PropTypes.func
   }
   
   componentDidMount = () => {
-    this.props.getVisualDataByHour(this.props.sensor.id)
+    this.props.getAvgVisualDataByHour(this.props.sensor.id)
   }
 
   handleDayDecreased = (day, e) => {
@@ -99,7 +99,7 @@ class VisualByHourChart extends Component {
             <VictoryBar
               animate={{
                 duration: 400,
-                onLoad: false
+                onLoad: { duration: 200 }
               }}
               barRatio={1}
               data={dataPedestrians[day]}
@@ -110,7 +110,7 @@ class VisualByHourChart extends Component {
             <VictoryBar
               animate={{
                 duration: 400,
-                onLoad: false
+                onLoad: { duration: 200 }
               }}
               barRatio={1}
               data={dataBicycle[day]}
@@ -121,7 +121,7 @@ class VisualByHourChart extends Component {
             <VictoryBar
               animate={{
                 duration: 400,
-                onLoad: false
+                onLoad: { duration: 200 }
               }}
               barRatio={1}
               data={dataOthers[day]}
@@ -147,11 +147,11 @@ class VisualByHourChart extends Component {
 
 const mapStateToProps = (state) => ({
   sensor: state.sensor.visual,
-  day: state.charts.visualDow
+  day: state.charts.byHour.visual.dow
 })
 
 const mapDispatchToProps = {
-  getVisualDataByHour,
+  getAvgVisualDataByHour,
   changeVisualDowChart
 }
 
