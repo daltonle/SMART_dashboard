@@ -40,6 +40,10 @@ class VisualByHourChart extends Component {
     this.props.changeVisualDowChart(day==6 ? 0 : day+1)
   }
 
+  handleTypeChanged = (selected) => {
+    this.props.changeVisualTypeHourChart(selected.value)
+  }
+
   render() {
     const { sensor, containerHeight, containerWidth, day, type } = this.props
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]

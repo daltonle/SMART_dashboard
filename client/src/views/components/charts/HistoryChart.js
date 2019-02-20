@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getAirDataHistory, getVisualDataHistory } from '../../../state/ducks/sensor/actions'
-import { changeZoomDomain } from '../../../state/ducks/charts/actions'
-import { VictoryGroup, VictoryArea, VictoryChart, VictoryLegend, VictoryAxis, VictoryZoomContainer } from 'victory'
+import { VictoryGroup, VictoryScatter, VictoryChart, VictoryLegend, VictoryAxis, VictoryZoomContainer } from 'victory'
 import moment from 'moment'
 import withDimension from 'react-dimensions'
 import { MyVictoryTheme } from '../../../utils/victoryTheme'
@@ -12,10 +11,7 @@ import styles from './HistoryChart.module.scss'
 class HistoryChart extends Component {
   static propTypes = {
     airSensor: PropTypes.object,
-    visualSensor: PropTypes.object,
-    zoomDomain: PropTypes.object,
-
-    changeZoomDomain: PropTypes.func
+    visualSensor: PropTypes.object
   }
 
   componentDidMount = () => {
@@ -24,10 +20,6 @@ class HistoryChart extends Component {
       this.props.getAirDataHistory(airSensor.id)
     if (visualSensor !== undefined)
       this.props.getVisualDataHistory(visualSensor.id)
-  }
-
-  handleZoomDomainChanged = (domain) => {
-    this.props.changeZoomDomain(domain)
   }
 
   render() {
@@ -62,15 +54,9 @@ class HistoryChart extends Component {
         height={containerHeight}
         width={containerWidth}
         padding={{left: 80, right: 100, top: 40, bottom: 80}}
-        domainPadding={{y: [20,0]}}
-        scale={{ x: "time" }}
-        containerComponent={
-          <VictoryZoomContainer
-            zoomDimension="x"
-            zoomDomain={this.props.zoomDomain}
-            onZoomDomainChange={this.handleZoomDomainChanged}
-          />
-        }
+        domainPadding={{y: [20,5]}}
+        domain={{x: [new Date(2018,12,1,0,0,0,0), new Date()]}}
+        containerComponent={<VictoryZoomContainer zoomDomain={{x: [new Date(2018,12,1,0,0,0,0), new Date()]}}/>}
       >
         <VictoryAxis scale="time" />
         <VictoryAxis dependentAxis />
@@ -78,71 +64,70 @@ class HistoryChart extends Component {
           style={{
             data: {
               strokeWidth: `3px`,
-              fillOpacity: 0.1
+              fillOpacity: 0.5
             }
           }}
         >
-          
-          <VictoryArea
-            interpolation="linear"
-            style={{
-              data: {
-                fill: `#02A27F`,
-                stroke: `#02A27F`
-              }
-            }}
-            data={airData}
-            x="timestamp"
-            y={d => parseFloat(d.pm2_5)}
-          />
-          <VictoryArea
-            interpolation="linear"
-            style={{
-              data: {
-                fill: `#FF595E`,
-                stroke: `#FF595E`
-              }
-            }}
-            data={airData}
-            x="timestamp"
-            y={d => parseFloat(d.pm10)}
-          />
-          <VictoryArea
-            interpolation="catmullRom"
-            style={{
-              data: {
-                fill: `#FFCA3A`,
-                stroke: `#FFCA3A`
-              }
-            }}
-            data={visualDataPedestrians}
-            x="timestamp"
-            y={d => parseInt(d.counter)}
-          />
-          <VictoryArea
-            interpolation="catmullRom"
-            style={{
-              data: {
-                fill: `#E66337`,
-                stroke: `#E66337`
-              }
-            }}
-            data={visualDataBicycle}
-            x="timestamp"
-            y={d => parseInt(d.counter)}
-          />
-          <VictoryArea
-            interpolation="catmullRom"
-            style={{
-              data: {
-                fill: `#5E50B5`,
-                stroke: `#5E50B5`
-              }
-            }}
-            data={visualDataOthers}
-            x="timestamp"
-            y={d => parseInt(d.counter)}
-          />
+          {airData.length===0 ? <div></div> : 
+            <VictoryScatter
+              style={{
+                data: {
+                  fill: "#02A27F"
+                }
+              }}
+              data={airData}
+              x="timestamp"
+              y={d => parseFloat(d.pm2_5)}
+            />
+          }
+          {airData.length===0 ? <div></div> : 
+            <VictoryScatter
+              style={{
+                data: {
+                  fill: "#FF595E"
+                }
+              }}
+              data={airData}
+              x="timestamp"
+              y={d => parseFloat(d.pm10)}
+            />
+          }
+          {visualDataPedestrians.length===0 ? <div></div> :
+            <VictoryScatter
+              style={{
+                data: {
+                  fill: "#FFCA3A"
+                }
+              }}
+              data={visualDataPedestrians}
+              x="timestamp"
+              y={d => parseInt(d.counter)}
+            />
+          }
+          {visualDataBicycle.length===0 ? <div></div> : 
+            <VictoryScatter
+              style={{
+                data: {
+                  fill: "#E66337"
+                }
+              }}
+              data={visualDataBicycle}
+              x="timestamp"
+              y={d => parseInt(d.counter)}
+            />
+          }
+          {visualDataOthers.length===0? <div></div> :
+            <VictoryScatter
+              style={{
+                data: {
+                  fill: "#5E50B5"
+                }
+              }}
+              data={visualDataOthers}
+              x="timestamp"
+              y={d => parseInt(d.counter)}
+            />
+          }
         </VictoryGroup>
         <VictoryLegend
           x={56}
@@ -150,7 +135,7 @@ class HistoryChart extends Component {
           padding={{left: 40, bottom: 24, top: 0, right: 0}}
           data={[
             ...airData.length=== 0 ? [] : [{ name: "PM2.5", symbol: {fill: "#02A27F"} }, { name: "PM10", symbol: {fill: "#FF595E"} }],
-            ...visualDataBicycle.length===0 ? [] : [ { name: "Pedestrian", symbol: {fill: "#FFCA3A"} }, { name: "Bicycle", symbol: {fill: "#E66337"} }, { name: "Others", symbol: {fill: "#5E50B5"} }]       
+            ...(visualDataBicycle.length!==0 || visualDataPedestrians!==0 || visualDataOthers!==0) ? [ { name: "Pedestrian", symbol: {fill: "#FFCA3A"} }, { name: "Bicycle", symbol: {fill: "#E66337"} }, { name: "Others", symbol: {fill: "#5E50B5"} }] : []       
           ]}
         />
       </VictoryChart>
@@ -160,14 +145,12 @@ class HistoryChart extends Component {
 
 const mapStateToProps = (state) => ({
   airSensor: state.sensor.air,
-  visualSensor: state.sensor.visual,
-  zoomDomain: state.charts.history.zoomDomain
+  visualSensor: state.sensor.visual
 })
 
 const mapDispatchToProps = {
   getAirDataHistory,
-  getVisualDataHistory,
-  changeZoomDomain
+  getVisualDataHistory
 }
 
 export default withDimension({
