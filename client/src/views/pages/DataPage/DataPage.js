@@ -11,14 +11,13 @@ import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/a
 import { showDataDetails, hideDataDetails } from '../../../state/ducks/charts/actions'
 import { DESK, MOBILE } from '../../../utils/const'
 import { AppBar } from '../../components/appbar/AppBar'
-import { VisualLiveChart, HistoryChart, HistoryBrush, AirByHourChart, VisualByHourChart } from '../../components/charts'
+import { VisualLiveChart, HistoryChart, AirByHourChart, VisualByHourChart } from '../../components/charts'
 import Map from '../../components/map/Map'
 import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
 import { ParticleData } from '../../components/particleData/ParticleData'
 import { TitleCard } from '../../components/titleCard/TitleCard'
 import styles from './DataPage_desktop.module.scss'
 import m_styles from './DataPage_mobile.module.scss'
-import { timingSafeEqual } from 'crypto';
 
 class DataPage extends Component {
   static propTypes = {
@@ -141,7 +140,6 @@ class DataPage extends Component {
                 </div>
                 <h3>History</h3>
                 <HistoryChart />
-                <HistoryBrush />
                 {(airSensor !== undefined) ? <h3>Air data by hour</h3>: <div></div>}
                 {(airSensor !== undefined) ? <AirByHourChart />: <div></div>}
                 {(visualSensor !== undefined) ? <h3>Vehicles by hour</h3>: <div></div>}
