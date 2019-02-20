@@ -68,57 +68,66 @@ class HistoryChart extends Component {
             }
           }}
         >
-          
-          <VictoryScatter
-            style={{
-              data: {
-                fill: `#02A27F`
-              }
-            }}
-            data={airData}
-            x="timestamp"
-            y={d => parseFloat(d.pm2_5)}
-          />
-          <VictoryScatter
-            style={{
-              data: {
-                fill: `#FF595E`
-              }
-            }}
-            data={airData}
-            x="timestamp"
-            y={d => parseFloat(d.pm10)}
-          />
-          <VictoryScatter
-            style={{
-              data: {
-                fill: `#FFCA3A`
-              }
-            }}
-            data={visualDataPedestrians}
-            x="timestamp"
-            y={d => parseInt(d.counter)}
-          />
-          <VictoryScatter
-            style={{
-              data: {
-                fill: `#E66337`
-              }
-            }}
-            data={visualDataBicycle}
-            x="timestamp"
-            y={d => parseInt(d.counter)}
-          />
-          <VictoryScatter
-            style={{
-              data: {
-                fill: `#5E50B5`
-              }
-            }}
-            data={visualDataOthers}
-            x="timestamp"
-            y={d => parseInt(d.counter)}
-          />
+          {airData.length===0 ? <div></div> : 
+            <VictoryScatter
+              style={{
+                data: {
+                  fill: "#02A27F"
+                }
+              }}
+              data={airData}
+              x="timestamp"
+              y={d => parseFloat(d.pm2_5)}
+            />
+          }
+          {airData.length===0 ? <div></div> : 
+            <VictoryScatter
+              style={{
+                data: {
+                  fill: "#FF595E"
+                }
+              }}
+              data={airData}
+              x="timestamp"
+              y={d => parseFloat(d.pm10)}
+            />
+          }
+          {visualDataPedestrians.length===0 ? <div></div> :
+            <VictoryScatter
+              style={{
+                data: {
+                  fill: "#FFCA3A"
+                }
+              }}
+              data={visualDataPedestrians}
+              x="timestamp"
+              y={d => parseInt(d.counter)}
+            />
+          }
+          {visualDataBicycle.length===0 ? <div></div> : 
+            <VictoryScatter
+              style={{
+                data: {
+                  fill: "#E66337"
+                }
+              }}
+              data={visualDataBicycle}
+              x="timestamp"
+              y={d => parseInt(d.counter)}
+            />
+          }
+          {visualDataOthers.length===0? <div></div> :
+            <VictoryScatter
+              style={{
+                data: {
+                  fill: "#5E50B5"
+                }
+              }}
+              data={visualDataOthers}
+              x="timestamp"
+              y={d => parseInt(d.counter)}
+            />
+          }
         </VictoryGroup>
         <VictoryLegend
           x={56}
@@ -126,7 +135,7 @@ class HistoryChart extends Component {
           padding={{left: 40, bottom: 24, top: 0, right: 0}}
           data={[
             ...airData.length=== 0 ? [] : [{ name: "PM2.5", symbol: {fill: "#02A27F"} }, { name: "PM10", symbol: {fill: "#FF595E"} }],
-            ...visualDataBicycle.length===0 ? [] : [ { name: "Pedestrian", symbol: {fill: "#FFCA3A"} }, { name: "Bicycle", symbol: {fill: "#E66337"} }, { name: "Others", symbol: {fill: "#5E50B5"} }]       
+            ...(visualDataBicycle.length!==0 || visualDataPedestrians!==0 || visualDataOthers!==0) ? [ { name: "Pedestrian", symbol: {fill: "#FFCA3A"} }, { name: "Bicycle", symbol: {fill: "#E66337"} }, { name: "Others", symbol: {fill: "#5E50B5"} }] : []       
           ]}
         />
       </VictoryChart>
