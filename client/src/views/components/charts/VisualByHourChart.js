@@ -100,7 +100,7 @@ class VisualByHourChart extends Component {
           theme={MyVictoryTheme}
           height={containerHeight}
           width={containerWidth}
-          padding={{left: 88, right: 100, top: 40, bottom: 80}}
+          padding={{left: 88, right: 100, top: 40, bottom: 100}}
           singleQuadrantDomainPadding={{x: false}}
           domainPadding={{x: 16, y: 40}}
         >
