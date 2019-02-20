@@ -113,7 +113,7 @@ router.get('/visual/live/:long,:lat', (req, res, next) => {
 })
 
 // retrieve air quality data from a time period
-router.get('/air/by-time/:id/:year-:month-:day', (req, res, next) => {
+router.get('/air/by-period/:id/:year-:month-:day', (req, res, next) => {
   let {
     year,
     month,
@@ -138,7 +138,7 @@ router.get('/air/by-time/:id/:year-:month-:day', (req, res, next) => {
 })
 
 // retrieve visual data from a time period
-router.get('/visual/by-time/:id/:year-:month-:day', (req, res, next) => {
+router.get('/visual/by-period/:id/:year-:month-:day', (req, res, next) => {
   let {
     year,
     month,
@@ -264,6 +264,33 @@ router.get('/visual/by-hour/max/:id', (req, res, next) => {
           GROUP BY 1,2,3`,
     values: [req.params.id]
   }
+
+  db.query(query)
+    .then(result => res.json(result.rows))
+    .catch(next)
+})
+
+// retrieve air data from a specific day
+router.get('/:type/by-day/:name/:id/:year-:month-:day', (req, res, next) => {
+  let day = moment([req.params.year, req.params.month-1, req.params.day]).format('YYYY-MM-DD HH:mm:ss')
+  let query = {}
+  if (req.params.type === 'air') {
+    query = {
+      text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss') as timestamp, ${req.params.name} FROM aq_data
+            WHERE id_aq=$1 and date_trunc('day', ts)=$2
+            ORDER BY ts ASC`,
+      values: [req.params.id, day]
+    }
+  }
+  else if (req.params.type === 'visual') {
+    query = {
+      text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss') as timestamp, counter FROM vs_count
+            WHERE id_vs=$1 AND type=$2 AND date_trunc('day', ts)=$3
+            ORDER BY ts ASC`,
+      values: [req.params.id, req.params.name, day]
+    }
+  }
+  
 
   db.query(query)
     .then(result => res.json(result.rows))
