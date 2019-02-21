@@ -1,13 +1,18 @@
 // *
 // * Colors (used for charts)
 // *
-const primaryColor = "#068FAB"
-const red = "#FF595E"
-const green = "#02A27F"
-const yellow = "#FFCA3A"
-const orange = "#E66337"
-const purple = "#5E50B5"
-const maroon = "#692D39"
-export const colors = [green, red, yellow, orange, purple, primaryColor, maroon];
-export const dividerColor = "#C1C1C2"
-export const labelColor = "#565659"
+
+export const colors = {
+  primaryColor : "#068FAB",
+  red : "#FF595E",
+  green : "#02A27F",
+  yellow : "#FFCA3A",
+  orange : "#E66337",
+  purple : "#5E50B5",
+  maroon : "#692D39",
+  dividerColor : "#C1C1C2",
+  labelColor : "#565659",
+  hintColor: "#8B8C8D",
+  backgroundColor: "#FCFCFC",
+  black: "#202124"
+}
