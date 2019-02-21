@@ -101,7 +101,7 @@ class HistoryChart extends Component {
             name: "PM2_5",
             type: 'scatter',
             mode: 'markers',
-            marker: { color: colors.red, opacity: 0.3 }
+            marker: { color: colors.red, opacity: 0.7 }
           },
           {
             x: airData.pm10.x,
@@ -109,7 +109,7 @@ class HistoryChart extends Component {
             name: "PM10",
             type: 'scatter',
             mode: 'markers',
-            marker: { color: colors.green, opacity: 0.3 }
+            marker: { color: colors.green, opacity: 0.7 }
           },
           {
             x: visualData.pedestrian.x,
@@ -117,7 +117,7 @@ class HistoryChart extends Component {
             name: "Pedestrian",
             type: "scatter",
             mode: "markers",
-            marker: { color: colors.yellow, opacity: 0.3 }
+            marker: { color: colors.yellow, opacity: 0.7 }
           },
           {
             x: visualData.bicycle.x,
@@ -125,7 +125,7 @@ class HistoryChart extends Component {
             name: "Bicycle",
             type: "scatter",
             mode: "markers",
-            marker: { color: colors.orange, opacity: 0.3 }
+            marker: { color: colors.orange, opacity: 0.7 }
           },
           {
             x: visualData.vehicle.x,
@@ -133,7 +133,7 @@ class HistoryChart extends Component {
             name: "Others",
             type: "scatter",
             mode: "markers",
-            marker: { color: colors.purple, opacity: 0.3 }
+            marker: { color: colors.purple, opacity: 0.7 }
           }
         ]}
         config={{
