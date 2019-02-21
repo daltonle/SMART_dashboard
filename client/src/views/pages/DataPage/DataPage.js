@@ -18,6 +18,7 @@ import { ParticleData } from '../../components/particleData/ParticleData'
 import { TitleCard } from '../../components/titleCard/TitleCard'
 import styles from './DataPage_desktop.module.scss'
 import m_styles from './DataPage_mobile.module.scss'
+import AirOfDayChart from '../../components/charts/AirOfDayChart'
 
 class DataPage extends Component {
   static propTypes = {
@@ -142,6 +143,8 @@ class DataPage extends Component {
                 <HistoryChart />
                 {(airSensor !== undefined) ? <h3>Air data by hour</h3>: <div></div>}
                 {(airSensor !== undefined) ? <AirByHourChart />: <div></div>}
+                {(airSensor !== undefined) ? <h3>Air data of a day</h3> : <div></div>}
+                {(airSensor !== undefined) ? <AirOfDayChart />: <div></div>}
                 {(visualSensor !== undefined) ? <h3>Vehicles by hour</h3>: <div></div>}
                 {(visualSensor !== undefined) ? <VisualByHourChart />: <div></div>}
               </div> :
