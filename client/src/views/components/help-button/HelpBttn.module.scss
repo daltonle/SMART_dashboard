@@ -1,0 +1,30 @@
+@import '../../../styles/colors.scss';
+
+.bttn {
+  display: inline-block;
+  height: 1.25rem;
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translate(-100%, -50%);
+
+  .icon {
+    stroke: $neutral-color-5;
+    width: 1.25em;
+    height: 1.25em;
+    margin: auto;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.theme {
+  border-radius: 5px;
+  color: $black !important;
+  padding: 1rem 1.5rem;
+  background-color: /*rgba(6, 144, 171, 1)*/ #FFFFFF !important;
+  box-shadow: 0.1875em .25em 1em rgba(0, 0, 0, .3);
+}
+

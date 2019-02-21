@@ -14,6 +14,7 @@ import { AppBar } from '../../components/appbar/AppBar'
 import { VisualLiveChart, HistoryChart, AirByHourChart, VisualByHourChart, AirOfDayChart, VisualOfDayChart } from '../../components/charts'
 import Map from '../../components/map/Map'
 import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
+import { HelpBttn } from '../../components/help-button/HelpBttn'
 import { ParticleData } from '../../components/particleData/ParticleData'
 import { TitleCard } from '../../components/titleCard/TitleCard'
 import styles from './DataPage_desktop.module.scss'
@@ -138,15 +139,51 @@ class DataPage extends Component {
                 <div className={styles.exitButton} onClick={this.props.hideDataDetails}>
                   <ExitIcon className={styles.icon}/>
                 </div>
-                <h3>History</h3>
+                <div className={styles.header} style={{marginTop: 0}}>
+                  <h3>History</h3>
+                  <HelpBttn 
+                    name="history-chart" 
+                    message="Data collected over time" 
+                  />
+                </div>
                 <HistoryChart />
-                {(airSensor !== undefined) ? <h3>Air data by hour</h3>: <div></div>}
+                {(airSensor !== undefined) ? 
+                  <div className={styles.header}>
+                    <h3>Air data by hour</h3>
+                    <HelpBttn 
+                      name="air-by-hour-chart" 
+                      message='Air quality data in each hour on each day of the week.<br><br>Use dropdown dialogue to view average/<br>minimum/maximum data.'
+                    />
+                  </div> : <div></div>
+                }
                 {(airSensor !== undefined) ? <AirByHourChart />: <div></div>}
-                {(airSensor !== undefined) ? <h3>Air data of a day</h3> : <div></div>}
+                {(airSensor !== undefined) ? 
+                  <div className={styles.header}>
+                    <h3>Air data of a day</h3>
+                    <HelpBttn 
+                      name="air-of-day-chart" 
+                      message="Choose a date to view air quality data of that day." 
+                    />
+                  </div> : <div></div>
+                }
                 {(airSensor !== undefined) ? <AirOfDayChart />: <div></div>}
-                {(visualSensor !== undefined) ? <h3>Vehicles by hour</h3>: <div></div>}
+                {(visualSensor !== undefined) ? 
+                  <div className={styles.header}>
+                    <h3>Vehicles by hour</h3>
+                    <HelpBttn 
+                      name="vehicles-by-hour-chart" 
+                      message="Traffic data in each hour on each day of the week." 
+                    />
+                  </div>: <div></div>}
                 {(visualSensor !== undefined) ? <VisualByHourChart />: <div></div>}
-                {(visualSensor !== undefined) ? <h3>Visual data of a day</h3> : <div></div>}
+                {(visualSensor !== undefined) ? 
+                  <div className={styles.header}>
+                    <h3>Visual data of a day</h3>
+                    <HelpBttn 
+                      name="vehicles-of-day-chart" 
+                      message="Choose a date to view traffic data on that day." 
+                    />
+                  </div> : <div></div>}
                 {(visualSensor !== undefined) ? <VisualOfDayChart />: <div></div>}
               </div> :
               <div className={styles.mapContainer}>

@@ -96,9 +96,17 @@
       align-self: flex-end;
     }
 
-    h3 {
-      margin: 0 2.5rem 2rem 2.5rem;
-      font-weight: $font-weight-heavy;
+    .header {
+      margin: 1rem 4rem 2rem 2.5rem;
+      align-self: stretch;
+      position: relative;
+      z-index: 10;
+
+      h3 {
+        margin: 0;
+        font-weight: $font-weight-heavy;
+        display: inline-block;
+      }
     }
   }
 }
