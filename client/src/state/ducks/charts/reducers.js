@@ -49,16 +49,6 @@ const initialState = {
 
 const chartsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SHOW_DETAILS:
-      return {
-        ...state,
-        showDetails: true
-      }
-    case HIDE_DETAILS:
-      return {
-        ...state,
-        showDetails: false
-      }
     case CHANGE_ZOOM_DOMAINS_HISTORY:
       return {
         ...state,

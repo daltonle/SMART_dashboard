@@ -1,24 +1,10 @@
-import { 
-  SHOW_DETAILS, 
-  HIDE_DETAILS, 
+import {
   CHANGE_ZOOM_DOMAINS_HISTORY, 
   CHANGE_AIR_DOW_HOUR_CHART,
   CHANGE_VISUAL_DOW_HOUR_CHART,
   CHANGE_AIR_TYPE_HOUR_CHART,
   CHANGE_VISUAL_TYPE_HOUR_CHART
 } from './types'
-
-export const showDataDetails = () => dispatch => {
-  dispatch({
-    type: SHOW_DETAILS
-  })
-}
-
-export const hideDataDetails = () => dispatch => {
-  dispatch({
-    type: HIDE_DETAILS
-  })
-}
 
 export const changeZoomDomain = domain => dispatch => {
   dispatch({

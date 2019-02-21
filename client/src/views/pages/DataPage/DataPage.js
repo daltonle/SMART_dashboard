@@ -8,7 +8,6 @@ import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { changeCentre, changeLayer } from '../../../state/ducks/map/actions'
 import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/actions'
-import { showDataDetails, hideDataDetails } from '../../../state/ducks/charts/actions'
 import { DESK, MOBILE } from '../../../utils/const'
 import { AppBar } from '../../components/appbar/AppBar'
 import { VisualLiveChart, HistoryChart, AirByHourChart, VisualByHourChart, AirOfDayChart, VisualOfDayChart } from '../../components/charts'
@@ -33,9 +32,14 @@ class DataPage extends Component {
     changeLayer: PropTypes.func,
     changeCentre: PropTypes.func,
     getAirDataLive: PropTypes.func,
-    getVisualDataLive: PropTypes.func,
-    showDataDetails: PropTypes.func,
-    hideDataDetails: PropTypes.func
+    getVisualDataLive: PropTypes.func
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      doShowDetails: false
+    }
   }
   
   // After component mounted, change map centre to the new position,
@@ -70,6 +74,16 @@ class DataPage extends Component {
     }
   }
 
+  handleExpand = (e) => {
+    e.preventDefault()
+    this.setState({ doShowDetails: true })
+  }
+
+  handleCollapse = (e) => {
+    e.preventDefault()
+    this.setState({ doShowDetails: false })
+  }
+
   handleLayerClick = (e) => {
     e.preventDefault()
     this.props.changeLayer()
@@ -82,7 +96,8 @@ class DataPage extends Component {
   }
 
   render() {
-    let { airSensor, visualSensor, isAirLayer, doShowDetails } = this.props
+    let { airSensor, visualSensor, isAirLayer } = this.props
+    const { doShowDetails } = this.state
 
     if (this.props.media === DESK)
       return (
@@ -91,7 +106,7 @@ class DataPage extends Component {
             <AppBar media={this.props.media} />
           </div>
           <div className={styles.content}>
-            <div className={classNames(styles.data, { [styles.detailsShown]: this.props.doShowDetails })}>
+            <div className={classNames(styles.data, { [styles.detailsShown]: doShowDetails })}>
               <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick}/>
               <div className={styles.titleCard}>
                 <TitleCard
@@ -136,7 +151,7 @@ class DataPage extends Component {
             </div>
             { doShowDetails ? 
               <div className={styles.chartDetails}>
-                <div className={styles.exitButton} onClick={this.props.hideDataDetails}>
+                <div className={styles.exitButton} onClick={this.handleCollapse}>
                   <ExitIcon className={styles.icon}/>
                 </div>
                 <div className={styles.header} style={{marginTop: 0}}>
@@ -187,7 +202,7 @@ class DataPage extends Component {
                 {(visualSensor !== undefined) ? <VisualOfDayChart />: <div></div>}
               </div> :
               <div className={styles.mapContainer}>
-                <div className={styles.expandButton} onClick={this.props.showDataDetails}>
+                <div className={styles.expandButton} onClick={this.handleExpand}>
                   <ExpandIcon className={styles.icon} />
                 </div>
                 <Map media={this.props.media}/>
@@ -222,7 +237,7 @@ class DataPage extends Component {
               </div>
             </div>
             <div className={m_styles.data}>
-              <div className={m_styles.expandButton} onClick={this.props.showDataDetails}>
+              <div className={m_styles.expandButton} onClick={this.handleExpand}>
                 <ExpandUpIcon className={m_styles.icon} />
               </div>
               <div className={m_styles.titleCard}>
@@ -278,17 +293,14 @@ const mapStateToProps = state => ({
   isAirLayer: state.map.isAirLayer,
   airSensor: state.sensor.air,
   visualSensor: state.sensor.visual,
-  mapCentre: state.map.centre,
-  doShowDetails: state.charts.showDetails
+  mapCentre: state.map.centre
 })
 
 const mapDispatchToProps = {
   changeLayer,
   changeCentre,
   getAirDataLive,
-  getVisualDataLive,
-  showDataDetails,
-  hideDataDetails
+  getVisualDataLive
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DataPage)
