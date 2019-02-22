@@ -24,7 +24,7 @@ router.get('/air/:id', (req, res, next) => {
 // retrieve PM2_5 history data of a sensor based on id
 router.get('/pm25/:id', (req, res, next) => {
   let query = {
-    text: `SELECT pm2_5, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp FROM aq_data
+    text: `SELECT pm2_5 as y, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as x FROM aq_data
       WHERE id_aq=$1::text
       ORDER BY ts DESC`,
     values: [req.params.id]
@@ -38,7 +38,7 @@ router.get('/pm25/:id', (req, res, next) => {
 // retrieve PM10 history data of a sensor based on id
 router.get('/pm10/:id', (req, res, next) => {
   let query = {
-    text: `SELECT pm10, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp FROM aq_data
+    text: `SELECT pm10 as y, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as x FROM aq_data
       WHERE id_aq=$1::text
       ORDER BY ts DESC`,
     values: [req.params.id]
