@@ -6,14 +6,16 @@ import Downsampler from 'downsample-lttb'
 import { getAirDataHistory, getVisualDataHistory } from '../../../state/ducks/sensor/actions'
 import moment from 'moment'
 import withDimension from 'react-dimensions'
+import { MOBILE } from '../../../utils/const'
 import { colors } from '../../../styles/colors.js'
 import styles from './HistoryChart.module.scss'
 import '../../../styles/plotly.scss'
 
-const numPointsInDownsampledData = 1000
+const numPointsInDownsampledData = 500
 
 class HistoryChart extends Component {
   static propTypes = {
+    media: PropTypes.string,
     airSensor: PropTypes.object,
     visualSensor: PropTypes.object
   }
@@ -92,12 +94,49 @@ class HistoryChart extends Component {
       }
     }
 
+    // chart layout
+    const webLayout = { 
+      width: containerWidth, 
+      height: containerHeight,
+      showlegend: true,
+      legend: { x: 0, y: 1.25, orientation: "h" },
+      plot_bgcolor: colors.backgroundColor,
+      paper_bgcolor: colors.backgroundColor,
+      margin: {
+        t: 0,
+        pad: 8
+      }
+    }
+    
+    const mobileLayout = {
+      ...webLayout,
+      margin: {
+        t: 100,
+        l: 40,
+        r: 0,
+        b: 64,
+        pad: 8
+      }
+    }
+
+    // chart config
+    const webConfig = {
+      modeBarButtonsToRemove: ['toImage', 'sendDataToCloud', 'select2d', 'lasso2d', 'toggleSpikelines'],
+      displaylogo: false,
+      displayModeBar: 'hover'
+    }
+
+    const mobileCongig = {
+      ...webConfig,
+      displayModeBar: true
+    }
+
     return (
       <Plot
         data={[
           {
             x: airData.pm2_5.x,
-            y: airData.pm2_5.y,
+            y: airData.pm10.y,
             name: "PM2_5",
             type: 'scatter',
             mode: 'markers',
@@ -136,22 +175,8 @@ class HistoryChart extends Component {
             marker: { color: colors.purple, opacity: 0.7 }
           }
         ]}
-        config={{
-          modeBarButtonsToRemove: ['toImage', 'sendDataToCloud', 'select2d', 'lasso2d', 'toggleSpikelines'],
-          displaylogo: false,
-        }}
-        layout={{ 
-          width: containerWidth, 
-          height: containerHeight,
-          showlegend: true,
-          legend: { x: 0, y: 1.25, orientation: "h" },
-          plot_bgcolor: colors.backgroundColor,
-          paper_bgcolor: colors.backgroundColor,
-          margin: {
-            t: 0,
-            pad: 8
-          }
-        }}
+        config={this.props.media===MOBILE ? mobileCongig : webConfig}
+        layout={this.props.media===MOBILE ? mobileLayout : webLayout}
       />
     )
   }

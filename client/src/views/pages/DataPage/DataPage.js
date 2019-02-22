@@ -161,7 +161,7 @@ class DataPage extends Component {
                     message="Data collected over time" 
                   />
                 </div>
-                <HistoryChart />
+                <HistoryChart media={DESK} />
                 {(airSensor !== undefined) ? 
                   <div className={styles.header}>
                     <h3>Air data by hour</h3>
@@ -171,7 +171,7 @@ class DataPage extends Component {
                     />
                   </div> : <div></div>
                 }
-                {(airSensor !== undefined) ? <AirByHourChart />: <div></div>}
+                {(airSensor !== undefined) ? <AirByHourChart media={DESK} />: <div></div>}
                 {(airSensor !== undefined) ? 
                   <div className={styles.header}>
                     <h3>Air data of a day</h3>
@@ -181,7 +181,7 @@ class DataPage extends Component {
                     />
                   </div> : <div></div>
                 }
-                {(airSensor !== undefined) ? <AirOfDayChart />: <div></div>}
+                {(airSensor !== undefined) ? <AirOfDayChart media={DESK} />: <div></div>}
                 {(visualSensor !== undefined) ? 
                   <div className={styles.header}>
                     <h3>Vehicles by hour</h3>
@@ -190,7 +190,7 @@ class DataPage extends Component {
                       message="Traffic data in each hour on each day of the week." 
                     />
                   </div>: <div></div>}
-                {(visualSensor !== undefined) ? <VisualByHourChart />: <div></div>}
+                {(visualSensor !== undefined) ? <VisualByHourChart media={DESK} />: <div></div>}
                 {(visualSensor !== undefined) ? 
                   <div className={styles.header}>
                     <h3>Visual data of a day</h3>
@@ -199,7 +199,7 @@ class DataPage extends Component {
                       message="Choose a date to view traffic data on that day." 
                     />
                   </div> : <div></div>}
-                {(visualSensor !== undefined) ? <VisualOfDayChart />: <div></div>}
+                {(visualSensor !== undefined) ? <VisualOfDayChart media={DESK} />: <div></div>}
               </div> :
               <div className={styles.mapContainer}>
                 <div className={styles.expandButton} onClick={this.handleExpand}>
@@ -226,6 +226,98 @@ class DataPage extends Component {
     else if (this.props.media === MOBILE)
       return (
         <div className={ m_styles.outer }>
+          { doShowDetails ? 
+          <div className={m_styles.chartDetails}>
+            <div className={m_styles.backButton} onClick={this.handleBackClick}>
+              <ArrowLeftIcon className={m_styles.icon} />
+            </div>
+            <div className={m_styles.titleCard}>
+              <TitleCard
+                name={isAirLayer ? 
+                  (airSensor===undefined ? 'No name.' : airSensor.description) : 
+                  (visualSensor===undefined ? 'No name.' : visualSensor.description) }
+                suburb='No location data'
+                position={{
+                  lng: this.props.mapCentre.lng,
+                  lat: this.props.mapCentre.lat
+                }}
+                media={this.props.media}
+                full={true}
+              />
+            </div>
+            <h4>Live feed</h4>
+            { airSensor === undefined ? 
+              <h5 className={m_styles.noAir}>No air data.</h5> : 
+              <div className={styles.airDataContainer}>
+                <div>
+                  <ParticleData
+                    data={airSensor === undefined ? -1 : airSensor.pm2_5}
+                    level={1}
+                    unit="ug/m3"
+                  />
+                  <h5>PM2.5</h5>
+                </div>
+                <div>
+                  <ParticleData
+                    data={airSensor === undefined ? -1 : airSensor.pm10}
+                    level={1}
+                    unit="ug/m3"
+                  />
+                  <h5>PM10</h5>
+                </div>
+              </div>
+            }
+            { visualSensor === undefined ? 
+              <h5 className={m_styles.noVisual}>No visual data.</h5> :
+              <VisualLiveChart />
+            }
+            <div className={m_styles.header} style={{marginTop: 0}}>
+              <h3>History</h3>
+              <HelpBttn 
+                name="history-chart" 
+                message="Data collected over time" 
+              />
+            </div>
+            <HistoryChart media={MOBILE} />
+            {(airSensor !== undefined) ? 
+              <div className={m_styles.header}>
+                <h3>Air data by hour</h3>
+                <HelpBttn 
+                  name="air-by-hour-chart" 
+                  message='Air quality data in each hour on each day of the week.<br><br>Use dropdown dialogue to view average/<br>minimum/maximum data.'
+                />
+              </div> : <div></div>
+            }
+            {(airSensor !== undefined) ? <AirByHourChart media={MOBILE} />: <div></div>}
+            {(airSensor !== undefined) ? 
+              <div className={m_styles.header}>
+                <h3>Air data of a day</h3>
+                <HelpBttn 
+                  name="air-of-day-chart" 
+                  message="Choose a date to view air quality data of that day." 
+                />
+              </div> : <div></div>
+            }
+            {(airSensor !== undefined) ? <AirOfDayChart media={MOBILE} />: <div></div>}
+            {(visualSensor !== undefined) ? 
+              <div className={m_styles.header}>
+                <h3>Vehicles by hour</h3>
+                <HelpBttn 
+                  name="vehicles-by-hour-chart" 
+                  message="Traffic data in each hour on each day of the week." 
+                />
+              </div>: <div></div>}
+            {(visualSensor !== undefined) ? <VisualByHourChart media={MOBILE} />: <div></div>}
+            {(visualSensor !== undefined) ? 
+              <div className={m_styles.header}>
+                <h3>Visual data of a day</h3>
+                <HelpBttn 
+                  name="vehicles-of-day-chart" 
+                  message="Choose a date to view traffic data on that day." 
+                />
+              </div> : <div></div>}
+            {(visualSensor !== undefined) ? <VisualOfDayChart media={MOBILE} />: <div></div>}
+          </div> :
           <div className={m_styles.content}>
             <div className={ m_styles.mapContainer }>
               <Map media={this.props.media}/>
@@ -281,6 +373,8 @@ class DataPage extends Component {
               }
             </div>
           </div>
+          }
+          
           <div className={ m_styles.appbar }>
             <AppBar media={this.props.media} />
           </div>

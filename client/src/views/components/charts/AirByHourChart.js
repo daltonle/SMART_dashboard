@@ -4,15 +4,19 @@ import { connect } from 'react-redux'
 import { getAvgAirDataByHour, getMinAirDataByHour, getMaxAirDataByHour } from '../../../state/ducks/sensor/actions'
 import { changeAirDowChart, changeAirTypeHourChart } from '../../../state/ducks/charts/actions'
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryGroup, VictoryLegend, VictoryTooltip } from 'victory'
+import Plot from 'react-plotly.js'
 import Select from 'react-select'
 import LeftIcon from 'react-feather/dist/icons/chevron-left'
 import RightIcon from 'react-feather/dist/icons/chevron-right'
 import withDimension from 'react-dimensions'
 import { MyVictoryTheme } from '../../../utils/victoryTheme'
+import { MOBILE } from '../../../utils/const'
+import { colors } from '../../../styles/colors'
 import styles from './AirByHourChart.module.scss'
 
 class AirByHourChart extends Component {
   static propTypes = {
+    media: PropTypes.string,
     sensor: PropTypes.object,
     day: PropTypes.number,
     type: PropTypes.string,
@@ -44,22 +48,84 @@ class AirByHourChart extends Component {
     this.props.changeAirTypeHourChart(selected.value)
   }
 
-  render() {
-    const { sensor, containerHeight, containerWidth, day, type } = this.props
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+  getData = () => {
+    const { sensor, type } = this.props
     let data = []
     for (let i = 0; i < 7; i++)
-      data[i] = []
+      data[i] = {
+        pm2_5: { x:[], y:[] },
+        pm10: { x:[], y:[] }
+      }
     if (sensor.byHour !== undefined)
-      if (sensor.byHour[type] !== undefined)
+      if (sensor.byHour[type] !== undefined) {
         sensor.byHour[type].forEach(d => {
-          data[d.dow].push({
-            hour: d.hour,
-            pm2_5: Math.round(parseFloat(d.pm2_5)),
-            pm10: Math.round(parseFloat(d.pm10)),
-            label: `PM2.5:  ${Math.round(parseFloat(d.pm2_5))}, PM10:  ${Math.round(parseFloat(d.pm10))}`
-          }) 
+          let { dow, hour } = d
+          data[dow].pm2_5.x.push(hour)
+          data[dow].pm2_5.y.push(d.pm2_5)
+          data[dow].pm10.x.push(hour)
+          data[dow].pm10.y.push(d.pm10)
         })
+      }
+    
+    return data
+  }
+
+  render() {
+    const { containerHeight, containerWidth, day, type, media } = this.props
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    const data = this.getData()
+
+    const chartData = [
+      {
+        ...data[day].pm2_5,
+        name: "PM2_5",
+        type: 'bar',
+        marker: { color: colors.green, opacity: 1 }
+      },
+      {
+        ...data[day].pm10,
+        name: "PM10",
+        type: "bar",
+        marker: { color: colors.red, opacity: 1 }
+      }
+    ]
+
+    // chart layout
+    const webLayout = { 
+      width: containerWidth, 
+      height: containerHeight,
+      showlegend: true,
+      legend: { x: 0, y: 1.25, orientation: "h" },
+      plot_bgcolor: colors.backgroundColor,
+      paper_bgcolor: colors.backgroundColor,
+      margin: {
+        t: 0,
+        pad: 8
+      }
+    }
+    
+    const mobileLayout = {
+      ...webLayout,
+      margin: {
+        t: 100,
+        l: 40,
+        r: 24,
+        b: 64,
+        pad: 8
+      }
+    }
+
+    // chart config
+    const webConfig = {
+      modeBarButtonsToRemove: ['toImage', 'sendDataToCloud', 'select2d', 'lasso2d', 'toggleSpikelines'],
+      displaylogo: false,
+      displayModeBar: 'hover'
+    }
+
+    const mobileCongig = {
+      ...webConfig,
+      displayModeBar: true
+    }
 
     return (
       <div>
@@ -79,6 +145,12 @@ class AirByHourChart extends Component {
             />
           </div>
         </div>
+        <Plot
+          data={chartData}
+          layout={media===MOBILE ? mobileLayout : webLayout}
+          config={media===MOBILE ? mobileCongig : webConfig}
+        />
+        {/*
         <VictoryChart
           theme={MyVictoryTheme}
           height={containerHeight}
@@ -140,6 +212,7 @@ class AirByHourChart extends Component {
             ]}
           />
         </VictoryChart>
+          */}
       </div>
     )
   }
