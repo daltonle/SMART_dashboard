@@ -7,20 +7,6 @@ const db = require('../db')
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(bodyParser.json())
 
-// retrieve air quality data history of a sensor
-router.get('/air/:id', (req, res, next) => {
-  let query = {
-    text: `SELECT pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp FROM aq_data
-      WHERE id_aq=$1::text
-      ORDER BY ts DESC`,
-    values: [req.params.id]
-  }
-
-  db.query(query)
-    .then(result => res.json(result.rows))
-    .catch(next)
-})
-
 // retrieve PM2_5 history data of a sensor based on id
 router.get('/pm25/:id', (req, res, next) => {
   let query = {
@@ -87,20 +73,6 @@ router.get('/air/live/:long,:lat', (req, res, next) => {
   
   db.query(query)
     .then(result => res.json(result.rows[0]))
-    .catch(next)
-})
-
-// retrieve visual data history of a sensor
-router.get('/visual/:id', (req, res, next) => {
-  let query = {
-    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp, type, counter FROM vs_count
-      WHERE id_vs=$1::text
-      ORDER BY ts DESC`,
-    values: [req.params.id]
-  }
-
-  db.query(query)
-    .then(result => res.json(result.rows))
     .catch(next)
 })
 
