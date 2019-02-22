@@ -275,7 +275,7 @@ router.get('/visual/by-hour/max/:id', (req, res, next) => {
 router.get('/air/by-day/:name/:id/:year-:month-:day', (req, res, next) => {
   let day = moment([req.params.year, req.params.month-1, req.params.day]).format('YYYY-MM-DD HH:mm:ss')
   let query = {
-    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss') as timestamp, ${req.params.name} FROM aq_data
+    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:ss') as timestamp, ${req.params.name} FROM aq_data
           WHERE id_aq=$1 and date_trunc('day', ts)=$2
           ORDER BY ts ASC`,
     values: [req.params.id, day]
@@ -292,7 +292,7 @@ router.get('/air/by-day/:name/:id/:year-:month-:day', (req, res, next) => {
 router.get('/visual/by-day/:name/:id/:year-:month-:day', (req, res, next) => {
   let day = moment([req.params.year, req.params.month-1, req.params.day]).format('YYYY-MM-DD HH:mm:ss')
   let query = {
-    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss') as timestamp, counter FROM vs_count
+    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:ss') as timestamp, counter FROM vs_count
           WHERE id_vs=$1 AND type=$2 AND date_trunc('day', ts)=$3
           ORDER BY ts ASC`,
     values: [req.params.id, req.params.name, day]

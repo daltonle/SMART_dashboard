@@ -268,11 +268,10 @@ export const getAirDataByDay = (id, day) => dispatch => {
   fetch( `/sensor-data/air/by-day/pm2_5/${id}/${day}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => {console.log('res', res)
-    dispatch({
+  .then(res => dispatch({
     type: GET_PM25_BY_DAY,
     payload: res
-  })})
+  }))
   .catch(err => console.log(err))
 
   fetch( `/sensor-data/air/by-day/pm10/${id}/${day}`)
