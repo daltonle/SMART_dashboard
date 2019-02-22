@@ -13,7 +13,12 @@ import {
   GET_PM10_DATA_HISTORY,
   GET_PEDESTRIAN_HISTORY,
   GET_BICYCLE_HISTORY,
-  GET_VEHICLE_HISTORY
+  GET_VEHICLE_HISTORY,
+  GET_PM25_BY_DAY,
+  GET_PM10_BY_DAY,
+  GET_PEDESTRIAN_BY_DAY,
+  GET_BICYCLE_BY_DAY,
+  GET_VEHICLE_BY_DAY
 } from "./types"
 
 /**
@@ -167,6 +172,61 @@ const sensorReducer = (state = initialState, action) => {
           byHour: {
             ...state.visual.byHour,
             max: action.payload
+          }
+        }
+      }
+    case GET_PM25_BY_DAY:
+      return {
+        ...state,
+        air: {
+          ...state.air,
+          byDay: {
+            ...state.air.byDay,
+            pm2_5: action.payload
+          }
+        }
+      }
+    case GET_PM10_BY_DAY:
+      return {
+        ...state,
+        air: {
+          ...state.air,
+          byDay: {
+            ...state.air.byDay,
+            pm10: action.payload
+          }
+        }
+      }
+    case GET_PEDESTRIAN_BY_DAY:
+      return {
+        ...state,
+        visual: {
+          ...state.visual,
+          byDay: {
+            ...state.visual.byDay,
+            pedesrian: action.payload
+          }
+        }
+      }
+    case GET_BICYCLE_BY_DAY:
+      return {
+        ...state,
+        visual: {
+          ...state.visual,
+          byDay: {
+            ...state.visual.byDay,
+            bicycle: action.payload
+          }
+        }
+      }
+    case GET_VEHICLE_BY_DAY:
+      return {
+        ...state,
+        visual: {
+          ...state.visual,
+          byDay: {
+            ...state.visual.byDay,
+            vehicle: action.payload
           }
         }
       }

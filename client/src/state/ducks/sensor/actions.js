@@ -11,12 +11,21 @@ import {
   GET_PM10_DATA_HISTORY,
   GET_PEDESTRIAN_HISTORY,
   GET_BICYCLE_HISTORY,
-  GET_VEHICLE_HISTORY
+  GET_VEHICLE_HISTORY,
+  GET_PM25_BY_DAY,
+  GET_PM10_BY_DAY,
+  GET_PEDESTRIAN_BY_DAY,
+  GET_BICYCLE_BY_DAY,
+  GET_VEHICLE_BY_DAY
 } from './types'
 
-// get data of air sensor at given position,
-// and the data of the closest visual sensor in a 10m radius
-// REVIEW: At the moment only getting visual sensor with exact same coordinates
+/**
+ * Get data of air sensor at given position, 
+ * and the data of the closest visual sensor in a 10m radius
+ * 
+ * // REVIEW: At the moment only getting visual sensor with exact same coordinates
+ * @param {{lng: number, lat: number}} sensor 
+ */
 export const getAirData = (sensor) => (dispatch) => {
   fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
@@ -85,9 +94,13 @@ export const getAirData = (sensor) => (dispatch) => {
     .catch(err => console.log(err))
 }
 
-// get data of visual sensor at given position,
-// and the data of the closest air sensor in a 10m radius
-// REVIEW: At the moment only getting air sensor with exact same coordinates
+/**
+ * Get data of visual sensor at given position,
+ * and the data of the closest air sensor in a 10m radius
+ * 
+ * // REVIEW: At the moment only getting air sensor with exact same coordinates
+ * @param {{lng: number, lat: number}} sensor 
+ */
 export const getVisualData = (sensor) => (dispatch) => {
   fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
@@ -156,7 +169,10 @@ export const getVisualData = (sensor) => (dispatch) => {
     .catch(err => console.log(err))
 }
 
-// get average air data by hour
+/**
+ * Get average number of air particles by hour
+ * @param {string} id 
+ */
 export const getAvgAirDataByHour = id => dispatch => {
   fetch(`/sensor-data/air/by-hour/avg/${id}`)
   .then(res => res.text())
@@ -168,7 +184,10 @@ export const getAvgAirDataByHour = id => dispatch => {
   .catch(err => console.log(err))
 }
 
-// get min air data by hour
+/**
+ * Get min number of air particles by hour
+ * @param {string} id 
+ */
 export const getMinAirDataByHour = id => dispatch => {
   fetch(`/sensor-data/air/by-hour/min/${id}`)
   .then(res => res.text())
@@ -180,7 +199,10 @@ export const getMinAirDataByHour = id => dispatch => {
   .catch(err => console.log(err))
 }
 
-// get max air data by hour
+/**
+ * Get max number of air particles by hour
+ * @param {string} id 
+ */
 export const getMaxAirDataByHour = id => dispatch => {
   fetch(`/sensor-data/air/by-hour/max/${id}`)
   .then(res => res.text())
@@ -192,7 +214,10 @@ export const getMaxAirDataByHour = id => dispatch => {
   .catch(err => console.log(err))
 }
 
-// get average visual data history by hour
+/**
+ * Get average number of transportations by hour
+ * @param {string} id 
+ */
 export const getAvgVisualDataByHour = id => dispatch => {
   fetch(`/sensor-data/visual/by-hour/avg/${id}`)
   .then(res => res.text())
@@ -204,7 +229,10 @@ export const getAvgVisualDataByHour = id => dispatch => {
   .catch(err => console.log(err))
 }
 
-// get min visual data history by hour
+/**
+ * Get min number of transportations by hour
+ * @param {string} id 
+ */
 export const getMinVisualDataByHour = id => dispatch => {
   fetch(`/sensor-data/visual/by-hour/min/${id}`)
   .then(res => res.text())
@@ -216,13 +244,79 @@ export const getMinVisualDataByHour = id => dispatch => {
   .catch(err => console.log(err))
 }
 
-// get max visual data history by hour
+/**
+ * Get max number of transportations by hour
+ * @param {string} id 
+ */
 export const getMaxVisualDataByHour = id => dispatch => {
   fetch(`/sensor-data/visual/by-hour/max/${id}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
     type: GET_MAX_VISUAL_DATA_BY_HOUR,
+    payload: res
+  }))
+  .catch(err => console.log(err))
+}
+
+/**
+ * Get air quality data from a specific day
+ * @param {string} id 
+ * @param {number} year 
+ * @param {number} month 
+ * @param {number} day 
+ */
+export const getAirDataByDay = (id, year, month, day) => dispatch => {
+  fetch( `/sensor-data/air/by-day/pm2_5/${id}/${year}-${month}-${day}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_PM25_BY_DAY,
+    payload: res
+  }))
+  .catch(err => console.log(err))
+
+  fetch( `/sensor-data/air/by-day/pm10/${id}/${year}-${month}-${day}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_PM10_BY_DAY,
+    payload: res
+  }))
+  .catch(err => console.log(err))
+}
+  
+/**
+ * Get visual data from a specific day
+ * @param {string} id 
+ * @param {number} year 
+ * @param {number} month 
+ * @param {number} day 
+ */
+export const getVisualDataByDay = (id, year, month, day) => dispatch => {
+  fetch( `/sensor-data/visual/by-day/pedestrian/${id}/${year}-${month}-${day}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_PEDESTRIAN_BY_DAY,
+    payload: res
+  }))
+  .catch(err => console.log(err))
+
+  fetch( `/sensor-data/visual/by-day/bicycle/${id}/${year}-${month}-${day}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_BICYCLE_BY_DAY,
+    payload: res
+  }))
+  .catch(err => console.log(err))
+
+  fetch( `/sensor-data/visual/by-day/vehicle/${id}/${year}-${month}-${day}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_VEHICLE_BY_DAY,
     payload: res
   }))
   .catch(err => console.log(err))
