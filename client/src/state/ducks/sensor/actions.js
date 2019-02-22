@@ -8,7 +8,9 @@ import {
   GET_MAX_AIR_DATA_BY_HOUR,
   GET_AVG_VISUAL_DATA_BY_HOUR,
   GET_MIN_VISUAL_DATA_BY_HOUR,
-  GET_MAX_VISUAL_DATA_BY_HOUR
+  GET_MAX_VISUAL_DATA_BY_HOUR,
+  GET_PM25_DATA_HISTORY,
+  GET_PM10_DATA_HISTORY
 } from './types'
 
 // get live data of air sensor at given position,
@@ -64,6 +66,30 @@ export const getAirDataHistory = id => dispatch => {
     .then(text => text.length ? JSON.parse(text) : undefined)
     .then(res => dispatch({
       type: GET_AIR_DATA_HISTORY,
+      payload: res
+    }))
+    .catch(err => console.log(err))
+}
+
+// get PM2_5 data history by id
+export const getDataHistoryPM2_5 = id => dispatch => {
+  fetch(`/sensor-data/pm25/${id}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_PM25_DATA_HISTORY,
+      payload: res
+    }))
+    .catch(err => console.log(err))
+}
+
+// get PM10 data history by id
+export const getDataHistoryPM10 = id => dispatch => {
+  fetch(`/sensor-data/pm25/${id}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_PM10_DATA_HISTORY,
       payload: res
     }))
     .catch(err => console.log(err))
