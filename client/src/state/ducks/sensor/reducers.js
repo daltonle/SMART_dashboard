@@ -8,7 +8,9 @@ import {
   GET_MAX_AIR_DATA_BY_HOUR,
   GET_AVG_VISUAL_DATA_BY_HOUR,
   GET_MIN_VISUAL_DATA_BY_HOUR,
-  GET_MAX_VISUAL_DATA_BY_HOUR
+  GET_MAX_VISUAL_DATA_BY_HOUR,
+  GET_PM25_DATA_HISTORY,
+  GET_PM10_DATA_HISTORY
 } from "./types"
 
 /**
@@ -65,6 +67,22 @@ const sensorReducer = (state = initialState, action) => {
         air: {
           ...state.air,
           history: action.payload
+        }
+      }
+    case GET_PM25_DATA_HISTORY:
+      return {
+        ...state,
+        air: {
+          ...state.air,
+          historyPM2_5: action.payload
+        }
+      }
+    case GET_PM10_DATA_HISTORY:
+      return {
+        ...state,
+        air: {
+          ...state.air,
+          historyPM10: action.payload
         }
       }
     case GET_VISUAL_DATA_HISTORY:

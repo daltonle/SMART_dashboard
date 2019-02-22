@@ -8,36 +8,60 @@ import {
   GET_MAX_AIR_DATA_BY_HOUR,
   GET_AVG_VISUAL_DATA_BY_HOUR,
   GET_MIN_VISUAL_DATA_BY_HOUR,
-  GET_MAX_VISUAL_DATA_BY_HOUR
+  GET_MAX_VISUAL_DATA_BY_HOUR,
+  GET_PM25_DATA_HISTORY,
+  GET_PM10_DATA_HISTORY
 } from './types'
 
 // get live data of air sensor at given position,
 // and the data of the closest visual sensor in a 10m radius
 // REVIEW: At the moment only getting visual sensor with exact same coordinates
-export const getAirDataLive = (sensor) => (dispatch) => {
+export const getAirData = (sensor) => (dispatch) => {
   fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
-    .then(res => dispatch({
-      type: GET_AIR_DATA_LIVE,
-      payload: res
-    }))
+    .then(res => {
+      dispatch({
+        type: GET_AIR_DATA_LIVE,
+        payload: res
+      })
+      if (res !== undefined) {
+        fetch(`/sensor-data/pm25/${res.id}`)
+        .then(res => res.text())
+        .then(text => text.length ? JSON.parse(text) : undefined)
+        .then(res => dispatch({
+          type: GET_PM25_DATA_HISTORY,
+          payload: res
+        }))
+        .catch(err => console.log(err))
+      fetch(`/sensor-data/pm10/${res.id}`)
+        .then(res => res.text())
+        .then(text => text.length ? JSON.parse(text) : undefined)
+        .then(res => dispatch({
+          type: GET_PM10_DATA_HISTORY,
+          payload: res
+        }))
+        .catch(err => console.log(err))
+      }
+    })
     .catch(err => console.log(err))
 
   fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
-    .then(res => dispatch({
-      type: GET_VISUAL_DATA_LIVE,
-      payload: res
-    }))
+    .then(res => {
+      dispatch({
+        type: GET_VISUAL_DATA_LIVE,
+        payload: res
+      })
+    })
     .catch(err => console.log(err))
 }
 
 // get live data of visual sensor at given position,
 // and the data of the closest air sensor in a 10m radius
 // REVIEW: At the moment only getting air sensor with exact same coordinates
-export const getVisualDataLive = (sensor) => (dispatch) => {
+export const getVisualData = (sensor) => (dispatch) => {
   fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
@@ -64,6 +88,30 @@ export const getAirDataHistory = id => dispatch => {
     .then(text => text.length ? JSON.parse(text) : undefined)
     .then(res => dispatch({
       type: GET_AIR_DATA_HISTORY,
+      payload: res
+    }))
+    .catch(err => console.log(err))
+}
+
+// get PM2_5 data history by id
+export const getDataHistoryPM2_5 = id => dispatch => {
+  fetch(`/sensor-data/pm25/${id}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_PM25_DATA_HISTORY,
+      payload: res
+    }))
+    .catch(err => console.log(err))
+}
+
+// get PM10 data history by id
+export const getDataHistoryPM10 = id => dispatch => {
+  fetch(`/sensor-data/pm25/${id}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_PM10_DATA_HISTORY,
       payload: res
     }))
     .catch(err => console.log(err))

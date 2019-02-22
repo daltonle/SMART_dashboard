@@ -22,8 +22,6 @@ class HistoryChart extends Component {
 
   componentDidMount = () => {
     let { airSensor, visualSensor } = this.props
-    if (airSensor !== undefined)
-      this.props.getAirDataHistory(airSensor.id)
     if (visualSensor !== undefined)
       this.props.getVisualDataHistory(visualSensor.id)
   }
@@ -31,10 +29,8 @@ class HistoryChart extends Component {
   render() {
     const { containerHeight, containerWidth, airSensor, visualSensor } = this.props
     // pre-process data
-    let airData = {
-      pm2_5: { x:[], y:[] },
-      pm10: { x:[], y:[] }
-    }
+    let dataPM2_5 = { x:[], y:[] }
+    let dataPM10 = { x:[], y:[] }
     let visualData = {
       pedestrian: { x:[], y:[] },
       bicycle: { x:[], y:[] },
@@ -42,24 +38,17 @@ class HistoryChart extends Component {
     }
 
     if (airSensor !== undefined) {
-      if (airSensor.history !== undefined) {
-        let tmp2_5 = []
-        let tmp10 = []
-
-        airSensor.history.forEach(d => {
-          tmp2_5.push([moment(d.timestamp, 'DD-MM-YYYY HH:mm:ss').toDate(), parseFloat(d.pm2_5)])
-          tmp10.push([moment(d.timestamp, 'DD-MM-YYYY HH:mm:ss').toDate(), parseFloat(d.pm10)])
-        })
-        let downsampledPM2_5 = Downsampler.processData(tmp2_5, numPointsInDownsampledData)
-        let downsampledPM10 = Downsampler.processData(tmp10, numPointsInDownsampledData)
-        downsampledPM2_5.forEach(d => {
-          airData.pm2_5.x.push(d[0])
-          airData.pm2_5.y.push(d[1])
-        })
-        downsampledPM10.forEach(d => {
-          airData.pm10.x.push(d[0])
-          airData.pm10.y.push(d[1])
-        })
+      if (airSensor.historyPM2_5 !== undefined) {
+        for (let i = 0, l = airSensor.historyPM2_5.length; i < l; i++) {
+          dataPM2_5.x.push(moment(airSensor.historyPM2_5[i].x, "DD-MM-YYYY HH:mm:ss").toDate())
+          dataPM2_5.y.push(airSensor.historyPM2_5[i].y)
+        }
+      }
+      if (airSensor.historyPM10 !== undefined) {
+        for (let i = 0, l = airSensor.historyPM10.length; i < l; i++) {
+          dataPM10.x.push(moment(airSensor.historyPM10[i].x, "DD-MM-YYYY HH:mm:ss").toDate())
+          dataPM10.y.push(airSensor.historyPM10[i].y)
+        }
       }
     }
     if (visualSensor !== undefined) {
@@ -135,16 +124,14 @@ class HistoryChart extends Component {
       <Plot
         data={[
           {
-            x: airData.pm2_5.x,
-            y: airData.pm10.y,
+            ...dataPM2_5,
             name: "PM2_5",
             type: 'scatter',
             mode: 'markers',
             marker: { color: colors.green, opacity: 0.7 }
           },
           {
-            x: airData.pm10.x,
-            y: airData.pm10.y,
+            ...dataPM10,
             name: "PM10",
             type: 'scatter',
             mode: 'markers',

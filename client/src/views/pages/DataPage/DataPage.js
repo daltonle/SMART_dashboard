@@ -7,7 +7,8 @@ import ExitIcon from 'react-feather/dist/icons/x'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { changeCentre, changeLayer } from '../../../state/ducks/map/actions'
-import { getAirDataLive, getVisualDataLive } from '../../../state/ducks/sensor/actions'
+import { getAirData, getVisualData } from '../../../state/ducks/sensor/actions'
+import { getDataHistoryPM2_5, getDataHistoryPM10 } from '../../../state/ducks/sensor/actions'
 import { DESK, MOBILE } from '../../../utils/const'
 import { AppBar } from '../../components/appbar/AppBar'
 import { VisualLiveChart, HistoryChart, AirByHourChart, VisualByHourChart, AirOfDayChart, VisualOfDayChart } from '../../components/charts'
@@ -31,8 +32,8 @@ class DataPage extends Component {
     
     changeLayer: PropTypes.func,
     changeCentre: PropTypes.func,
-    getAirDataLive: PropTypes.func,
-    getVisualDataLive: PropTypes.func
+    getAirData: PropTypes.func,
+    getVisualData: PropTypes.func
   }
 
   constructor(props) {
@@ -49,9 +50,13 @@ class DataPage extends Component {
       isAirLayer,
       match,
       mapCentre,
-      getAirDataLive,
-      getVisualDataLive,
-      changeCentre
+      airSensor,
+      visualSensor,
+      getAirData,
+      getVisualData,
+      changeCentre,
+      getDataHistoryPM10,
+      getDataHistoryPM2_5
     } = this.props
 
     let newCentre = {
@@ -62,15 +67,16 @@ class DataPage extends Component {
     changeCentre(newCentre)
 
     if (isAirLayer)
-      getAirDataLive(newCentre)
-    else getVisualDataLive(newCentre)
+      getAirData(newCentre)
+    else getVisualData(newCentre)    
   }
 
   componentDidUpdate = (prevProps) => {
+    let {airSensor} = this.props
     if (this.props.mapCentre !== prevProps.mapCentre) {
       if (this.props.isAirLayer)
-        this.props.getAirDataLive(this.props.mapCentre)
-      else this.props.getVisualDataLive(this.props.mapCentre)
+        this.props.getAirData(this.props.mapCentre)
+      else this.props.getVisualData(this.props.mapCentre)
     }
   }
 
@@ -393,8 +399,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   changeLayer,
   changeCentre,
-  getAirDataLive,
-  getVisualDataLive
+  getAirData,
+  getVisualData,
+  getDataHistoryPM2_5,
+  getDataHistoryPM10
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DataPage)
