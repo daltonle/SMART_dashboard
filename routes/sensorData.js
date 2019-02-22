@@ -7,33 +7,17 @@ const db = require('../db')
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(bodyParser.json())
 
-// retrieve PM2_5 history data of a sensor based on id
-router.get('/pm25/:id', (req, res, next) => {
+// retrieve air history data of a sensor based on id
+router.get('/history/air/:name/:id', (req, res, next) => {
   let query = {
-    text: `SELECT pm2_5, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp FROM aq_data
+    text: `SELECT ${req.params.name}, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp FROM aq_data
       WHERE id_aq=$1::text
       ORDER BY ts DESC`,
     values: [req.params.id]
   }
 
   db.query(query)
-    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss").toDate(), y: parseFloat(d.pm2_5)})))
-    .then(result => LTTB(result, 1000))
-    .then(result => res.json(result.map(d => ({x: moment(d.x).format("DD-MM-YYYY HH:mm:ss"), y: d.y}))))
-    .catch(next)
-})
-
-// retrieve PM10 history data of a sensor based on id
-router.get('/pm10/:id', (req, res, next) => {
-  let query = {
-    text: `SELECT pm10, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp FROM aq_data
-      WHERE id_aq=$1::text
-      ORDER BY ts DESC`,
-    values: [req.params.id]
-  }
-
-  db.query(query)
-    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss"), y: parseFloat(d.pm10)})))
+    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss").toDate(), y: parseFloat(d[req.params.name])})))
     .then(result => LTTB(result, 1000))
     .then(result => res.json(result.map(d => ({x: moment(d.x).format("DD-MM-YYYY HH:mm:ss"), y: d.y}))))
     .catch(next)
@@ -76,49 +60,17 @@ router.get('/air/live/:long,:lat', (req, res, next) => {
     .catch(next)
 })
 
-// retrieve pedestrian data history based on id
-router.get('/pedestrian/:id', (req, res, next) => {
+// retrieve visual data history based on id
+router.get('/history/visual/:name/:id', (req, res, next) => {
   let query = {
     text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp, counter FROM vs_count
       WHERE id_vs=$1::text AND type=$2
       ORDER BY ts DESC`,
-    values: [req.params.id, "pedestrian"]
+    values: [req.params.id, req.params.name]
   }
 
   db.query(query)
-    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss"), y: parseFloat(d.counter)})))
-    .then(result => LTTB(result, 1000))
-    .then(result => res.json(result.map(d => ({x: moment(d.x).format("DD-MM-YYYY HH:mm:ss"), y: d.y}))))
-    .catch(next)
-})
-
-// retrieve bicycle data history based on id
-router.get('/bicycle/:id', (req, res, next) => {
-  let query = {
-    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp, counter FROM vs_count
-      WHERE id_vs=$1::text AND type=$2
-      ORDER BY ts DESC`,
-    values: [req.params.id, "bicycle"]
-  }
-
-  db.query(query)
-    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss"), y: parseFloat(d.counter)})))
-    .then(result => LTTB(result, 1000))
-    .then(result => res.json(result.map(d => ({x: moment(d.x).format("DD-MM-YYYY HH:mm:ss"), y: d.y}))))
-    .catch(next)
-})
-
-// retrieve vehicle data history based on id
-router.get('/vehicle/:id', (req, res, next) => {
-  let query = {
-    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp, counter FROM vs_count
-      WHERE id_vs=$1::text AND type=$2
-      ORDER BY ts DESC`,
-    values: [req.params.id, "vehicle"]
-  }
-
-  db.query(query)
-    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss"), y: parseFloat(d.counter)})))
+    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss").toDate(), y: parseFloat(d.counter)})))
     .then(result => LTTB(result, 1000))
     .then(result => res.json(result.map(d => ({x: moment(d.x).format("DD-MM-YYYY HH:mm:ss"), y: d.y}))))
     .catch(next)
@@ -320,29 +272,36 @@ router.get('/visual/by-hour/max/:id', (req, res, next) => {
 })
 
 // retrieve air data from a specific day
-router.get('/:type/by-day/:name/:id/:year-:month-:day', (req, res, next) => {
+router.get('/air/by-day/:name/:id/:year-:month-:day', (req, res, next) => {
   let day = moment([req.params.year, req.params.month-1, req.params.day]).format('YYYY-MM-DD HH:mm:ss')
-  let query = {}
-  if (req.params.type === 'air') {
-    query = {
-      text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss') as timestamp, ${req.params.name} FROM aq_data
-            WHERE id_aq=$1 and date_trunc('day', ts)=$2
-            ORDER BY ts ASC`,
-      values: [req.params.id, day]
-    }
+  let query = {
+    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss') as timestamp, ${req.params.name} FROM aq_data
+          WHERE id_aq=$1 and date_trunc('day', ts)=$2
+          ORDER BY ts ASC`,
+    values: [req.params.id, day]
   }
-  else if (req.params.type === 'visual') {
-    query = {
-      text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss') as timestamp, counter FROM vs_count
-            WHERE id_vs=$1 AND type=$2 AND date_trunc('day', ts)=$3
-            ORDER BY ts ASC`,
-      values: [req.params.id, req.params.name, day]
-    }
-  }
-  
 
   db.query(query)
-    .then(result => res.json(result.rows))
+    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss").toDate(), y: parseFloat(d[req.params.name])})))
+    .then(result => LTTB(result, 1000))
+    .then(result => res.json(result.map(d => ({x: moment(d.x).format("DD-MM-YYYY HH:mm:ss"), y: d.y}))))
+    .catch(next)
+})
+
+// retrieve visual data from a specific day
+router.get('/visual/by-day/:name/:id/:year-:month-:day', (req, res, next) => {
+  let day = moment([req.params.year, req.params.month-1, req.params.day]).format('YYYY-MM-DD HH:mm:ss')
+  let query = {
+    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:mm:ss') as timestamp, counter FROM vs_count
+          WHERE id_vs=$1 AND type=$2 AND date_trunc('day', ts)=$3
+          ORDER BY ts ASC`,
+    values: [req.params.id, req.params.name, day]
+  }
+
+  db.query(query)
+    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss").toDate(), y: parseFloat(d.counter)})))
+    .then(result => LTTB(result, 1000))
+    .then(result => res.json(result.map(d => ({x: moment(d.x).format("DD-MM-YYYY HH:mm:ss"), y: d.y}))))
     .catch(next)
 })
 

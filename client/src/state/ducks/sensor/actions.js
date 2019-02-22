@@ -27,7 +27,7 @@ export const getAirData = (sensor) => (dispatch) => {
         payload: res
       })
       if (res !== undefined) {
-        fetch(`/sensor-data/pm25/${res.id}`)
+        fetch(`/sensor-data/history/air/pm2_5/${res.id}`)
           .then(res => res.text())
           .then(text => text.length ? JSON.parse(text) : undefined)
           .then(res => dispatch({
@@ -35,7 +35,7 @@ export const getAirData = (sensor) => (dispatch) => {
             payload: res
           }))
           .catch(err => console.log(err))
-        fetch(`/sensor-data/pm10/${res.id}`)
+        fetch(`/sensor-data/history/air/pm10/${res.id}`)
           .then(res => res.text())
           .then(text => text.length ? JSON.parse(text) : undefined)
           .then(res => dispatch({
@@ -56,7 +56,7 @@ export const getAirData = (sensor) => (dispatch) => {
         payload: res
       })
       if (res !== undefined) {
-        fetch(`/sensor-data/pedestrian/${res.id}`)
+        fetch(`/sensor-data/history/visual/pedestrian/${res.id}`)
           .then(res => res.text())
           .then(text => text.length ? JSON.parse(text) : undefined)
           .then(res => dispatch({
@@ -64,7 +64,7 @@ export const getAirData = (sensor) => (dispatch) => {
             payload: res
           }))
           .catch(err => console.log(err))
-        fetch(`/sensor-data/bicycle/${res.id}`)
+        fetch(`/sensor-data/history/visual/bicycle/${res.id}`)
           .then(res => res.text())
           .then(text => text.length ? JSON.parse(text) : undefined)
           .then(res => dispatch({
@@ -72,7 +72,7 @@ export const getAirData = (sensor) => (dispatch) => {
             payload: res
           }))
           .catch(err => console.log(err))
-        fetch(`/sensor-data/vehicle/${res.id}`)
+        fetch(`/sensor-data/history/visual/vehicle/${res.id}`)
           .then(res => res.text())
           .then(text => text.length ? JSON.parse(text) : undefined)
           .then(res => dispatch({
@@ -98,7 +98,7 @@ export const getVisualData = (sensor) => (dispatch) => {
         payload: res
       })
       if (res !== undefined) {
-        fetch(`/sensor-data/pedestrian/${res.id}`)
+        fetch(`/sensor-data/history/visual/pedestrian/${res.id}`)
           .then(res => res.text())
           .then(text => text.length ? JSON.parse(text) : undefined)
           .then(res => dispatch({
@@ -106,7 +106,7 @@ export const getVisualData = (sensor) => (dispatch) => {
             payload: res
           }))
           .catch(err => console.log(err))
-        fetch(`/sensor-data/bicycle/${res.id}`)
+        fetch(`/sensor-data/history/visual/bicycle/${res.id}`)
           .then(res => res.text())
           .then(text => text.length ? JSON.parse(text) : undefined)
           .then(res => dispatch({
@@ -114,7 +114,7 @@ export const getVisualData = (sensor) => (dispatch) => {
             payload: res
           }))
           .catch(err => console.log(err))
-        fetch(`/sensor-data/vehicle/${res.id}`)
+        fetch(`/sensor-data/history/visual/vehicle/${res.id}`)
           .then(res => res.text())
           .then(text => text.length ? JSON.parse(text) : undefined)
           .then(res => dispatch({
@@ -135,7 +135,7 @@ export const getVisualData = (sensor) => (dispatch) => {
         payload: res
       })
       if (res !== undefined) {
-        fetch(`/sensor-data/pm25/${res.id}`)
+        fetch(`/sensor-data/history/air/pm2_5/${res.id}`)
           .then(res => res.text())
           .then(text => text.length ? JSON.parse(text) : undefined)
           .then(res => dispatch({
@@ -143,7 +143,7 @@ export const getVisualData = (sensor) => (dispatch) => {
             payload: res
           }))
           .catch(err => console.log(err))
-        fetch(`/sensor-data/pm10/${res.id}`)
+        fetch(`/sensor-data/history/air/pm10/${res.id}`)
           .then(res => res.text())
           .then(text => text.length ? JSON.parse(text) : undefined)
           .then(res => dispatch({
