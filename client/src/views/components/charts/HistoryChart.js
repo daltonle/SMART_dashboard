@@ -2,16 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Plot from 'react-plotly.js'
-import Downsampler from 'downsample-lttb'
-import { getAirDataHistory, getVisualDataHistory } from '../../../state/ducks/sensor/actions'
 import moment from 'moment'
 import withDimension from 'react-dimensions'
 import { MOBILE } from '../../../utils/const'
 import { colors } from '../../../styles/colors.js'
 import styles from './HistoryChart.module.scss'
 import '../../../styles/plotly.scss'
-
-const numPointsInDownsampledData = 500
 
 class HistoryChart extends Component {
   static propTypes = {
@@ -152,10 +148,7 @@ const mapStateToProps = (state) => ({
   visualSensor: state.sensor.visual
 })
 
-const mapDispatchToProps = {
-  getAirDataHistory,
-  getVisualDataHistory
-}
+const mapDispatchToProps = {}
 
 export default withDimension({
   className: styles.wrapper

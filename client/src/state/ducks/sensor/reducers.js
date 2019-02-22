@@ -64,14 +64,6 @@ const sensorReducer = (state = initialState, action) => {
         ...state,
         visual: action.payload
       }
-    case GET_AIR_DATA_HISTORY:
-      return {
-        ...state,
-        air: {
-          ...state.air,
-          history: action.payload
-        }
-      }
     case GET_PM25_DATA_HISTORY:
       return {
         ...state,
@@ -110,14 +102,6 @@ const sensorReducer = (state = initialState, action) => {
         visual: {
           ...state.visual,
           historyVehicle: action.payload
-        }
-      }
-    case GET_VISUAL_DATA_HISTORY:
-      return {
-        ...state,
-        visual: {
-          ...state.visual,
-          history: action.payload
         }
       }
     case GET_AVG_AIR_DATA_BY_HOUR:
