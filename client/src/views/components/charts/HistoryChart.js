@@ -2,16 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Plot from 'react-plotly.js'
-import Downsampler from 'downsample-lttb'
-import { getAirDataHistory, getVisualDataHistory } from '../../../state/ducks/sensor/actions'
 import moment from 'moment'
 import withDimension from 'react-dimensions'
 import { MOBILE } from '../../../utils/const'
 import { colors } from '../../../styles/colors.js'
 import styles from './HistoryChart.module.scss'
 import '../../../styles/plotly.scss'
-
-const numPointsInDownsampledData = 500
 
 class HistoryChart extends Component {
   static propTypes = {
@@ -20,22 +16,14 @@ class HistoryChart extends Component {
     visualSensor: PropTypes.object
   }
 
-  componentDidMount = () => {
-    let { airSensor, visualSensor } = this.props
-    if (visualSensor !== undefined)
-      this.props.getVisualDataHistory(visualSensor.id)
-  }
-
   render() {
     const { containerHeight, containerWidth, airSensor, visualSensor } = this.props
     // pre-process data
     let dataPM2_5 = { x:[], y:[] }
     let dataPM10 = { x:[], y:[] }
-    let visualData = {
-      pedestrian: { x:[], y:[] },
-      bicycle: { x:[], y:[] },
-      vehicle: { x:[], y:[] }
-    }
+    let dataPedestrian = { x:[], y:[] }
+    let dataBicycle = { x:[], y:[] }
+    let dataVehicle = { x:[], y:[] }
 
     if (airSensor !== undefined) {
       if (airSensor.historyPM2_5 !== undefined) {
@@ -52,34 +40,23 @@ class HistoryChart extends Component {
       }
     }
     if (visualSensor !== undefined) {
-      if (visualSensor.history !== undefined) {
-        let tmpPed = []
-        let tmpBi = []
-        let tmpVeh = []
-
-        visualSensor.history.forEach(d => {
-          if (d.type === 'pedestrian')
-            tmpPed.push([moment(d.timestamp, 'DD-MM-YYYY HH:mm:ss').toDate(), parseFloat(d.counter)])
-          else if (d.type === 'bicycle')
-            tmpBi.push([moment(d.timestamp, 'DD-MM-YYYY HH:mm:ss').toDate(), parseFloat(d.counter)])
-          else if (d.type === 'vehicle')
-            tmpVeh.push([moment(d.timestamp, 'DD-MM-YYYY HH:mm:ss').toDate(), parseFloat(d.counter)])
-        })
-        let downsampledPed = Downsampler.processData(tmpPed, numPointsInDownsampledData)
-        let downsampledBi = Downsampler.processData(tmpBi, numPointsInDownsampledData)
-        let downsampledVeh = Downsampler.processData(tmpVeh, numPointsInDownsampledData)
-        downsampledPed.forEach(d => {
-          visualData.pedestrian.x.push(d[0])
-          visualData.pedestrian.y.push(d[1])
-        })
-        downsampledBi.forEach(d => {
-          visualData.bicycle.x.push(d[0])
-          visualData.bicycle.y.push(d[1])
-        })
-        downsampledVeh.forEach(d => {
-          visualData.vehicle.x.push(d[0])
-          visualData.vehicle.y.push(d[1])
-        })
+      if (visualSensor.historyPedestrian !== undefined) {
+        for (let i = 0, l = visualSensor.historyPedestrian.length; i < l; i++) {
+          dataPedestrian.x.push(moment(visualSensor.historyPedestrian[i].x, "DD-MM-YYYY HH:mm:ss").toDate())
+          dataPedestrian.y.push(visualSensor.historyPedestrian[i].y)
+        }
+      }
+      if (visualSensor.historyBicycle !== undefined) {
+        for (let i = 0, l = visualSensor.historyBicycle.length; i < l; i++) {
+          dataBicycle.x.push(moment(visualSensor.historyBicycle[i].x, "DD-MM-YYYY HH:mm:ss").toDate())
+          dataBicycle.y.push(visualSensor.historyBicycle[i].y)
+        }
+      }
+      if (visualSensor.historyVehicle !== undefined) {
+        for (let i = 0, l = visualSensor.historyVehicle.length; i < l; i++) {
+          dataVehicle.x.push(moment(visualSensor.historyVehicle[i].x, "DD-MM-YYYY HH:mm:ss").toDate())
+          dataVehicle.y.push(visualSensor.historyVehicle[i].y)
+        }
       }
     }
 
@@ -138,24 +115,21 @@ class HistoryChart extends Component {
             marker: { color: colors.red, opacity: 0.7 }
           },
           {
-            x: visualData.pedestrian.x,
-            y: visualData.pedestrian.y,
+            ...dataPedestrian,
             name: "Pedestrian",
             type: "scatter",
             mode: "markers",
             marker: { color: colors.yellow, opacity: 0.7 }
           },
           {
-            x: visualData.bicycle.x,
-            y: visualData.bicycle.y,
+            ...dataBicycle,
             name: "Bicycle",
             type: "scatter",
             mode: "markers",
             marker: { color: colors.orange, opacity: 0.7 }
           },
           {
-            x: visualData.vehicle.x,
-            y: visualData.vehicle.y,
+            ...dataVehicle,
             name: "Others",
             type: "scatter",
             mode: "markers",
@@ -174,10 +148,7 @@ const mapStateToProps = (state) => ({
   visualSensor: state.sensor.visual
 })
 
-const mapDispatchToProps = {
-  getAirDataHistory,
-  getVisualDataHistory
-}
+const mapDispatchToProps = {}
 
 export default withDimension({
   className: styles.wrapper

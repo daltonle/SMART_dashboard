@@ -8,7 +8,6 @@ import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { changeCentre, changeLayer } from '../../../state/ducks/map/actions'
 import { getAirData, getVisualData } from '../../../state/ducks/sensor/actions'
-import { getDataHistoryPM2_5, getDataHistoryPM10 } from '../../../state/ducks/sensor/actions'
 import { DESK, MOBILE } from '../../../utils/const'
 import { AppBar } from '../../components/appbar/AppBar'
 import { VisualLiveChart, HistoryChart, AirByHourChart, VisualByHourChart, AirOfDayChart, VisualOfDayChart } from '../../components/charts'
@@ -400,9 +399,7 @@ const mapDispatchToProps = {
   changeLayer,
   changeCentre,
   getAirData,
-  getVisualData,
-  getDataHistoryPM2_5,
-  getDataHistoryPM10
+  getVisualData
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DataPage)

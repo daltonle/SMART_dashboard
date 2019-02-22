@@ -104,6 +104,54 @@ router.get('/visual/:id', (req, res, next) => {
     .catch(next)
 })
 
+// retrieve pedestrian data history based on id
+router.get('/pedestrian/:id', (req, res, next) => {
+  let query = {
+    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp, counter FROM vs_count
+      WHERE id_vs=$1::text AND type=$2
+      ORDER BY ts DESC`,
+    values: [req.params.id, "pedestrian"]
+  }
+
+  db.query(query)
+    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss"), y: parseFloat(d.counter)})))
+    .then(result => LTTB(result, 1000))
+    .then(result => res.json(result.map(d => ({x: moment(d.x).format("DD-MM-YYYY HH:mm:ss"), y: d.y}))))
+    .catch(next)
+})
+
+// retrieve bicycle data history based on id
+router.get('/bicycle/:id', (req, res, next) => {
+  let query = {
+    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp, counter FROM vs_count
+      WHERE id_vs=$1::text AND type=$2
+      ORDER BY ts DESC`,
+    values: [req.params.id, "bicycle"]
+  }
+
+  db.query(query)
+    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss"), y: parseFloat(d.counter)})))
+    .then(result => LTTB(result, 1000))
+    .then(result => res.json(result.map(d => ({x: moment(d.x).format("DD-MM-YYYY HH:mm:ss"), y: d.y}))))
+    .catch(next)
+})
+
+// retrieve vehicle data history based on id
+router.get('/vehicle/:id', (req, res, next) => {
+  let query = {
+    text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp, counter FROM vs_count
+      WHERE id_vs=$1::text AND type=$2
+      ORDER BY ts DESC`,
+    values: [req.params.id, "vehicle"]
+  }
+
+  db.query(query)
+    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss"), y: parseFloat(d.counter)})))
+    .then(result => LTTB(result, 1000))
+    .then(result => res.json(result.map(d => ({x: moment(d.x).format("DD-MM-YYYY HH:mm:ss"), y: d.y}))))
+    .catch(next)
+})
+
 // retrieve visual data history of a sensor based on coordinates
 router.get('/visual/:long,:lat', (req, res, next) => {
   let {
