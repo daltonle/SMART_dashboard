@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const bodyParser = require('body-parser')
+const LTTB = require('downsample').LTTB
 const moment = require('moment')
 const db = require('../db')
 
@@ -30,7 +31,7 @@ router.get('/pm25/:id', (req, res, next) => {
   }
 
   db.query(query)
-    .then(result => res.json(result.rows))
+    .then(result => res.json(LTTB(result.rows, 1000)))
     .catch(next)
 })
 
@@ -44,7 +45,7 @@ router.get('/pm10/:id', (req, res, next) => {
   }
 
   db.query(query)
-    .then(result => res.json(result.rows))
+    .then(result => res.json(LTTB(result.rows, 1000)))
     .catch(next)
 })
 
