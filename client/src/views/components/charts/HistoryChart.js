@@ -83,8 +83,6 @@ class HistoryChart extends Component {
       }
     }
 
-    console.log(dataPM2_5)
-
     // chart layout
     const webLayout = { 
       width: containerWidth, 
