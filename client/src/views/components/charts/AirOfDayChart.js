@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { getAirDataByDay } from '../../../state/ducks/sensor/actions'
 import Plot from 'react-plotly.js'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
@@ -13,13 +14,25 @@ import styles from './AirOfDayChart.module.scss'
 class AirOfDayChart extends Component {
   static propTypes = {
     media: PropTypes.string,
-    sensor: PropTypes.object
+    id: PropTypes.string,
+    dataByDay: PropTypes.object,
+
+    getAirDataByDay: PropTypes.func
   }
 
   constructor(props) {
     super(props)
     this.state = {
       selectedDate: new Date()
+    }
+  }
+  
+  componentDidMount = () => {
+    const { selectedDate } = this.state
+    const { id, getAirDataByDay } = this.props
+
+    if (id !== undefined) {
+      getAirDataByDay(this.props.id, selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
     }
   }
 
@@ -30,24 +43,22 @@ class AirOfDayChart extends Component {
   }
 
   getData = (name) => {
-    const { sensor } = this.props
+    const { dataByDay } = this.props
     let data = { x:[], y:[] }
 
-    if (sensor === undefined)
-      return {}
+    if (dataByDay === undefined)
+      return data
     else if (this.state === undefined)
-      return {}
+      return data
     else {
-      const { selectedDate } = this.state
-      if (sensor.history === undefined)
-        return {}
+      if (dataByDay[name] === undefined)
+        return data
       else {
-        sensor.history.filter(
-          d => moment(d.timestamp, 'DD-MM-YYYY HH:mm:ss').isSame(moment(selectedDate), 'day')
-        ).forEach(d => {
-          data.x.push(moment(d.timestamp, 'DD-MM-YYYY HH:mm:ss').toDate())
-          data.y.push(parseFloat(d[name]))
-        })
+        for (let i = 0, l = dataByDay[name].length; i < l; i++) {
+          data.x.push(moment(dataByDay[name][i].x, "DD-MM-YYYY HH:mm:ss").toDate())
+          data.y.push(dataByDay[name][i].y)
+        }
+
         return data
       }
     }
@@ -137,11 +148,12 @@ class AirOfDayChart extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  sensor: state.sensor.air
+  id: state.sensor.air.id,
+  dataByDay: state.sensor.air.byDay
 })
 
 const mapDispatchToProps = {
-  
+  getAirDataByDay
 }
 
 export default withDimension({
