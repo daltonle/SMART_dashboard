@@ -7,9 +7,16 @@
   width: initial;
   min-height: 20rem;
   max-height: 30rem;
+  z-index: 1001;
+}
+
+.container {
+  z-index: 3;
 }
 
 .options {
+  z-index: 100001 !important;
+
   h5 {
     font-weight: $font-weight-heavy;
     display: inline;

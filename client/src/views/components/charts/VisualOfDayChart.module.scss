@@ -9,7 +9,13 @@
   max-height: 30rem;
 }
 
+.container {
+  z-index: 3;
+}
+
 .options {
+  z-index: 1001 !important;
+
   h5 {
     font-weight: $font-weight-heavy;
     display: inline;
