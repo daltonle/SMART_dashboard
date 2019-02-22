@@ -24,28 +24,32 @@ router.get('/air/:id', (req, res, next) => {
 // retrieve PM2_5 history data of a sensor based on id
 router.get('/pm25/:id', (req, res, next) => {
   let query = {
-    text: `SELECT pm2_5 as y, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as x FROM aq_data
+    text: `SELECT pm2_5, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp FROM aq_data
       WHERE id_aq=$1::text
       ORDER BY ts DESC`,
     values: [req.params.id]
   }
 
   db.query(query)
-    .then(result => res.json(LTTB(result.rows, 1000)))
+    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss").toDate(), y: parseFloat(d.pm2_5)})))
+    .then(result => LTTB(result, 1000))
+    .then(result => res.json(result.map(d => ({x: moment(d.x).format("DD-MM-YYYY HH:mm:ss"), y: d.y}))))
     .catch(next)
 })
 
 // retrieve PM10 history data of a sensor based on id
 router.get('/pm10/:id', (req, res, next) => {
   let query = {
-    text: `SELECT pm10 as y, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as x FROM aq_data
+    text: `SELECT pm10, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp FROM aq_data
       WHERE id_aq=$1::text
       ORDER BY ts DESC`,
     values: [req.params.id]
   }
 
   db.query(query)
-    .then(result => res.json(LTTB(result.rows, 1000)))
+    .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss"), y: parseFloat(d.pm10)})))
+    .then(result => LTTB(result, 1000))
+    .then(result => res.json(result.map(d => ({x: moment(d.x).format("DD-MM-YYYY HH:mm:ss"), y: d.y}))))
     .catch(next)
 })
 
