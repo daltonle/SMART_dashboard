@@ -204,7 +204,7 @@ const sensorReducer = (state = initialState, action) => {
           ...state.visual,
           byDay: {
             ...state.visual.byDay,
-            pedesrian: action.payload
+            pedestrian: action.payload
           }
         }
       }
