@@ -32,7 +32,15 @@ class AirOfDayChart extends Component {
     const { id, getAirDataByDay } = this.props
 
     if (id !== undefined) {
-      getAirDataByDay(this.props.id, selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
+      getAirDataByDay(this.props.id, moment(selectedDate).format("YYYY-MM-DD"))
+    }
+  }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.state.selectedDate !== prevState.selectedDate) {
+      const { selectedDate } = this.state
+      if (this.props.id !== undefined)
+        this.props.getAirDataByDay(this.props.id, moment(selectedDate).format("YYYY-MM-DD"))
     }
   }
 

@@ -262,21 +262,20 @@ export const getMaxVisualDataByHour = id => dispatch => {
 /**
  * Get air quality data from a specific day
  * @param {string} id 
- * @param {number} year 
- * @param {number} month 
- * @param {number} day 
+ * @param {string} day "YYYY-MM-DD"
  */
-export const getAirDataByDay = (id, year, month, day) => dispatch => {
-  fetch( `/sensor-data/air/by-day/pm2_5/${id}/${year}-${month}-${day}`)
+export const getAirDataByDay = (id, day) => dispatch => {
+  fetch( `/sensor-data/air/by-day/pm2_5/${id}/${day}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => dispatch({
+  .then(res => {console.log('res', res)
+    dispatch({
     type: GET_PM25_BY_DAY,
     payload: res
-  }))
+  })})
   .catch(err => console.log(err))
 
-  fetch( `/sensor-data/air/by-day/pm10/${id}/${year}-${month}-${day}`)
+  fetch( `/sensor-data/air/by-day/pm10/${id}/${day}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -289,12 +288,10 @@ export const getAirDataByDay = (id, year, month, day) => dispatch => {
 /**
  * Get visual data from a specific day
  * @param {string} id 
- * @param {number} year 
- * @param {number} month 
- * @param {number} day 
+ * @param {string} day "YYYY-MM-DD"
  */
-export const getVisualDataByDay = (id, year, month, day) => dispatch => {
-  fetch( `/sensor-data/visual/by-day/pedestrian/${id}/${year}-${month}-${day}`)
+export const getVisualDataByDay = (id, day) => dispatch => {
+  fetch( `/sensor-data/visual/by-day/pedestrian/${id}/${day}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -303,7 +300,7 @@ export const getVisualDataByDay = (id, year, month, day) => dispatch => {
   }))
   .catch(err => console.log(err))
 
-  fetch( `/sensor-data/visual/by-day/bicycle/${id}/${year}-${month}-${day}`)
+  fetch( `/sensor-data/visual/by-day/bicycle/${id}/${day}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -312,7 +309,7 @@ export const getVisualDataByDay = (id, year, month, day) => dispatch => {
   }))
   .catch(err => console.log(err))
 
-  fetch( `/sensor-data/visual/by-day/vehicle/${id}/${year}-${month}-${day}`)
+  fetch( `/sensor-data/visual/by-day/vehicle/${id}/${day}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({

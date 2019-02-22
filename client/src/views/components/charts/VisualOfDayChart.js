@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { getVisualDataByDay } from '../../../state/ducks/sensor/actions'
 import Plot from 'react-plotly.js'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
@@ -13,7 +14,10 @@ import styles from './VisualOfDayChart.module.scss'
 class VisualOfDayChart extends Component {
   static propTypes = {
     media: PropTypes.string,
-    sensor: PropTypes.object
+    id: PropTypes.string,
+    dataByDay: PropTypes.object,
+
+    getVisualDataByDay: PropTypes.func
   }
 
   constructor(props) {
@@ -24,7 +28,20 @@ class VisualOfDayChart extends Component {
   }
   
   componentDidMount = () => {
-    
+    const { selectedDate } = this.state
+    const { id, getVisualDataByDay } = this.props
+
+    if (id !== undefined) {
+      getVisualDataByDay(id, selectedDate.getFullYear(), selectedDate.getMonth()+1, selectedDate.getDate())
+    }
+  }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.state.selectedDate !== prevState.selectedDate) {
+      const { selectedDate } = this.state
+      if (this.props.id !== undefined)
+        this.props.getVisualDataByDay(this.props.id, moment(selectedDate).format("YYYY-MM-DD"))
+    }
   }
 
   handleDateChange = (date) => {
@@ -34,26 +51,22 @@ class VisualOfDayChart extends Component {
   }
 
   getData = (name) => {
-    const { sensor } = this.props
+    const { dataByDay } = this.props
     let data = { x:[], y:[] }
 
-    if (sensor === undefined)
-      return {}
+    if (dataByDay === undefined)
+      return data
     else if (this.state === undefined)
-      return {}
+      return data
     else {
-      const { selectedDate } = this.state
-      if (sensor.history === undefined)
-        return {}
+      if (dataByDay[name] === undefined)
+        return data
       else {
-        sensor.history.filter(
-          d => moment(d.timestamp, 'DD-MM-YYYY HH:mm:ss').isSame(moment(selectedDate), 'day')
-        ).filter(
-          d => d.type === name
-        ).forEach(d => {
-          data.x.push(moment(d.timestamp, 'DD-MM-YYYY HH:mm:ss').toDate())
-          data.y.push(parseFloat(d.counter))
-        })
+        for (let i = 0, l = dataByDay[name].length; i < l; i++) {
+          data.x.push(moment(dataByDay[name][i].x, "DD-MM-YYYY HH:mm:ss").toDate())
+          data.y.push(dataByDay[name][i].y)
+        }
+
         return data
       }
     }
@@ -150,10 +163,13 @@ class VisualOfDayChart extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  sensor: state.sensor.visual
+  id: state.sensor.visual.id,
+  dataByDay: state.sensor.visual.byDay
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  getVisualDataByDay
+}
 
 export default withDimension({
   className: styles.wrapper
