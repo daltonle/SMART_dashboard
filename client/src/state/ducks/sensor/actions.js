@@ -90,6 +90,14 @@ export const getAirData = (sensor) => (dispatch) => {
             payload: res
           }))
           .catch(err => console.log(err))
+        fetch(`/sensor-data/visual/heatmap/${res.id}`)
+          .then(res => res.text())
+          .then(text => text.length ? JSON.parse(text) : undefined)
+          .then(res => dispatch({
+            type: GET_VISUAL_HEATMAP_DATA,
+            payload: res
+          }))
+          .catch(err => console.log(err))
       }
     })
     .catch(err => console.log(err))
@@ -133,6 +141,14 @@ export const getVisualData = (sensor) => (dispatch) => {
           .then(text => text.length ? JSON.parse(text) : undefined)
           .then(res => dispatch({
             type: GET_VEHICLE_HISTORY,
+            payload: res
+          }))
+          .catch(err => console.log(err))
+        fetch(`/sensor-data/visual/heatmap/${res.id}`)
+          .then(res => res.text())
+          .then(text => text.length ? JSON.parse(text) : undefined)
+          .then(res => dispatch({
+            type: GET_VISUAL_HEATMAP_DATA,
             payload: res
           }))
           .catch(err => console.log(err))
