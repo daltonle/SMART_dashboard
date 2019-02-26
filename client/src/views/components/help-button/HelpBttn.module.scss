@@ -21,10 +21,12 @@
 }
 
 .theme {
+  max-width: 30vw;
   border-radius: 5px;
   color: $black !important;
   padding: 1rem 1.5rem;
   background-color: /*rgba(6, 144, 171, 1)*/ #FFFFFF !important;
+  opacity: 1 !important;
   box-shadow: 0.1875em .25em 1em rgba(0, 0, 0, .3);
 }
 
