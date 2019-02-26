@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const LTTB = require('downsample').LTTB
 const moment = require('moment')
 const db = require('../db')
+const generateHeatmapData = require('../utils/generateHeatmapData')
 
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(bodyParser.json())
@@ -302,6 +303,20 @@ router.get('/visual/by-day/:name/:id/:year-:month-:day', (req, res, next) => {
     .then(result => result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss").toDate(), y: parseFloat(d.counter)})))
     .then(result => LTTB(result, 1000))
     .then(result => res.json(result.map(d => ({x: moment(d.x).format("DD-MM-YYYY HH:mm:ss"), y: d.y}))))
+    .catch(next)
+})
+
+// retrieve data for visual heatmap
+router.get('/visual/heatmap/:id', (req, res, next) => {
+  let query = {
+    text: `SELECT x1, y1, x2, y2 FROM vs_detections
+          WHERE id_obj IN (SELECT id FROM vs_object WHERE id_sensor=$1)
+          ORDER BY ts ASC`,
+    values: [req.params.id]
+  }
+
+  db.query(query)
+    .then(result => res.json(generateHeatmapData(result.rows)))
     .catch(next)
 })
 
