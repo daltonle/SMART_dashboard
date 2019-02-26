@@ -16,7 +16,8 @@ import {
   GET_PM10_BY_DAY,
   GET_PEDESTRIAN_BY_DAY,
   GET_BICYCLE_BY_DAY,
-  GET_VEHICLE_BY_DAY
+  GET_VEHICLE_BY_DAY,
+  GET_VISUAL_HEATMAP_DATA
 } from './types'
 
 /**
@@ -313,6 +314,21 @@ export const getVisualDataByDay = (id, day) => dispatch => {
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
     type: GET_VEHICLE_BY_DAY,
+    payload: res
+  }))
+  .catch(err => console.log(err))
+}
+
+/**
+ * Get object tracking data in the heatmap data format
+ * @param {string} id 
+ */
+export const getHeatmapData = (id) => dispatch => {
+  fetch(`/sensor-data/visual/heatmap/${id}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => dispatch({
+    type: GET_VISUAL_HEATMAP_DATA,
     payload: res
   }))
   .catch(err => console.log(err))

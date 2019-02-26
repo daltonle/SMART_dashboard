@@ -23,3 +23,6 @@ export const GET_MAX_AIR_DATA_BY_HOUR = 'sensor/GET_MAX_AIR_DATA_BY_HOUR'
 export const GET_AVG_VISUAL_DATA_BY_HOUR = 'sensor/GET_AVG_VISUAL_DATA_BY_HOUR'
 export const GET_MIN_VISUAL_DATA_BY_HOUR = 'sensor/GET_MIN_VISUAL_DATA_BY_HOUR'
 export const GET_MAX_VISUAL_DATA_BY_HOUR = 'sensor/GET_MAX_VISUAL_DATA_BY_HOUR'
+
+/** Get visual object tracking data */
+export const GET_VISUAL_HEATMAP_DATA = 'sensor/GET_VISUAL_HEATMAP_DATA'

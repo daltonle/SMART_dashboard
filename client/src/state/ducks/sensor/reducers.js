@@ -18,7 +18,8 @@ import {
   GET_PM10_BY_DAY,
   GET_PEDESTRIAN_BY_DAY,
   GET_BICYCLE_BY_DAY,
-  GET_VEHICLE_BY_DAY
+  GET_VEHICLE_BY_DAY,
+  GET_VISUAL_HEATMAP_DATA
 } from "./types"
 
 /**
@@ -228,6 +229,14 @@ const sensorReducer = (state = initialState, action) => {
             ...state.visual.byDay,
             vehicle: action.payload
           }
+        }
+      }
+    case GET_VISUAL_HEATMAP_DATA:
+      return {
+        ...state,
+        visual: {
+          ...state.visual,
+          heatmap: action.payload
         }
       }
     default: 
