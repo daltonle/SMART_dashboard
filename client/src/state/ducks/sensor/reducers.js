@@ -19,7 +19,8 @@ import {
   GET_PEDESTRIAN_BY_DAY,
   GET_BICYCLE_BY_DAY,
   GET_VEHICLE_BY_DAY,
-  GET_VISUAL_HEATMAP_DATA
+  GET_VISUAL_HEATMAP_DATA,
+  GET_TRAJECTORY_DATA
 } from "./types"
 
 /**
@@ -237,6 +238,14 @@ const sensorReducer = (state = initialState, action) => {
         visual: {
           ...state.visual,
           heatmap: action.payload
+        }
+      }
+    case GET_TRAJECTORY_DATA:
+      return {
+        ...state,
+        visual: {
+          ...state.visual,
+          trajectory: action.payload
         }
       }
     default: 
