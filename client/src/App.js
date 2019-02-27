@@ -7,6 +7,7 @@ import { DESK, MOBILE, BREAK_POINT } from './utils/const'
 import store from './state/store'
 import DashboardMain from './views/pages/DashboardMain/DashboardMain'
 import DataPage from './views/pages/DataPage/DataPage'
+import Compare from './views/pages/Compare/Compare';
 
 class App extends Component {
   render() {
@@ -23,6 +24,10 @@ class App extends Component {
                 <Route 
                   path='/dashboard/:lat,:long'
                   render={(props) => <DataPage {...props} media={matches ? MOBILE : DESK} />}
+                />
+                <Route
+                  path='/compare'
+                  render={(props) => <Compare {...props} media={matches ? MOBILE : DESK} />}
                 />
               </Switch>
             )}

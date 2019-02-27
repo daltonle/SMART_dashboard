@@ -20,6 +20,11 @@ class DashboardMain extends Component {
     this.props.changeLayer()
   }
 
+  handleCompareClick = (e) => {
+    e.preventDefault()
+    this.props.history.push(`/compare`)
+  }
+
   render() {
     if (this.props.media === DESK)
       return (
@@ -31,13 +36,13 @@ class DashboardMain extends Component {
             <Map media={this.props.media}/>
             <div className={styles.controlButton}>
               <div onClick={this.handleLayerClick}>
-                <LayersBttn />
+                <LayersBttn media={this.props.media}/>
               </div>
               <div>
-                <LegendsBttn />
+                <LegendsBttn media={this.props.media} />
               </div>
-              <div>
-                <CompareBttn />
+              <div onClick={this.handleCompareClick}>
+                <CompareBttn media={this.props.media} />
               </div>
             </div>
           </div>
@@ -54,11 +59,11 @@ class DashboardMain extends Component {
               </div>
             </div>
             <div className={m_styles.controlButton}>
-              <div>
-                <CompareBttn />
+              <div onClick={this.handleCompareClick}>
+                <CompareBttn media={this.props.media} />
               </div>
               <div>
-                <LegendsBttn />
+                <LegendsBttn media={this.props.media} />
               </div>
             </div>
           </div>
