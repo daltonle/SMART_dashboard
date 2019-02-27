@@ -1,3 +1,5 @@
+const outlier = require('outlier2')
+
 /** 
  * Function that takes data of bounding boxes to generate data used for
  * heatmap. This function assumes the screen resolution is 1280 x 720.
@@ -21,14 +23,12 @@ const generateHeatmapData = (data) => {
   }
 
   for (let i=0, l=data.length; i < l; i++) {
-    console.log(`Start with data[${i}]`)
+    
     // convert raw coordinates to coordinates of the block unit
     const bottomLeftX = Math.floor(parseFloat(data[i].x1) / UNIT)
     const bottomLeftY = Math.floor(parseFloat(data[i].y1) / UNIT)
     const topRightX = Math.floor(parseFloat(data[i].x2) / UNIT)
     const topRightY = Math.floor(parseFloat(data[i].y2) / UNIT)
-
-    console.log(bottomLeftX, bottomLeftY, topRightX, topRightY)
 
     // increment values of each block unit that is in the bounding box
     for (let k = bottomLeftY; k <= topRightY; k++) {      // for each row (y)
@@ -55,7 +55,17 @@ const generateHeatmapData = (data) => {
 
   }
 
+  //TODO: Handle outliers
+
   return result
+}
+
+const mean = (numbers) => {
+  let total = 0
+  for (let i = 0, l = number.length; i < l; i ++) {
+      total += numbers[i]
+  }
+  return total / numbers.length
 }
 
 module.exports = generateHeatmapData

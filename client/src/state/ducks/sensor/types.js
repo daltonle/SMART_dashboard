@@ -26,3 +26,4 @@ export const GET_MAX_VISUAL_DATA_BY_HOUR = 'sensor/GET_MAX_VISUAL_DATA_BY_HOUR'
 
 /** Get visual object tracking data */
 export const GET_VISUAL_HEATMAP_DATA = 'sensor/GET_VISUAL_HEATMAP_DATA'
+export const GET_TRAJECTORY_DATA = 'sensor/GET_TRAJECTORY_DATA'

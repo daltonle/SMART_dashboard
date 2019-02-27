@@ -10,7 +10,7 @@ import { changeCentre, changeLayer } from '../../../state/ducks/map/actions'
 import { getAirData, getVisualData } from '../../../state/ducks/sensor/actions'
 import { DESK, MOBILE } from '../../../utils/const'
 import { AppBar } from '../../components/appbar/AppBar'
-import { VisualLiveChart, HistoryChart, AirByHourChart, VisualByHourChart, AirOfDayChart, VisualOfDayChart, VisualHeatmap } from '../../components/charts'
+import { VisualLiveChart, HistoryChart, AirByHourChart, VisualByHourChart, AirOfDayChart, VisualOfDayChart, VisualHeatmap, TrajectoryChart } from '../../components/charts'
 import Map from '../../components/map/Map'
 import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
 import { HelpBttn } from '../../components/help-button/HelpBttn'
@@ -206,7 +206,7 @@ class DataPage extends Component {
                   </div> : <div></div>}
                 {(visualSensor !== undefined) ? <VisualOfDayChart media={DESK} />: <div></div>}
                 {(visualSensor !== undefined) ? 
-                  <div className={styles.header} style={{marginBottom: `.5rem`}}>
+                  <div className={styles.header}>
                     <h3>Object detection</h3>
                     <HelpBttn 
                       name="heatmap" 
@@ -214,6 +214,15 @@ class DataPage extends Component {
                     />
                   </div> : <div></div>}
                 {(visualSensor !== undefined) ? <VisualHeatmap media={DESK} />: <div></div>}
+                {(visualSensor !== undefined) ? 
+                  <div className={styles.header}>
+                    <h3>Trajectory tracking</h3>
+                    <HelpBttn 
+                      name="trajectory" 
+                      message="This chart shows the trajectory of object centre detected by the camera." 
+                    />
+                  </div> : <div></div>}
+                {(visualSensor !== undefined) ? <TrajectoryChart media={DESK} />: <div></div>}
               </div> :
               <div className={styles.mapContainer}>
                 <div className={styles.expandButton} onClick={this.handleExpand}>
@@ -340,6 +349,15 @@ class DataPage extends Component {
                 />
               </div> : <div></div>}
             {(visualSensor !== undefined) ? <VisualHeatmap media={MOBILE} />: <div></div>}
+            {(visualSensor !== undefined) ? 
+              <div className={m_styles.header}>
+                <h3>Trajectory tracking</h3>
+                <HelpBttn 
+                  name="trajectory" 
+                  message="This chart shows the trajectory of object centre detected by the camera." 
+                />
+              </div> : <div></div>}
+            {(visualSensor !== undefined) ? <TrajectoryChart media={MOBILE} />: <div></div>}
           </div> :
           <div className={m_styles.content}>
             <div className={ m_styles.mapContainer }>

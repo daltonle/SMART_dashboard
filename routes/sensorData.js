@@ -311,12 +311,29 @@ router.get('/visual/heatmap/:id', (req, res, next) => {
   let query = {
     text: `SELECT x1, y1, x2, y2 FROM vs_detections
           WHERE id_obj IN (SELECT id FROM vs_object WHERE id_sensor=$1)
-          ORDER BY ts ASC`,
+          ORDER BY ts DESC
+          LIMIT 5000`,
     values: [req.params.id]
   }
 
   db.query(query)
     .then(result => res.json(generateHeatmapData(result.rows)))
+    .catch(next)
+})
+
+// retrieve data for visual trajectory tracking
+router.get('/visual/trajectory/:id', (req, res, next) => {
+  let query = {
+    text: `SELECT id_obj, array_agg((x1+x2)/2 ORDER BY ts DESC) as x, array_agg((y1+y2)/2) as y FROM vs_detections
+          WHERE id_obj IN (SELECT id FROM vs_object WHERE id_sensor=$1)
+          GROUP BY id_obj
+          ORDER BY id_obj ASC
+          LIMIT 500`,
+    values: [req.params.id]
+  }
+
+  db.query(query)
+    .then(result => res.json(result.rows))
     .catch(next)
 })
 
