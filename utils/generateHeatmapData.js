@@ -1,5 +1,3 @@
-const outlier = require('outlier2')
-
 /** 
  * Function that takes data of bounding boxes to generate data used for
  * heatmap. This function assumes the screen resolution is 1280 x 720.
