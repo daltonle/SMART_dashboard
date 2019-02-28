@@ -116,11 +116,11 @@ class LocationPicker extends Component {
             }
           }
         })
+
+        this.setState({ cardVisible: true })
       })
       .catch(err => console.log(err))
     }
-
-    this.setState({ cardVisible: true })
   }
 
   handleLocationAdded = () => {
