@@ -25,6 +25,12 @@ class Map extends Component {
     this.props.addVisualMarkers()
   }
 
+  shouldComponentUpdate = (nextProps, nextState) => {
+    if (this.props !== nextProps || this.state !== nextState)
+      return true
+    else return false
+  }
+
   handleMarkerClick = (marker, e) => {
     let newCentre = {
       lng: parseFloat(marker.long),
