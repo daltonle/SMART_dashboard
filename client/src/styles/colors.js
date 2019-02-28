@@ -19,4 +19,4 @@ export const colors = {
   primaryColor_3: "#60B7C9"
 }
 
-export const colorScale = [ colors.green, colors.red, colors.yellow, colors.orange, colors.purple, colors.maroon, colors.primaryColor]
+export const colorScale = [ colors.green, colors.red, colors.yellow, colors.purple, colors.orange, colors.maroon, colors.primaryColor]
