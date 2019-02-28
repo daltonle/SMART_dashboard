@@ -161,6 +161,14 @@ export const getVisualData = (sensor) => (dispatch) => {
             payload: res
           }))
           .catch(err => console.log(err))
+        fetch(`/sensor-data/visual/trajectory/${res.id}`)
+          .then(res => res.text())
+          .then(text => text.length ? JSON.parse(text) : undefined)
+          .then(res => dispatch({
+            type: GET_TRAJECTORY_DATA,
+            payload: res
+          }))
+          .catch(err => console.log(err))
       }
     })
     .catch(err => console.log(err))
