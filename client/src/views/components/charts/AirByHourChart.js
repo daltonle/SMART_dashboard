@@ -142,6 +142,16 @@ class AirByHourChart extends Component {
                 { value: "min", label: "minimum" },
                 { value: "max", label: "maximum" }
               ]}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: `3px`,
+                colors: {
+                  ...theme.colors,
+                  primary25: colors.primaryColor_1,
+                  primary50: colors.primaryColor_3,
+                  primary: colors.primaryColor,
+                }
+              })}
             />
           </div>
         </div>

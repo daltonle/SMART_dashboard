@@ -6,37 +6,32 @@ import withDimension from 'react-dimensions'
 import moment from 'moment'
 import { MOBILE } from '../../../../utils/const'
 import { colors, colorScale } from '../../../../styles/colors.js'
-import styles from './History.module.scss'
+import styles from './ByHour.module.scss'
 import '../../../../styles/plotly.scss'
 
-class History extends Component {
+class ByHour extends Component {
   static propTypes = {
     media: PropTypes.string,
     sensors: PropTypes.array,
-    field: PropTypes.string
+    field: PropTypes.string,
+    type: PropTypes.string,
+    day: PropTypes.number
   }
 
   render() {
-    const { containerHeight, containerWidth, sensors, field } = this.props
+    const { containerHeight, containerWidth, sensors, field, type, day } = this.props
     // pre-process data
     let chartData = []
 
     for (let i = 0, l = sensors.length; i < l; i++) {
-      if (sensors[i].history) {
-        let idx = chartData.push({
-          x: [],
-          y: [],
+      if (sensors[i].byHour) {
+        chartData.push({
+          ...sensors[i].byHour[field][type][day],
           name: `${sensors[i].description.substr(0,10)}...`,
           type: 'scatter',
-          mode: 'markers',
+          mode: 'lines+markers',
           marker: { color: colorScale[i], opacity: 0.7 }
-        }) - 1
-        if (sensors[i].history[field]) {
-          sensors[i].history[field].x.map(d => {
-            chartData[idx].x.push(moment(d, "DD-MM-YYYY HH:mm:ss").toDate())
-          })
-          chartData[idx].y = [...sensors[i].history[field].y]
-        }
+        })
       }
     }
 
@@ -97,4 +92,4 @@ const mapDispatchToProps = {}
 
 export default withDimension({
   className: styles.wrapper
-})(connect(mapStateToProps, mapDispatchToProps)(History))
+})(connect(mapStateToProps, mapDispatchToProps)(ByHour))

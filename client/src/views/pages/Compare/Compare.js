@@ -4,6 +4,9 @@ import { connect } from "react-redux"
 import classNames from 'classnames'
 import ArrowLeftIcon from 'react-feather/dist/icons/arrow-left'
 import ExitIcon from 'react-feather/dist/icons/x'
+import LeftIcon from 'react-feather/dist/icons/chevron-left'
+import RightIcon from 'react-feather/dist/icons/chevron-right'
+import Select from 'react-select'
 import { AppBar } from '../../components/appbar/AppBar'
 import LocationPicker from '../../components/map/LocationPicker'
 import { DESK, MOBILE } from '../../../utils/const'
@@ -12,6 +15,8 @@ import { HelpBttn } from '../../components/help-button/HelpBttn'
 import CompareList from "../../components/compare-list/CompareList"
 import Live from "../../components/charts/compare/Live"
 import History from "../../components/charts/compare/History"
+import ByHour from "../../components/charts/compare/ByHour"
+import { colors } from "../../../styles/colors"
 import { changeLayer } from '../../../state/ducks/map/actions'
 import { removeAllSensors } from '../../../state/ducks/compare/actions'
 
@@ -31,12 +36,15 @@ class Compare extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      doShowDetails: false
+      doShowDetails: false,
+      day: 0,
+      type: 'avg'
     }
   }
 
   handleBackClick = (e) => {
     e.preventDefault()
+    this.props.removeAllSensors()
     this.props.history.push(`/dashboard`)
   }
 
@@ -48,6 +56,7 @@ class Compare extends Component {
 
   handleCompareClick = (e) => {
     e.preventDefault()
+    this.props.removeAllSensors()
     this.props.history.push(`/dashboard`)
   }
 
@@ -61,9 +70,32 @@ class Compare extends Component {
     this.setState({ doShowDetails: false })
   }
 
+  handleDayDecreased = (e) => {
+    e.preventDefault()
+    const { day } = this.state
+    let newDay = (day===0 ? 6 : day-1)
+    this.setState({
+      day: newDay
+    })
+  }
+
+  handleDayIncreased = (e) => {
+    e.preventDefault()
+    const { day } = this.state
+    let newDay = (day===6 ? 0 : day+1)
+    this.setState({
+      day: newDay
+    })
+  }
+
+  handleTypeChanged = (selected) => {
+    this.setState({ type: selected.value })
+  }
+
   render() {
-    const { doShowDetails } = this.state
+    const { doShowDetails, day, type } = this.state
     const { isAirLayer } = this.props
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
     if (this.props.media === DESK)
       return (
@@ -111,32 +143,91 @@ class Compare extends Component {
                 </div>
                 {
                   isAirLayer ?
-                  <div className={styles.historyCharts}>
-                    <div className={styles.historyChartAir}>
+                  <div className={styles.chartGroup}>
+                    <div className={styles.chartItemAir}>
                       <h4>PM2.5</h4>
                       <History field="pm2_5"/>
                     </div>
-                    <div className={styles.historyChartAir}>
+                    <div className={styles.chartItemAir}>
                       <h4>PM10</h4>
                       <History field="pm10"/>
                     </div>
                   </div> :
-                  <div className={styles.historyCharts}>
-                    <div className={styles.historyChartVisual}>
+                  <div className={styles.chartGroup}>
+                    <div className={styles.chartItemVisual}>
                       <h4>Pedestrian</h4>
                       <History field="pedestrian"/>
                     </div>
-                    <div className={styles.historyChartVisual}>
+                    <div className={styles.chartItemVisual}>
                       <h4>Bicycle</h4>
                       <History field="bicycle"/>
                     </div>
-                    <div className={styles.historyChartVisual}>
+                    <div className={styles.chartItemVisual}>
                       <h4>Others</h4>
                       <History field="vehicle"/>
                     </div>
                   </div>
                 }
-                
+                <div className={styles.header} style={{marginTop: 0}}>
+                  <h3>Data by hour</h3>
+                  <HelpBttn 
+                    name="by-hour-compare" 
+                    message="Data recorded across locations during each hour each day" 
+                  />
+                </div>
+                <div className={styles.options}>
+                  <LeftIcon className={styles.icon} onClick={e => this.handleDayDecreased(e)}/>
+                  <h5>{days[day]}</h5>
+                  <RightIcon className={styles.icon} onClick={e => this.handleDayIncreased(e)}/>
+                  <div className={styles.dropdown}>
+                    <Select
+                      defaultValue={{ value: `${type}`, label: type==="avg" ? "average" : (type==="min" ? "minimum" : "maximum") }}
+                      onChange={this.handleTypeChanged}
+                      options={[
+                        { value: "avg", label: "average" },
+                        { value: "min", label: "minimum" },
+                        { value: "max", label: "maximum" }
+                      ]}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: `3px`,
+                        colors: {
+                          ...theme.colors,
+                          primary25: colors.primaryColor_1,
+                          primary50: colors.primaryColor_3,
+                          primary: colors.primaryColor,
+                        }
+                      })}
+                    />
+                  </div>
+                </div>
+                {
+                  isAirLayer ?
+                  <div className={styles.chartGroup}>
+                    <div className={styles.chartItemAir}>
+                      <h4>PM2.5</h4>
+                      <ByHour field="pm2_5" day={day} type={type}/>
+                    </div>
+                    <div className={styles.chartItemAir}>
+                      <h4>PM10</h4>
+                      <ByHour field="pm10" day={day} type={type}/>
+                    </div>
+                  </div> :
+                  <div className={styles.chartGroup}>
+                    <div className={styles.chartItemVisual}>
+                      <h4>Pedestrian</h4>
+                      <ByHour field="pedestrian" day={day} type={type}/>
+                    </div>
+                    <div className={styles.chartItemVisual}>
+                      <h4>Bicycle</h4>
+                      <ByHour field="bicycle" day={day} type={type}/>
+                    </div>
+                    <div className={styles.chartItemVisual}>
+                      <h4>Others</h4>
+                      <ByHour field="vehicle" day={day} type={type}/>
+                    </div>
+                  </div>
+                }
               </div> :
               <div className={styles.mapContainer}>
                 <LocationPicker media={this.props.media}/>
