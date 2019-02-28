@@ -17,6 +17,7 @@ import m_styles from "./Compare_mobile.module.scss"
 
 class Compare extends Component {
   static propTypes = {
+    count: PropTypes.number,
     media: PropTypes.string,
     
     changeLayer: PropTypes.func
@@ -44,6 +45,16 @@ class Compare extends Component {
     this.props.history.push(`/dashboard`)
   }
 
+  handleStartCompare = (e) => {
+    e.preventDefault()
+    this.setState({ doShowDetails: true })
+  }
+
+  handleCollapse = (e) => {
+    e.preventDefault()
+    this.setState({ doShowDetails: false })
+  }
+
   render() {
     const { doShowDetails } = this.state
 
@@ -61,9 +72,15 @@ class Compare extends Component {
               </div>
               <h5>Choose location from map</h5>
               <CompareList />
-              <div className={styles.start}>
-                <h3>Compare</h3>
-              </div>
+              {
+                this.props.count > 1 ?
+                <div className={styles.start} onClick={this.handleStartCompare}>
+                  <h3>Compare</h3>
+                </div> :
+                <div className={styles.startDisabled} >
+                  <h3>Compare</h3>
+                </div>
+              }
             </div>
             { doShowDetails ? 
               <div className={styles.chartDetails}>
@@ -138,7 +155,9 @@ class Compare extends Component {
   }
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  count: state.compare.count
+})
 
 const mapDispatchToProps = {
   changeLayer

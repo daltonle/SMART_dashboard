@@ -79,6 +79,26 @@
         margin: .875rem 0;
       }
     }
+
+    .startDisabled {
+      background-color: $neutral-color-3;
+      border-radius: 3px;
+      margin-top: auto;
+      margin-bottom: 2.5rem;
+      width: 66%;
+      height: 3rem;
+      align-self: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      cursor: not-allowed;
+      
+      h3 {
+        color: $neutral-color-7;
+        margin: .875rem 0;
+      }
+    }
   }
 
   .mapContainer {
