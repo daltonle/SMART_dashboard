@@ -42,7 +42,8 @@ const compareReducer = (state = initialState, action) => {
     case REMOVE_ALL_SENSORS:
       return {
         ...state,
-        sensors: []
+        sensors: [],
+        count: 0
       }
     default:
       return state
