@@ -10,6 +10,7 @@ import { DESK, MOBILE } from '../../../utils/const'
 import { LayersBttn, LegendsBttn, CompareBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
 import { HelpBttn } from '../../components/help-button/HelpBttn'
 import CompareList from "../../components/compare-list/CompareList"
+import Live from "../../components/charts/compare/Live"
 import { changeLayer } from '../../../state/ducks/map/actions'
 import { removeAllSensors } from '../../../state/ducks/compare/actions'
 
@@ -91,12 +92,13 @@ class Compare extends Component {
                   <ExitIcon className={styles.icon}/>
                 </div>
                 <div className={styles.header} style={{marginTop: 0}}>
-                  <h3>History</h3>
+                  <h3>Live data</h3>
                   <HelpBttn 
-                    name="history-chart" 
-                    message="Data collected over time" 
+                    name="live-compare" 
+                    message="Live data across locations" 
                   />
                 </div>
+                <Live />
               </div> :
               <div className={styles.mapContainer}>
                 <LocationPicker media={this.props.media}/>
