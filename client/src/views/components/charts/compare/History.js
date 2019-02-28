@@ -31,10 +31,12 @@ class History extends Component {
           mode: 'markers',
           marker: { color: colorScale[i], opacity: 0.7 }
         }) - 1
-        sensors[i].history[field].x.map(d => {
-          chartData[idx].x.push(moment(d, "DD-MM-YYYY HH:mm:ss").toDate())
-        })
-        chartData[idx].y = [...sensors[i].history[field].y]
+        if (sensors[i].history[field]) {
+          sensors[i].history[field].x.map(d => {
+            chartData[idx].x.push(moment(d, "DD-MM-YYYY HH:mm:ss").toDate())
+          })
+          chartData[idx].y = [...sensors[i].history[field].y]
+        }
       }
     }
 

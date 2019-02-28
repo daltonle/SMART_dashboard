@@ -140,7 +140,7 @@
     div.historyCharts {
       align-self: stretch;
       display: flex;
-      flex-flow: row nowrap;
+      flex-flow: row;
 
       h4 {
         margin: 0;
@@ -149,6 +149,10 @@
 
       .historyChartAir {
         flex-basis: 50%;
+      }
+
+      .historyChartVisual {
+        flex-basis: 33.33%;
       }
     }
   }

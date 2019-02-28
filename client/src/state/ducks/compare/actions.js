@@ -14,32 +14,31 @@ import {
  */
 export const addCompareSensor = (id, desc) => (dispatch, getState) => {
   const { isAirLayer } = getState().map
-  if (isAirLayer) {
-    dispatch({
-      type: ADD_SENSOR,
-      payload: { id: id, description: desc}
-    })
-    dispatch({
-      type:INCREMENT_COUNT,
-      payload: getState().compare.count + 1
-    })
-    fetch(`compare/air/${id}`)
-    .then(res => res.text())
-    .then(text => text.length ? JSON.parse(text) : undefined)
-    .then(res => {
-      let nextSensors = [...getState().compare.sensors]
-      let idx = nextSensors.findIndex(s => s.id === res.id)
-      nextSensors[idx] = { ...res }
-      dispatch({
-        type: ADD_SENSOR_DATA,
-        payload: nextSensors
-      })
-    })
-    .catch(err => console.log(err))
-  }
-  else {
+  dispatch({
+    type: ADD_SENSOR,
+    payload: { id: id, description: desc}
+  })
+  dispatch({
+    type:INCREMENT_COUNT,
+    payload: getState().compare.count + 1
+  })
+
+  let type = 'air'
+  if (!isAirLayer) { type='visual' }
     
-  }
+  fetch(`compare/${type}/${id}`)
+  .then(res => res.text())
+  .then(text => text.length ? JSON.parse(text) : undefined)
+  .then(res => {
+    let nextSensors = [...getState().compare.sensors]
+    let idx = nextSensors.findIndex(s => s.id === res.id)
+    nextSensors[idx] = { ...res }
+    dispatch({
+      type: ADD_SENSOR_DATA,
+      payload: nextSensors
+    })
+  })
+  .catch(err => console.log(err))
 }
 
 /**

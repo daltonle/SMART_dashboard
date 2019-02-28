@@ -77,7 +77,7 @@ router.get('/visual/coordinates=:long,:lat', (req, res, next) => {
   } = req.params
   let query = {
     text: `SELECT id, long, lat, alt, name, description FROM vs_sensor
-    WHERE long=$1::text AND lat=$2::text`,
+    WHERE long=$1::numeric AND lat=$2::numeric`,
     values: [long, lat]
   }
   

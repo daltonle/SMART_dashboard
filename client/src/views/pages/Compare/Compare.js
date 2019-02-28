@@ -22,6 +22,7 @@ class Compare extends Component {
   static propTypes = {
     count: PropTypes.number,
     media: PropTypes.string,
+    isAirLayer: PropTypes.bool,
     
     changeLayer: PropTypes.func,
     removeAllSensors: PropTypes.func
@@ -62,6 +63,7 @@ class Compare extends Component {
 
   render() {
     const { doShowDetails } = this.state
+    const { isAirLayer } = this.props
 
     if (this.props.media === DESK)
       return (
@@ -107,16 +109,34 @@ class Compare extends Component {
                     message="Data recorded over time across locations" 
                   />
                 </div>
-                <div className={styles.historyCharts}>
-                  <div className={styles.historyChartItem}>
-                    <h4>PM2.5</h4>
-                    <History field="pm2_5"/>
+                {
+                  isAirLayer ?
+                  <div className={styles.historyCharts}>
+                    <div className={styles.historyChartAir}>
+                      <h4>PM2.5</h4>
+                      <History field="pm2_5"/>
+                    </div>
+                    <div className={styles.historyChartAir}>
+                      <h4>PM10</h4>
+                      <History field="pm10"/>
+                    </div>
+                  </div> :
+                  <div className={styles.historyCharts}>
+                    <div className={styles.historyChartVisual}>
+                      <h4>Pedestrian</h4>
+                      <History field="pedestrian"/>
+                    </div>
+                    <div className={styles.historyChartVisual}>
+                      <h4>Bicycle</h4>
+                      <History field="bicycle"/>
+                    </div>
+                    <div className={styles.historyChartVisual}>
+                      <h4>Others</h4>
+                      <History field="vehicle"/>
+                    </div>
                   </div>
-                  <div className={styles.historyChartAir}>
-                    <h4>PM10</h4>
-                    <History field="pm10"/>
-                  </div>
-                </div>
+                }
+                
               </div> :
               <div className={styles.mapContainer}>
                 <LocationPicker media={this.props.media}/>
@@ -179,7 +199,8 @@ class Compare extends Component {
 }
 
 const mapStateToProps = state => ({
-  count: state.compare.count
+  count: state.compare.count,
+  isAirLayer: state.map.isAirLayer
 })
 
 const mapDispatchToProps = {

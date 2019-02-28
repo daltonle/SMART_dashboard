@@ -33,7 +33,14 @@ class Live extends Component {
       }
     }
     else {
-      // TODO: Process data for visual live
+      for (let i = 0, l = sensors.length; i < l; i++) {
+        dataPedestrian.x.push(`${sensors[i].description.substr(0,25)}...`)
+        dataBicycle.x.push(`${sensors[i].description.substr(0,25)}...`)
+        dataVehicle.x.push(`${sensors[i].description.substr(0,25)}...`)
+        dataPedestrian.y.push(sensors[i].pedestrians)
+        dataBicycle.y.push(sensors[i].bicycles)
+        dataVehicle.y.push(sensors[i].vehicles)
+      }
     }
 
     // chart layout
@@ -88,6 +95,24 @@ class Live extends Component {
             name: 'PM10',
             type: 'bar',
             marker: { color: colors.red, opacity: 0.7 }
+          },
+          {
+            ...dataPedestrian,
+            name: 'Pedestrian',
+            type: 'bar',
+            marker: { color: colors.yellow, opacity: 0.7 }
+          },
+          {
+            ...dataBicycle,
+            name: 'Bicycle',
+            type: 'bar',
+            marker: { color: colors.purple, opacity: 0.7 }
+          },
+          {
+            ...dataVehicle,
+            name: 'Vehicle',
+            type: 'bar',
+            marker: { color: colors.maroon, opacity: 0.7 }
           }
         ]}
         config={this.props.media===MOBILE ? mobileCongig : webConfig}

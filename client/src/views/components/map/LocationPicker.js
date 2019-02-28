@@ -96,31 +96,32 @@ class LocationPicker extends Component {
   }
 
   handleMarkerClick = (marker, e) => {
-    if (this.props.isAirLayer) {
-      fetch(`/sensors/air/coordinates=${marker.long},${marker.lat}`)
-      .then(res => res.text())
-      .then(text => text.length ? JSON.parse(text) : undefined)
-      .then(res => {
-        if (this.props.selectedSensors.find(s => s.id === res.id))
-          this.setState({ addable: false })
-        else this.setState({ addable: true })
+    let type = 'air'
+    if (!this.props.isAirLayer) { type = 'visual' }
 
-        this.setState({
-          selectedLocation: {
-            id: res.id,
-            name: res.description,
-            suburb: "No location data",
-            position: {
-              lat: res.lat,
-              lng: res.long
-            }
+    fetch(`/sensors/${type}/coordinates=${marker.long},${marker.lat}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => {
+      if (this.props.selectedSensors.find(s => s.id === res.id))
+        this.setState({ addable: false })
+      else this.setState({ addable: true })
+
+      this.setState({
+        selectedLocation: {
+          id: res.id,
+          name: res.description,
+          suburb: "No location data",
+          position: {
+            lat: res.lat,
+            lng: res.long
           }
-        })
-
-        this.setState({ cardVisible: true })
+        }
       })
-      .catch(err => console.log(err))
-    }
+
+      this.setState({ cardVisible: true })
+    })
+    .catch(err => console.log(err))
   }
 
   handleLocationAdded = () => {
