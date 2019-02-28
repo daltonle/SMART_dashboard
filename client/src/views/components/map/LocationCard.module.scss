@@ -7,8 +7,7 @@
   top: 2.5rem;
   left: 2.5rem;
   background-color: $background-color;
-  padding: 2.5rem 2rem;
-  padding-right: 4.5rem;
+  padding: 2.5rem 4.5rem 4rem 2rem;
   border-radius: 5px;
   box-shadow: 0.1875em 0 2em rgba(0, 0, 0, .3);
 
@@ -26,6 +25,7 @@
 
   .addButton {
     position: absolute;
+    padding: .25rem .75rem;
     bottom: 2rem;
     right: 2.5rem;
     cursor: pointer;
@@ -33,6 +33,52 @@
     h4 {
       margin: 0;
       font-weight: $font-weight-heavy;
+    }
+  }
+
+  .addButtonDisabled {
+    position: absolute;
+    padding: .25rem .75rem;
+    border-radius: 3px;
+    bottom: 2rem;
+    right: 2.5rem;
+    cursor: not-allowed;
+    background-color: $neutral-color-3;
+
+    h4 {
+      margin: 0;
+      font-weight: $font-weight-heavy;
+      color: $neutral-color-7;
+    }
+  }
+
+  .addButtonAdded {
+    position: absolute;
+    padding: .25rem .75rem;
+    border-radius: 3px;
+    box-shadow: 0.1em 0 1em rgba(0, 0, 0, .3);
+    bottom: 2rem;
+    right: 2.5rem;
+    cursor: not-allowed;
+    background-color: $green;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+
+    h4 {
+      margin: 0;
+      display: inline;
+      font-weight: $font-weight-heavy;
+      color: $background-color;
+    }
+
+    .icon {
+      transform: translateY(10%);
+      margin-left: .5rem;
+      stroke: $background-color;
+      height: 1.25rem;
+      width: 1.25rem;
     }
   }
 }

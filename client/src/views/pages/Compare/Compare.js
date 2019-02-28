@@ -9,6 +9,7 @@ import LocationPicker from '../../components/map/LocationPicker'
 import { DESK, MOBILE } from '../../../utils/const'
 import { LayersBttn, LegendsBttn, CompareBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
 import { HelpBttn } from '../../components/help-button/HelpBttn'
+import CompareList from "../../components/compare-list/CompareList"
 import { changeLayer } from '../../../state/ducks/map/actions'
 
 import styles from "./Compare_desktop.module.scss"
@@ -54,7 +55,15 @@ class Compare extends Component {
           </div>
           <div className={styles.content}>
             <div className={classNames(styles.data, { [styles.detailsShown]: doShowDetails })}>
-              <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick}/>
+              <div className={styles.header} >
+                <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick}/>
+                <h3>Compare</h3>
+              </div>
+              <h5>Choose location from map</h5>
+              <CompareList />
+              <div className={styles.start}>
+                <h3>Compare</h3>
+              </div>
             </div>
             { doShowDetails ? 
               <div className={styles.chartDetails}>

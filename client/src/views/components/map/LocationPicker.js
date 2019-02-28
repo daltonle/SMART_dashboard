@@ -66,6 +66,8 @@ class LocationPicker extends Component {
     visualMarkers: PropTypes.array,
     isAirLayer: PropTypes.bool,
     mapCentre: PropTypes.object,
+    selectedSensors: PropTypes.array,
+    count: PropTypes.number,
     addAirMarkers: PropTypes.func,
     addVisualMarkers: PropTypes.func,
     addCompareSensor: PropTypes.func
@@ -75,6 +77,7 @@ class LocationPicker extends Component {
     super(props)
     this.state = {
       cardVisible: false,
+      addable: true,
       selectedLocation: {
         id: "",
         name: "",
@@ -97,17 +100,23 @@ class LocationPicker extends Component {
       fetch(`/sensors/air/coordinates=${marker.long},${marker.lat}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
-      .then(res => this.setState({
-        selectedLocation: {
-          id: res.id,
-          name: res.description,
-          suburb: "No location data",
-          position: {
-            lat: res.lat,
-            lng: res.long
+      .then(res => {
+        if (this.props.selectedSensors.find(s => s.id === res.id))
+          this.setState({ addable: false })
+        else this.setState({ addable: true })
+
+        this.setState({
+          selectedLocation: {
+            id: res.id,
+            name: res.description,
+            suburb: "No location data",
+            position: {
+              lat: res.lat,
+              lng: res.long
+            }
           }
-        }
-      }))
+        })
+      })
       .catch(err => console.log(err))
     }
 
@@ -115,7 +124,9 @@ class LocationPicker extends Component {
   }
 
   handleLocationAdded = () => {
-    this.props.addCompareSensor(this.state.selectedLocation.id)
+    this.props.addCompareSensor(this.state.selectedLocation.id, this.state.selectedLocation.name)
+    this.setState({ cardVisible: false })
+    // TODO: display success message on added
   }
 
   handleLocationCardCollapse = () => {
@@ -148,7 +159,7 @@ class LocationPicker extends Component {
     }
     // TODO: add Markers data + last fetch time to localStorage, test for this before fetch for new data
 
-    const { selectedLocation, cardVisible } = this.state
+    const { selectedLocation, cardVisible, addable } = this.state
 
     return(
       <div style={{ height: `100%`, width:`100%`, position: `relative` }}>
@@ -162,6 +173,8 @@ class LocationPicker extends Component {
           name={selectedLocation.name} 
           suburb={selectedLocation.suburb}
           position={selectedLocation.position}
+          addable={addable}
+          maxed={this.props.count >= 5}
           onExit={this.handleLocationCardCollapse}
           onLocationAdded={this.handleLocationAdded}
         />
@@ -174,7 +187,9 @@ const mapStateToProps = state => ({
   airMarkers: state.map.airMarkers,
   visualMarkers: state.map.visualMarkers,
   isAirLayer: state.map.isAirLayer,
-  mapCentre: state.map.centre
+  mapCentre: state.map.centre,
+  selectedSensors: state.compare.sensors,
+  count: state.compare.count
 })
 
 const mapDispatchToProps = {
