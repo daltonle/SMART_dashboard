@@ -1,0 +1,48 @@
+@import '../../../styles/colors.scss';
+@import '../../../styles//font.scss';
+
+.container {
+  width: 50%;
+  position: absolute;
+  top: 2.5rem;
+  left: 2.5rem;
+  background-color: $background-color;
+  padding: 2.5rem 2rem;
+  padding-right: 4.5rem;
+  border-radius: 5px;
+  box-shadow: 0.1875em 0 2em rgba(0, 0, 0, .3);
+
+  .exitButton {
+    stroke: $black;
+    height: 1.25rem;
+    width: 1.25rem;
+    margin: 0;
+    flex-shrink: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 2.5rem;
+    right: 2.5rem;
+  }
+
+  .addButton {
+    position: absolute;
+    bottom: 2rem;
+    right: 2.5rem;
+
+    h4 {
+      margin: 0;
+      font-weight: $font-weight-heavy;
+    }
+  }
+}
+
+.visible {
+  @extend .container;
+  visibility: visible;
+}
+
+.hidden {
+  @extend .container;
+  visibility: hidden;
+}
+

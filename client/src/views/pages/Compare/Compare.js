@@ -5,7 +5,7 @@ import classNames from 'classnames'
 import ArrowLeftIcon from 'react-feather/dist/icons/arrow-left'
 import ExitIcon from 'react-feather/dist/icons/x'
 import { AppBar } from '../../components/appbar/AppBar'
-import Map from '../../components/map/Map'
+import LocationPicker from '../../components/map/LocationPicker'
 import { DESK, MOBILE } from '../../../utils/const'
 import { LayersBttn, LegendsBttn, CompareBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
 import { HelpBttn } from '../../components/help-button/HelpBttn'
@@ -70,7 +70,7 @@ class Compare extends Component {
                 </div>
               </div> :
               <div className={styles.mapContainer}>
-                <Map media={this.props.media}/>
+                <LocationPicker media={this.props.media}/>
                 <div className={styles.controlButton}>
                   <div onClick={this.handleLayerClick}>
                     <LayersBttn media={this.props.media} />
@@ -107,7 +107,7 @@ class Compare extends Component {
           </div> :
           <div className={m_styles.content}>
             <div className={ m_styles.mapContainer }>
-              <Map media={this.props.media}/>
+              <LocationPicker media={this.props.media}/>
               <div className={m_styles.backButton} onClick={this.handleBackClick}>
                 <ArrowLeftIcon className={m_styles.icon} />
               </div>
