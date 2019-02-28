@@ -94,6 +94,11 @@ class DataPage extends Component {
     this.props.changeLayer()
   }
 
+  handleCompareClick = (e) => {
+    e.preventDefault()
+    this.props.history.push('/compare')
+  }
+
   // REVIEW: push() or goBack()
   handleBackClick = (e) => {
     e.preventDefault()
@@ -228,7 +233,7 @@ class DataPage extends Component {
                 <div className={styles.expandButton} onClick={this.handleExpand}>
                   <ExpandIcon className={styles.icon} />
                 </div>
-                <Map media={this.props.media}/>
+                <Map media={this.props.media} zoomLevel={15}/>
                 <div className={styles.controlButton}>
                   <div onClick={this.handleLayerClick}>
                     <LayersBttn media={this.props.media} />
@@ -236,7 +241,7 @@ class DataPage extends Component {
                   <div>
                     <LegendsBttn media={this.props.media} />
                   </div>
-                  <div>
+                  <div onClick={this.handleCompareClick}>
                     <CompareBttn media={this.props.media} />
                   </div>
                 </div>
@@ -361,7 +366,7 @@ class DataPage extends Component {
           </div> :
           <div className={m_styles.content}>
             <div className={ m_styles.mapContainer }>
-              <Map media={this.props.media}/>
+              <Map media={this.props.media} zoomLevel={15}/>
               <div className={m_styles.backButton} onClick={this.handleBackClick}>
                 <ArrowLeftIcon className={m_styles.icon} />
               </div>

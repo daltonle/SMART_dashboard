@@ -3,11 +3,13 @@ import propTypes from 'prop-types'
 import { compose, withProps, withHandlers } from 'recompose'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { DESK, MOBILE } from '../../../utils/const'
+import { DESK } from '../../../utils/const'
 import { addAirMarkers, addVisualMarkers, changeCentre } from '../../../state/ducks/map/actions'
 import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
 import { mapStyles } from './MapStyles'
+
+
 
 class Map extends Component {
   static propTypes = {
@@ -80,14 +82,14 @@ class Map extends Component {
       withGoogleMap
     )(props =>
       <GoogleMap
-        defaultCenter={this.props.mapCentre}
-        defaultZoom={13}
+        defaultCenter={props.mapCentre}
+        defaultZoom={props.zoomLevel ? props.zoomLevel : 13}
         defaultOptions={{
           styles: mapStyles,
           streetViewControl: false,
           mapTypeControl: false,
           fullscreenControl: false,
-          zoomControl: (this.props.media === DESK ? true : false)
+          zoomControl: (props.media === DESK ? true : false)
         }}
         zoomControlOptions={{
           borderRadius: `.2em`
@@ -109,13 +111,18 @@ class Map extends Component {
             }
           ]}
         >
-          {markers}
+          {props.markers}
         </MarkerClusterer>
       </GoogleMap>
     )
 
     return(
-      <StyledMap />
+      <StyledMap 
+        mapCentre={this.props.mapCentre}
+        media={this.props.media}
+        markers={markers}
+        zoomLevel={this.props.zoomLevel}
+      />
     )
   }
 }

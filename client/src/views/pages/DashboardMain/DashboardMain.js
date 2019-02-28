@@ -33,7 +33,7 @@ class DashboardMain extends Component {
             <AppBar media={this.props.media}/>
           </div>
           <div className={ styles.mapContainer }>
-            <Map media={this.props.media}/>
+            <Map media={this.props.media} zoomLevel={13}/>
             <div className={styles.controlButton}>
               <div onClick={this.handleLayerClick}>
                 <LayersBttn media={this.props.media}/>
@@ -52,7 +52,7 @@ class DashboardMain extends Component {
       return (
         <div className={ m_styles.outer }>
           <div className={ m_styles.mapContainer }>
-            <Map media={this.props.media}/>
+            <Map media={this.props.media} zoomLevel={13}/>
             <div className={m_styles.layerButton}>
               <div onClick={this.handleLayerClick}>
                 <LayersBttn />
