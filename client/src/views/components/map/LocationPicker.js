@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import propTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { compose, withProps, withHandlers } from 'recompose'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { DESK, MOBILE } from '../../../utils/const'
+import { DESK } from '../../../utils/const'
 import { addAirMarkers, addVisualMarkers, changeCentre } from '../../../state/ducks/map/actions'
+import { addCompareSensor } from '../../../state/ducks/compare/actions'
 import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
 import { LocationCard } from './LocationCard'
@@ -60,13 +61,14 @@ const StyledMap = compose(
 
 class LocationPicker extends Component {
   static propTypes = {
-    media: propTypes.string,
-    airMarkers: propTypes.array,
-    visualMarkers: propTypes.array,
-    isAirLayer: propTypes.bool,
-    mapCentre: propTypes.object,
-    addAirMarkers: propTypes.func,
-    addVisualMarkers: propTypes.func
+    media: PropTypes.string,
+    airMarkers: PropTypes.array,
+    visualMarkers: PropTypes.array,
+    isAirLayer: PropTypes.bool,
+    mapCentre: PropTypes.object,
+    addAirMarkers: PropTypes.func,
+    addVisualMarkers: PropTypes.func,
+    addCompareSensor: PropTypes.func
   }
 
   constructor(props) {
@@ -113,7 +115,7 @@ class LocationPicker extends Component {
   }
 
   handleLocationAdded = () => {
-
+    this.props.addCompareSensor(this.state.selectedLocation.id)
   }
 
   handleLocationCardCollapse = () => {
@@ -178,7 +180,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   addAirMarkers,
   addVisualMarkers,
-  changeCentre
+  changeCentre,
+  addCompareSensor
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LocationPicker))
