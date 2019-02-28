@@ -32,7 +32,7 @@ class CompareList extends Component {
     const items = sensors.map(s => <CompareItem name={s.description} key={s.id} id={s.id} onItemDelete={this.handleItemDelete}/>)
     return (
       <div className={styles.list}>
-        {items}
+        {items.length===0 ? <h5>No locations selected</h5> : items}
       </div>
     )
   }
