@@ -23,66 +23,66 @@ router.get('/visual', (req, res, next) => {
 })
 
 // retrieve a specific air sensor by id
-router.get('/air/:id', (req, res, next) => {
+router.get('/air/id=:id', (req, res, next) => {
   let id = req.params.id
   let query = {
-    text: `SELECT * FROM aq_sensor
+    text: `SELECT id, long, lat, alt, name, description FROM aq_sensor
     WHERE id=$1::text`,
     values: [id]
   } 
 
   db.query(query)
-    .then(result => res.json(result.rows))
+    .then(result => res.json(result.rows[0]))
     .catch(next)
 })
 
 // retrieve a specific visual sensor by id
-router.get('/visual/:id', (req, res, next) => {
+router.get('/visual/id=:id', (req, res, next) => {
   let id = req.params.id
   let query = {
-    text: `SELECT * FROM vs_sensor
+    text: `SELECT id, long, lat, alt, name, description FROM vs_sensor
     WHERE id=$1`,
     values: [id]
   }
   
   
   db.query(query)
-    .then(result => res.json(result.rows))
+    .then(result => res.json(result.rows[0]))
     .catch(next)
 })
 
 // retrieve a specific air sensor by coordinates
-router.get('/air/:long,:lat', (req, res, next) => {
+router.get('/air/coordinates=:long,:lat', (req, res, next) => {
   let {
     long,
     lat
   } = req.params
 
   let query = {
-    text: `SELECT * FROM aq_sensor
-    WHERE long=$1::text AND lat=$2::text`,
+    text: `SELECT id, long, lat, alt, name, description FROM aq_sensor
+    WHERE long=$1::numeric AND lat=$2::numeric`,
     values: [long, lat]
   }
   
   db.query(query)
-    .then(result => res.json(result.rows))
+    .then(result => res.json(result.rows[0]))
     .catch(next)
 })
 
 // retrieve a specific visual sensor by coordinates
-router.get('/visual/:long,:lat', (req, res, next) => {
+router.get('/visual/coordinates=:long,:lat', (req, res, next) => {
   let {
     long,
     lat
   } = req.params
   let query = {
-    text: `SELECT * FROM vs_sensor
+    text: `SELECT id, long, lat, alt, name, description FROM vs_sensor
     WHERE long=$1::text AND lat=$2::text`,
     values: [long, lat]
   }
   
   db.query(query)
-    .then(result => res.json(result.rows))
+    .then(result => res.json(result.rows[0]))
     .catch(next)
 })
 
