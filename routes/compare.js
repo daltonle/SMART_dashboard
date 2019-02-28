@@ -63,8 +63,10 @@ router.get('/air/:id', async (req, res) => {
     res.json({
       id: req.params.id,
       ...live,
-      historyPM2_5: {...historyPM2_5},
-      historyPM10: {...historyPM10}
+      history: {
+        pm2_5: {...historyPM2_5},
+        pm10: {...historyPM10}
+      }
     })
   }
   catch (err) { console.log(err) }

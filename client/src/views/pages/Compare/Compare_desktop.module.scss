@@ -136,6 +136,21 @@
         display: inline-block;
       }
     }
+
+    div.historyCharts {
+      align-self: stretch;
+      display: flex;
+      flex-flow: row nowrap;
+
+      h4 {
+        margin: 0;
+        margin-left: 2.5rem;
+      }
+
+      .historyChartAir {
+        flex-basis: 50%;
+      }
+    }
   }
 }
 

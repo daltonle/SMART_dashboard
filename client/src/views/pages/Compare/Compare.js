@@ -11,6 +11,7 @@ import { LayersBttn, LegendsBttn, CompareBttn } from '../../components/mapContro
 import { HelpBttn } from '../../components/help-button/HelpBttn'
 import CompareList from "../../components/compare-list/CompareList"
 import Live from "../../components/charts/compare/Live"
+import History from "../../components/charts/compare/History"
 import { changeLayer } from '../../../state/ducks/map/actions'
 import { removeAllSensors } from '../../../state/ducks/compare/actions'
 
@@ -99,6 +100,23 @@ class Compare extends Component {
                   />
                 </div>
                 <Live />
+                <div className={styles.header} style={{marginTop: 0}}>
+                  <h3>History</h3>
+                  <HelpBttn 
+                    name="history-compare" 
+                    message="Data recorded over time across locations" 
+                  />
+                </div>
+                <div className={styles.historyCharts}>
+                  <div className={styles.historyChartItem}>
+                    <h4>PM2.5</h4>
+                    <History field="pm2_5"/>
+                  </div>
+                  <div className={styles.historyChartAir}>
+                    <h4>PM10</h4>
+                    <History field="pm10"/>
+                  </div>
+                </div>
               </div> :
               <div className={styles.mapContainer}>
                 <LocationPicker media={this.props.media}/>
