@@ -3,7 +3,8 @@ import {
   REMOVE_SENSOR,
   ADD_SENSOR_DATA,
   INCREMENT_COUNT,
-  DECREMENT_COUNT
+  DECREMENT_COUNT,
+  REMOVE_ALL_SENSORS
 } from "./types"
 
 /**
@@ -58,5 +59,12 @@ export const removeCompareSensor = id => (dispatch, getState) => {
   dispatch({
     type: DECREMENT_COUNT,
     payload: getState().compare.count - 1
+  })
+}
+
+
+export const removeAllSensors = () => dispatch => {
+  dispatch({
+    type: REMOVE_ALL_SENSORS
   })
 }

@@ -11,6 +11,7 @@ import { LayersBttn, LegendsBttn, CompareBttn } from '../../components/mapContro
 import { HelpBttn } from '../../components/help-button/HelpBttn'
 import CompareList from "../../components/compare-list/CompareList"
 import { changeLayer } from '../../../state/ducks/map/actions'
+import { removeAllSensors } from '../../../state/ducks/compare/actions'
 
 import styles from "./Compare_desktop.module.scss"
 import m_styles from "./Compare_mobile.module.scss"
@@ -20,7 +21,8 @@ class Compare extends Component {
     count: PropTypes.number,
     media: PropTypes.string,
     
-    changeLayer: PropTypes.func
+    changeLayer: PropTypes.func,
+    removeAllSensors: PropTypes.func
   }
 
   constructor(props) {
@@ -38,6 +40,7 @@ class Compare extends Component {
   handleLayerClick = (e) => {
     e.preventDefault()
     this.props.changeLayer()
+    this.props.removeAllSensors()
   }
 
   handleCompareClick = (e) => {
@@ -160,7 +163,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-  changeLayer
+  changeLayer,
+  removeAllSensors
 }
 
 export default connect(

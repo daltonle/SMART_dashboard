@@ -3,7 +3,8 @@ import {
   DECREMENT_COUNT,
   ADD_SENSOR,
   REMOVE_SENSOR,
-  ADD_SENSOR_DATA
+  ADD_SENSOR_DATA,
+  REMOVE_ALL_SENSORS
 } from './types'
 
 
@@ -37,6 +38,11 @@ const compareReducer = (state = initialState, action) => {
       return {
         ...state,
         sensors: action.payload
+      }
+    case REMOVE_ALL_SENSORS:
+      return {
+        ...state,
+        sensors: []
       }
     default:
       return state
