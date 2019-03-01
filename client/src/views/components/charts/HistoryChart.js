@@ -104,35 +104,35 @@ class HistoryChart extends Component {
             ...dataPM2_5,
             name: "PM2_5",
             type: 'scatter',
-            mode: 'markers',
+            mode: 'lines',
             marker: { color: colors.green, opacity: 0.7 }
           },
           {
             ...dataPM10,
             name: "PM10",
             type: 'scatter',
-            mode: 'markers',
+            mode: 'lines',
             marker: { color: colors.red, opacity: 0.7 }
           },
           {
             ...dataPedestrian,
             name: "Pedestrian",
             type: "scatter",
-            mode: "markers",
+            mode: "lines",
             marker: { color: colors.yellow, opacity: 0.7 }
           },
           {
             ...dataBicycle,
             name: "Bicycle",
             type: "scatter",
-            mode: "markers",
+            mode: "lines",
             marker: { color: colors.orange, opacity: 0.7 }
           },
           {
             ...dataVehicle,
             name: "Others",
             type: "scatter",
-            mode: "markers",
+            mode: "lines",
             marker: { color: colors.purple, opacity: 0.7 }
           }
         ]}
