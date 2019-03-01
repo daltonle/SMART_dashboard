@@ -53,15 +53,13 @@ router.get('/air/:id', async (req, res) => {
       values: [req.params.id]
     }
     result = await db.query(query)
-    tmp.splice(0, tmp.length)
-    x.splice(0, x.length)
-    y.splice(0, y.length)
-    tmp = LTTB(result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss").toDate(), y: parseFloat(d.pm10)})), 100)
+    let tmp2 = LTTB(result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss").toDate(), y: parseFloat(d.pm10)})), 100)
+    let x2 = [], y2 = []
     for (let i=0, l=tmp.length; i < l; i++) {
-      x.push(moment(tmp[i].x).format("DD-MM-YYYY HH:mm:ss"))
-      y.push(tmp[i].y)
+      x2.push(moment(tmp2[i].x).format("DD-MM-YYYY HH:mm:ss"))
+      y2.push(tmp2[i].y)
     }
-    historyPM10 = { x, y }
+    historyPM10 = { x: [...x2], y: [...y2] }
 
     // initialise by-hour data variables
     for (let i = 0; i < 7; i++) {
@@ -200,38 +198,34 @@ router.get('/visual/:id', async (req, res) => {
     // history of bicycles
     query = {
       text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp, counter FROM vs_count
-        WHERE id_vs=$1::text AND type='pedestrian'
+        WHERE id_vs=$1::text AND type='bicycle'
         ORDER BY ts DESC`,
       values: [req.params.id]
     }
     result = await db.query(query)
-    tmp.splice(0, tmp.length)
-    x.splice(0, x.length)
-    y.splice(0, y.length)
-    tmp = LTTB(result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss").toDate(), y: parseFloat(d.counter)})), 100)
-    for (let i=0, l=tmp.length; i < l; i++) {
-      x.push(moment(tmp[i].x).format("DD-MM-YYYY HH:mm:ss"))
-      y.push(tmp[i].y)
+    let tmp2 = LTTB(result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss").toDate(), y: parseFloat(d.counter)})), 100)
+    x = [], y = []
+    for (let i=0, l=tmp2.length; i < l; i++) {
+      x.push(moment(tmp2[i].x).format("DD-MM-YYYY HH:mm:ss"))
+      y.push(tmp2[i].y)
     }
     historyBi = { x, y }
 
     // history of vehicles
     query = {
       text: `SELECT to_char(ts, 'DD-MM-YYYY HH24:MI:SS') as timestamp, counter FROM vs_count
-        WHERE id_vs=$1::text AND type='pedestrian'
+        WHERE id_vs=$1::text AND type='vehicle'
         ORDER BY ts DESC`,
       values: [req.params.id]
     }
     result = await db.query(query)
-    tmp.splice(0, tmp.length)
-    x.splice(0, x.length)
-    y.splice(0, y.length)
-    tmp = LTTB(result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss").toDate(), y: parseFloat(d.counter)})), 100)
-    for (let i=0, l=tmp.length; i < l; i++) {
-      x.push(moment(tmp[i].x).format("DD-MM-YYYY HH:mm:ss"))
-      y.push(tmp[i].y)
+    let tmp3 = LTTB(result.rows.map(d => ({x: moment(d.timestamp, "DD-MM-YYYY HH:mm:ss").toDate(), y: parseFloat(d.counter)})), 100)
+    x = [], y = []
+    for (let i=0, l=tmp3.length; i < l; i++) {
+      x.push(moment(tmp3[i].x).format("DD-MM-YYYY HH:mm:ss"))
+      x.push(tmp3[i].y)
     }
-    historyVeh = { x, y }
+    historyVeh = { x,y }
 
     // initialise by-hour data variables
     for (let i = 0; i < 7; i++) {

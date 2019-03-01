@@ -9,92 +9,87 @@
   flex-flow: column;
 }
 
+.title {
+  flex-shrink:0;
+  height: 4rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  z-index: 1;
+  box-shadow: 0 0.1875em 2em rgba(0, 0, 0, .3);
+  position: relative;
+  overflow: visible;
+
+  h5 {
+    font-weight: $font-weight-heavy;
+  }
+
+  .icon {
+    stroke: $black;
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+}
+
 .appbar {
   z-index: 1;
 }
 
-.content {
+.mapContainer {
   z-index: 0;
   flex-grow: 1;
   position: relative;
-  display: flex;
-  flex-direction: column;
 
-  .data {
-    z-index: 1;
-    box-shadow: 0 -0.1875em 2em rgba(0, 0, 0, .3);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    overflow: hidden;
-    background-color: $background-color;
-    height: 25rem;
+  .layerButton {
+    position: absolute;
+    top: 1.5rem;
+    right: 1rem;
+  }
 
-    .expandButton {
-      width: 2.5rem;
-      height: 2.5rem;
-      align-self: center;
-      margin-bottom: .375rem;
-
-      .icon {
-        margin: .625rem;
-        stroke: $black;
-        height: 1.25rem;
-        width: 1.25rem;
-      }
-    }
-
-    .titleCard {
-      margin-left: 1.5rem;
-    }
-
-    h4 {
-      margin: 1.5rem;
-      margin-bottom: 1.5rem;
-      font-weight: $font-weight-heavy;
-    }
-
-    h5.noVisual, h5.noAir {
-      margin-block-start: 0;
-      margin-block-end: 1.5rem;
-      align-self: center;
-      color: $neutral-color-5;
-      font-style: italic;
+  .start {
+    background-color: $primary-color;
+    box-shadow: 0 0.1875em 2em rgba(0, 0, 0, .3);
+    border-radius: 3px;
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 66%;
+    height: 3rem;
+    cursor: pointer;
+    
+    h3 {
+      color: $background-color;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%)
     }
   }
 
-  .mapContainer {
-    z-index: 0;
-    flex-grow: 1;
-    position: relative;
-
-    .backButton {
+  .startDisabled {
+    background-color: $neutral-color-3;
+    box-shadow: 0 0.1875em 2em rgba(0, 0, 0, .3);
+    border-radius: 3px;
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 66%;
+    height: 3rem;
+    cursor: not-allowed;
+    
+    h3 {
+      color: $neutral-color-7;
+      margin: 0;
       position: absolute;
-      top: 1.5rem;
-      left: 1.5rem;
-      height: 2.5rem;
-      width:2.5rem;
-      border-radius: 50%;
-      border: 1px transparent; 
-      box-shadow: 0.1875em 0 2em rgba(0, 0, 0, .3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: rgba(255, 255, 255, 0.3);
-
-      .icon {
-        stroke: $black;
-        height: 1.25rem;
-        width: 1.25rem;
-        margin: .5em 0 .5em 0;
-        flex-shrink: 0;
-      }
-    }
-  
-    .layerButton {
-      position: absolute;
-      top: 1.5rem;
-      right: 1rem;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%)
     }
   }
 }
@@ -104,12 +99,14 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
   background-color: $background-color;
 
-  .backButton {
+  .exitButton {
     margin: 1.5rem;
-    width: 2.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    align-self: flex-end;
 
     .icon {
       stroke: $black;
@@ -118,22 +115,10 @@
     }
   }
 
-  .titleCard {
-    margin-left: 1.5rem;
-  }
-
   h4 {
     margin: 1.5rem;
     margin-bottom: 1.5rem;
     font-weight: $font-weight-heavy;
-  }
-
-  h5.noVisual, h5.noAir {
-    margin-block-start: 0;
-    margin-block-end: 1.5rem;
-    align-self: center;
-    color: $neutral-color-5;
-    font-style: italic;
   }
 
   .header {
@@ -146,6 +131,44 @@
       margin: 0;
       font-weight: $font-weight-heavy;
       display: inline-block;
+    }
+  }
+
+  div.historyChart {
+    align-self: stretch;
+    flex-shrink: 0;
+
+    h4 {
+      margin: 0;
+      margin-left: 2.5rem;
+    }
+  }
+
+  .options {
+    margin-left: 1.5rem;
+    display: flex;
+    align-items: center;
+    height: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1 !important;
+    flex-shrink: 0;
+  
+    h5 {
+      margin: 0
+    }
+  
+    .icon {
+      height: 1rem;
+      width: 1rem;
+      stroke: $black;
+      margin: 0;
+    }
+  
+    .dropdown {
+      width: 8.5rem;
+      font-size: .875rem;
+      margin-left: 2rem;
     }
   }
 }

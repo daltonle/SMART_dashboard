@@ -120,6 +120,7 @@ div.airDataContainer {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  flex-shrink: 0;
 
   & > div {
     text-align: center;

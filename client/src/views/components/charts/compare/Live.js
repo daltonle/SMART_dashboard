@@ -16,7 +16,7 @@ class Live extends Component {
   }
 
   render() {
-    const { containerHeight, containerWidth, sensors, isAirLayer } = this.props
+    const { containerHeight, containerWidth, sensors, isAirLayer, media } = this.props
     // pre-process data
     let dataPM2_5 = { x:[], y:[] }
     let dataPM10 = { x:[], y:[] }
@@ -26,17 +26,17 @@ class Live extends Component {
 
     if (isAirLayer) {
       for (let i = 0, l = sensors.length; i < l; i++) {
-        dataPM2_5.x.push(`${sensors[i].description.substr(0,25)}...`)
-        dataPM10.x.push(`${sensors[i].description.substr(0,25)}...`)
+        dataPM2_5.x.push(media===MOBILE ? `${sensors[i].description.substr(0,10)}...` : `${sensors[i].description.substr(0,25)}...`)
+        dataPM10.x.push(media===MOBILE ? `${sensors[i].description.substr(0,10)}...` : `${sensors[i].description.substr(0,25)}...`)
         dataPM2_5.y.push(sensors[i].pm2_5)
         dataPM10.y.push(sensors[i].pm10)
       }
     }
     else {
       for (let i = 0, l = sensors.length; i < l; i++) {
-        dataPedestrian.x.push(`${sensors[i].description.substr(0,25)}...`)
-        dataBicycle.x.push(`${sensors[i].description.substr(0,25)}...`)
-        dataVehicle.x.push(`${sensors[i].description.substr(0,25)}...`)
+        dataPedestrian.x.push(media===MOBILE ? `${sensors[i].description.substr(0,10)}...` : `${sensors[i].description.substr(0,25)}...`)
+        dataBicycle.x.push(media===MOBILE ? `${sensors[i].description.substr(0,10)}...` : `${sensors[i].description.substr(0,25)}...`)
+        dataVehicle.x.push(media===MOBILE ? `${sensors[i].description.substr(0,10)}...` : `${sensors[i].description.substr(0,25)}...`)
         dataPedestrian.y.push(sensors[i].pedestrians)
         dataBicycle.y.push(sensors[i].bicycles)
         dataVehicle.y.push(sensors[i].vehicles)
@@ -49,7 +49,7 @@ class Live extends Component {
       height: containerHeight,
       barmode: 'group',
       showlegend: true,
-      legend: { x: 0, y: 1.25, orientation: "h" },
+      legend: media===MOBILE ? {x:0, y: 1, orientation: "h"} : { x: 0, y: 1.25, orientation: "h" },
       plot_bgcolor: colors.backgroundColor,
       paper_bgcolor: colors.backgroundColor,
       margin: {
@@ -61,7 +61,7 @@ class Live extends Component {
     const mobileLayout = {
       ...webLayout,
       margin: {
-        t: 100,
+        t: 48,
         l: 40,
         r: 0,
         b: 64,
