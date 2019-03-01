@@ -24,7 +24,6 @@ import { colors } from "../../../styles/colors"
 import { changeLayer } from '../../../state/ducks/map/actions'
 import { removeAllSensors } from '../../../state/ducks/compare/actions'
 
-import '@trendmicro/react-radio/dist/react-radio.css'
 import styles from "./Compare_desktop.module.scss"
 import m_styles from "./Compare_mobile.module.scss"
 
