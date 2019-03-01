@@ -1,6 +1,8 @@
 /** Get live data */
 export const GET_AIR_DATA_LIVE = 'sensor/GET_AIR_DATA_LIVE'
 export const GET_VISUAL_DATA_LIVE = 'sensor/GET_VISUAL_DATA_LIVE'
+export const UPDATE_AIR_DATA_LIVE = 'sensor/UPDATE_AIR_DATA_LIVE'
+export const UPDATE_VISUAL_DATA_LIVE = 'sensor/UPDATE_VISUAL_DATA_LIVE'
 
 /** Get data history */
 export const GET_PM25_DATA_HISTORY = 'sensor/GET_PM25_DATA_HISTORY'

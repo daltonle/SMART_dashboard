@@ -20,7 +20,9 @@ import {
   GET_BICYCLE_BY_DAY,
   GET_VEHICLE_BY_DAY,
   GET_VISUAL_HEATMAP_DATA,
-  GET_TRAJECTORY_DATA
+  GET_TRAJECTORY_DATA,
+  UPDATE_AIR_DATA_LIVE,
+  UPDATE_VISUAL_DATA_LIVE
 } from "./types"
 
 /**
@@ -70,6 +72,22 @@ const sensorReducer = (state = initialState, action) => {
       return {
         ...state,
         visual: action.payload
+      }
+    case UPDATE_AIR_DATA_LIVE:
+      return {
+        ...state,
+        air: {
+          ...state.air,
+          ...action.payload
+        }
+      }
+    case UPDATE_VISUAL_DATA_LIVE:
+      return {
+        ...state,
+        visual: {
+          ...state.air,
+          ...action.payload
+        }
       }
     case GET_PM25_DATA_HISTORY:
       return {

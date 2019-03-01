@@ -4,7 +4,8 @@ import {
   ADD_SENSOR,
   REMOVE_SENSOR,
   ADD_SENSOR_DATA,
-  REMOVE_ALL_SENSORS
+  REMOVE_ALL_SENSORS,
+  UPDATE_LIVE_DATA
 } from './types'
 
 
@@ -33,6 +34,14 @@ const compareReducer = (state = initialState, action) => {
       return {
         ...state,
         sensors: action.payload
+      }
+    case UPDATE_LIVE_DATA:
+      const newSensors = [...state.sensors]
+      if (newSensors[action.idx].id === action.payload.id) // only update if id matches
+        newSensors[action.idx] = {...action.payload}
+      return {
+        ...state,
+        sensors: newSensors
       }
     case REMOVE_SENSOR:
       return {

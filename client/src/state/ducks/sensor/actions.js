@@ -18,8 +18,12 @@ import {
   GET_BICYCLE_BY_DAY,
   GET_VEHICLE_BY_DAY,
   GET_VISUAL_HEATMAP_DATA,
-  GET_TRAJECTORY_DATA
+  GET_TRAJECTORY_DATA,
+  UPDATE_AIR_DATA_LIVE,
+  UPDATE_VISUAL_DATA_LIVE
 } from './types'
+
+let timer1, timer2
 
 /**
  * Get data of air sensor at given position, 
@@ -28,88 +32,122 @@ import {
  * // REVIEW: At the moment only getting visual sensor with exact same coordinates
  * @param {{lng: number, lat: number}} sensor 
  */
-export const getAirData = (sensor) => (dispatch) => {
-  fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
-    .then(res => res.text())
-    .then(text => text.length ? JSON.parse(text) : undefined)
-    .then(res => {
-      dispatch({
-        type: GET_AIR_DATA_LIVE,
-        payload: res
-      })
-      if (res !== undefined) {
-        fetch(`/sensor-data/history/air/pm2_5/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_PM25_DATA_HISTORY,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-        fetch(`/sensor-data/history/air/pm10/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_PM10_DATA_HISTORY,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-      }
-    })
-    .catch(err => console.log(err))
+export const getAirData = (sensor) => async (dispatch) => {
+  let air = false, visual = false
 
-  fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
+  let res1 = await fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .catch(err => console.log(err))
+  
+  dispatch({
+    type: GET_AIR_DATA_LIVE,
+    payload: res1
+  })
+  if (res1 !== undefined) {
+    air = true
+    fetch(`/sensor-data/history/air/pm2_5/${res1.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_PM25_DATA_HISTORY,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+    fetch(`/sensor-data/history/air/pm10/${res1.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_PM10_DATA_HISTORY,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+  }
+    
+  let res2 = await fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .catch(err => console.log(err))
+  
+  dispatch({
+    type: GET_VISUAL_DATA_LIVE,
+    payload: res2
+  })
+  if (res2 !== undefined) {
+    visual = true
+    fetch(`/sensor-data/history/visual/pedestrian/${res2.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_PEDESTRIAN_HISTORY,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+    fetch(`/sensor-data/history/visual/bicycle/${res2.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_BICYCLE_HISTORY,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+    fetch(`/sensor-data/history/visual/vehicle/${res2.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_VEHICLE_HISTORY,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+    fetch(`/sensor-data/visual/heatmap/${res2.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_VISUAL_HEATMAP_DATA,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+    fetch(`/sensor-data/visual/trajectory/${res2.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_TRAJECTORY_DATA,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+  }
+    
+  // get live data after every minute
+  clearTimeout(timer1, timer2)
+  const getAirDataLive = () => {
+    fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
     .then(res => {
       dispatch({
-        type: GET_VISUAL_DATA_LIVE,
+        type: UPDATE_AIR_DATA_LIVE,
         payload: res
       })
-      if (res !== undefined) {
-        fetch(`/sensor-data/history/visual/pedestrian/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_PEDESTRIAN_HISTORY,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-        fetch(`/sensor-data/history/visual/bicycle/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_BICYCLE_HISTORY,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-        fetch(`/sensor-data/history/visual/vehicle/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_VEHICLE_HISTORY,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-        fetch(`/sensor-data/visual/heatmap/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_VISUAL_HEATMAP_DATA,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-        fetch(`/sensor-data/visual/trajectory/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_TRAJECTORY_DATA,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-      }
     })
     .catch(err => console.log(err))
+    timer1 = setTimeout(getAirDataLive, 60000)
+  }
+  if (air) getAirDataLive()
+
+  const getVisualDataLive = () => {
+    fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => {
+      dispatch({
+        type: UPDATE_VISUAL_DATA_LIVE,
+        payload: res
+      })
+    })
+    .catch(err => console.log(err))
+    timer2 = setTimeout(getVisualDataLive, 60000)
+  }
+  if (visual) getVisualDataLive()
 }
 
 /**
@@ -119,88 +157,122 @@ export const getAirData = (sensor) => (dispatch) => {
  * // REVIEW: At the moment only getting air sensor with exact same coordinates
  * @param {{lng: number, lat: number}} sensor 
  */
-export const getVisualData = (sensor) => (dispatch) => {
-  fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
+export const getVisualData = (sensor) => async (dispatch) => {
+  let air = false, visual = false
+
+  let res1 = await fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
-    .then(res => {
-        dispatch({
-        type: GET_VISUAL_DATA_LIVE,
-        payload: res
-      })
-      if (res !== undefined) {
-        fetch(`/sensor-data/history/visual/pedestrian/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_PEDESTRIAN_HISTORY,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-        fetch(`/sensor-data/history/visual/bicycle/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_BICYCLE_HISTORY,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-        fetch(`/sensor-data/history/visual/vehicle/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_VEHICLE_HISTORY,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-        fetch(`/sensor-data/visual/heatmap/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_VISUAL_HEATMAP_DATA,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-        fetch(`/sensor-data/visual/trajectory/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_TRAJECTORY_DATA,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-      }
-    })
     .catch(err => console.log(err))
-
-  fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
+  
+  dispatch({
+    type: GET_AIR_DATA_LIVE,
+    payload: res1
+  })
+  if (res1 !== undefined) {
+    air = true
+    fetch(`/sensor-data/history/air/pm2_5/${res1.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_PM25_DATA_HISTORY,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+    fetch(`/sensor-data/history/air/pm10/${res1.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_PM10_DATA_HISTORY,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+  }
+    
+  let res2 = await fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .catch(err => console.log(err))
+  
+  dispatch({
+    type: GET_VISUAL_DATA_LIVE,
+    payload: res2
+  })
+  if (res2 !== undefined) {
+    visual = true
+    fetch(`/sensor-data/history/visual/pedestrian/${res2.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_PEDESTRIAN_HISTORY,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+    fetch(`/sensor-data/history/visual/bicycle/${res2.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_BICYCLE_HISTORY,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+    fetch(`/sensor-data/history/visual/vehicle/${res2.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_VEHICLE_HISTORY,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+    fetch(`/sensor-data/visual/heatmap/${res2.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_VISUAL_HEATMAP_DATA,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+    fetch(`/sensor-data/visual/trajectory/${res2.id}`)
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => dispatch({
+        type: GET_TRAJECTORY_DATA,
+        payload: res
+      }))
+      .catch(err => console.log(err))
+  }
+    
+  // get live data after every minute
+  clearTimeout(timer1, timer2)
+  const getAirDataLive = () => {
+    fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
     .then(res => {
       dispatch({
-        type: GET_AIR_DATA_LIVE,
+        type: UPDATE_AIR_DATA_LIVE,
         payload: res
       })
-      if (res !== undefined) {
-        fetch(`/sensor-data/history/air/pm2_5/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_PM25_DATA_HISTORY,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-        fetch(`/sensor-data/history/air/pm10/${res.id}`)
-          .then(res => res.text())
-          .then(text => text.length ? JSON.parse(text) : undefined)
-          .then(res => dispatch({
-            type: GET_PM10_DATA_HISTORY,
-            payload: res
-          }))
-          .catch(err => console.log(err))
-      }
     })
     .catch(err => console.log(err))
+    timer1 = setTimeout(getAirDataLive, 60000)
+  }
+  if (air) getAirDataLive()
+
+  const getVisualDataLive = () => {
+    fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => {
+      dispatch({
+        type: UPDATE_VISUAL_DATA_LIVE,
+        payload: res
+      })
+    })
+    .catch(err => console.log(err))
+    timer2 = setTimeout(getVisualDataLive, 60000)
+  }
+  if (visual) getVisualDataLive()
 }
 
 /**
