@@ -130,7 +130,7 @@ class HistoryChart extends Component {
           },
           {
             ...dataVehicle,
-            name: "Others",
+            name: "Vehicles",
             type: "scatter",
             mode: "lines",
             marker: { color: colors.purple, opacity: 0.7 }

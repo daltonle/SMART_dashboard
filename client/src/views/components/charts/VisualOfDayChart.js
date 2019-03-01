@@ -96,7 +96,7 @@ class VisualOfDayChart extends Component {
       },
       {
         ...this.getData("vehicle"),
-        name: "Others",
+        name: "Vehicles",
         type: "scatter",
         mode: "markers",
         marker: { color: colors.yellow, opacity: 0.7 }

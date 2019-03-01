@@ -19,7 +19,7 @@ class VisualLiveChart extends Component {
     const liveData = [
       { type: "Pesdestrians", counter: sensorData === undefined ? 0 : parseFloat(sensorData.pedestrians)},
       { type: "Bicycles", counter: sensorData === undefined ? 0 : parseFloat(sensorData.bicycles)},
-      { type: "Others", counter: sensorData === undefined ? 0 : parseFloat(sensorData.vehicles)},
+      { type: "Vehicles", counter: sensorData === undefined ? 0 : parseFloat(sensorData.vehicles)},
     ]
 
     return (

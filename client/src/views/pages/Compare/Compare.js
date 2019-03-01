@@ -185,7 +185,7 @@ class Compare extends Component {
                       <History field="bicycle" media={this.props.media}/>
                     </div>
                     <div className={styles.chartItemVisual}>
-                      <h4>Others</h4>
+                      <h4>Vehicles</h4>
                       <History field="vehicle" media={this.props.media}/>
                     </div>
                   </div>
@@ -245,7 +245,7 @@ class Compare extends Component {
                       <ByHour field="bicycle" day={day} type={type} media={this.props.media}/>
                     </div>
                     <div className={styles.chartItemVisual}>
-                      <h4>Others</h4>
+                      <h4>Vehicles</h4>
                       <ByHour field="vehicle" day={day} type={type} media={this.props.media}/>
                     </div>
                   </div>
@@ -338,12 +338,12 @@ class Compare extends Component {
                     <h5>Type</h5>
                     <div className={m_styles.dropdown}>
                       <Select
-                        defaultValue={{ value: `${historyType}`, label: historyType==="pedestrian" ? "Pedestrian" : (historyType==="bicycle" ? "Bicycle" : "Others") }}
+                        defaultValue={{ value: `${historyType}`, label: historyType==="pedestrian" ? "Pedestrian" : (historyType==="bicycle" ? "Bicycle" : "Vehicles") }}
                         onChange={(selected, e) => {this.setState({ historyType: selected.value })}}
                         options={[
                           { value: "pedestrian", label: "Pedestrian" },
                           { value: "bicycle", label: "Bicycle" },
-                          { value: "vehicle", label: "Others" }
+                          { value: "vehicle", label: "Vehicles" }
                         ]}
                         theme={(theme) => ({
                           ...theme,

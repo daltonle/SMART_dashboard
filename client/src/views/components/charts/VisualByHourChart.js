@@ -49,11 +49,11 @@ class VisualByHourChart extends Component {
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     let dataPedestrians = [],
         dataBicycle = [],
-        dataOthers = []
+        dataVehicles = []
     for (let i = 0; i < 7; i++) {
       dataPedestrians[i] = []
       dataBicycle[i] = []
-      dataOthers[i] = []
+      dataVehicles[i] = []
     }
     if (sensor.byHour !== undefined) {
       if (sensor.byHour[type] !== undefined) {
@@ -71,7 +71,7 @@ class VisualByHourChart extends Component {
           }))
         sensor.byHour[type]
           .filter(d => d.type === 'vehicle')
-          .map(d => dataOthers[d.dow].push({
+          .map(d => dataVehicles[d.dow].push({
             hour: d.hour,
             counter: Math.round(parseFloat(d.counter))
           }))
@@ -148,7 +148,7 @@ class VisualByHourChart extends Component {
                 onLoad: { duration: 200 }
               }}
               barRatio={1}
-              data={dataOthers[day]}
+              data={dataVehicles[day]}
               x="hour"
               y="counter"
               labelComponent={<VictoryTooltip/>}
@@ -160,7 +160,7 @@ class VisualByHourChart extends Component {
             data={[
               { name: "Pedestrian" },
               { name: "Bicycle" },
-              { name: "Others" }
+              { name: "Vehicles" }
             ]}
           />
         </VictoryChart>
