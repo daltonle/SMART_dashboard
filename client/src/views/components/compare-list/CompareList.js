@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import DeleteIcon from 'react-feather/dist/icons/x'
 import { removeCompareSensor } from '../../../state/ducks/compare/actions'
+import { MOBILE } from '../../../utils/const'
 
 import styles from './CompareList.module.scss'
 
@@ -17,6 +18,7 @@ const CompareItem = ({ name, id, onItemDelete }) => {
 
 class CompareList extends Component {
   static propTypes = {
+    media: PropTypes.string,
     sensors: PropTypes.array,
 
     removeCompareSensor: PropTypes.func
@@ -28,10 +30,11 @@ class CompareList extends Component {
   }
 
   render() {
-    const { sensors } = this.props
+    const { sensors, media } = this.props
     const items = sensors.map(s => <CompareItem name={s.description} key={s.id} id={s.id} onItemDelete={this.handleItemDelete}/>)
+
     return (
-      <div className={styles.list}>
+      <div className={media===MOBILE ? styles.mobileList : styles.list}>
         {items.length===0 ? <h5>No locations selected</h5> : items}
       </div>
     )
