@@ -3,11 +3,13 @@ import classNames from 'classnames'
 import ExitIcon from 'react-feather/dist/icons/x'
 import CheckIcon from 'react-feather/dist/icons/check'
 import { TitleCard } from '../titleCard/TitleCard'
+import { MOBILE } from '../../../utils/const'
 
 import styles from './LocationCard.module.scss'
 
 export const LocationCard = (props) => {
   const { 
+    media,
     visible, 
     name, 
     suburb, 
@@ -18,12 +20,19 @@ export const LocationCard = (props) => {
     onExit } = props
   
   return (
-    <div className={classNames({ [styles.visible]: visible, [styles.hidden]: (!visible) })}>
+    <div 
+      className={classNames({ 
+        [styles.visible]: visible, 
+        [styles.hidden]: (!visible), 
+        [styles.mobile]: (media===MOBILE),
+        [styles.web]: (media!==MOBILE) 
+      })}>
       <TitleCard
         name={name}
         suburb={suburb}
         position={position}
         full
+        media={media}
       />
       <div className={styles.exitButton} onClick={onExit}>
         <ExitIcon className={styles.icon}/>

@@ -178,6 +178,7 @@ class LocationPicker extends Component {
           maxed={this.props.count >= 5}
           onExit={this.handleLocationCardCollapse}
           onLocationAdded={this.handleLocationAdded}
+          media={this.props.media}
         />
       </div>
     )

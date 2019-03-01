@@ -83,13 +83,26 @@
   }
 }
 
-.visible {
+.web {
   @extend .container;
+
+}
+
+.mobile {
+  @extend .container;
+  z-index: 1001;
+  position: absolute;
+  width: calc(100% - 2rem - 6.5rem);
+  top: 4.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.visible {
   visibility: visible;
 }
 
 .hidden {
-  @extend .container;
   visibility: hidden;
 }
 
