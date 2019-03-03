@@ -26,7 +26,7 @@ router.get('/visual', (req, res, next) => {
 router.get('/air/id=:id', (req, res, next) => {
   let id = req.params.id
   let query = {
-    text: `SELECT id, long, lat, alt, name, description FROM aq_sensor
+    text: `SELECT id, long, lat, alt, name, description, pm2_5, pm10 FROM aq_sensor
     WHERE id=$1::text`,
     values: [id]
   } 
@@ -40,7 +40,7 @@ router.get('/air/id=:id', (req, res, next) => {
 router.get('/visual/id=:id', (req, res, next) => {
   let id = req.params.id
   let query = {
-    text: `SELECT id, long, lat, alt, name, description FROM vs_sensor
+    text: `SELECT id, long, lat, alt, name, pedestrians, bicycles, vehicles description FROM vs_sensor
     WHERE id=$1`,
     values: [id]
   }
@@ -59,7 +59,7 @@ router.get('/air/coordinates=:long,:lat', (req, res, next) => {
   } = req.params
 
   let query = {
-    text: `SELECT id, long, lat, alt, name, description FROM aq_sensor
+    text: `SELECT id, long, lat, alt, name, description, pm2_5, pm10 FROM aq_sensor
     WHERE long=$1::numeric AND lat=$2::numeric`,
     values: [long, lat]
   }
@@ -76,7 +76,7 @@ router.get('/visual/coordinates=:long,:lat', (req, res, next) => {
     lat
   } = req.params
   let query = {
-    text: `SELECT id, long, lat, alt, name, description FROM vs_sensor
+    text: `SELECT id, long, lat, alt, name, description, pedestrians, bicycles, vehicles FROM vs_sensor
     WHERE long=$1::numeric AND lat=$2::numeric`,
     values: [long, lat]
   }
