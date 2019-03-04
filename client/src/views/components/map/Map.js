@@ -16,7 +16,7 @@ class Map extends Component {
     media: PropTypes.string,
     airMarkers: PropTypes.array,
     visualMarkers: PropTypes.array,
-    isAirLayer: PropTypes.bool,
+    layers: PropTypes.array,
     centre: PropTypes.object,
     zoomLevel: PropTypes.number,
     addAirMarkers: PropTypes.func,
@@ -35,8 +35,7 @@ class Map extends Component {
         || this.props.airMarkers !== nextProps.airMarkers
         || this.props.visualMarkers !== nextProps.visualMarkers)
       return true
-    else return false
-    
+    else return false    
   }
 
   handleMarkerClick = (marker, e) => {
@@ -45,33 +44,44 @@ class Map extends Component {
       lat: parseFloat(marker.lat)
     }
     this.props.changeCentre(newCentre)
-    this.props.history.push(`/dashboard/${marker.lat},${marker.long}`)
+    this.props.history.push({
+      pathname: `/dashboard/${marker.lat},${marker.long}`,
+      state: { type: marker.type, id: marker.id}
+    })
   }
 
   render() {
+    const { layers } = this.props
     // load markers
-    let markers
-    if (this.props.isAirLayer && this.props.airMarkers !== undefined) {
-      let { airMarkers } = this.props
-      markers = airMarkers.map((marker, index) => (
+    let airMarkers=[], visualMarkers=[]
+    if (layers.air && this.props.airMarkers !== undefined) {
+      airMarkers = this.props.airMarkers.map((marker, index) => (
         <Marker
           key={index}
+          id={marker.id}
+          type="air"
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
           icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
           onClick={(e) => this.handleMarkerClick(marker, e)}
         />
       ))
     }
-    else if (!this.props.isAirLayer && this.props.visualMarkers !== undefined) {
-      markers = this.props.visualMarkers.map((marker, index) => (
+    if (layers.visual && this.props.visualMarkers !== undefined) {
+      visualMarkers = this.props.visualMarkers.map((marker, index) => (
         <Marker
           key={index}
+          id={marker.id}
+          type="visual"
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
           icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
           onClick={(e) => this.handleMarkerClick(marker, e)}
         />
       ))
     }
+    const markers = [
+      ...airMarkers,
+      ...visualMarkers
+    ] 
     // TODO: add Markers data + last fetch time to localStorage, test for this before fetch for new data
 
     const StyledMap = compose(
@@ -158,7 +168,7 @@ class Map extends Component {
 const mapStateToProps = state => ({
   airMarkers: state.map.airMarkers,
   visualMarkers: state.map.visualMarkers,
-  isAirLayer: state.map.isAirLayer,
+  layers: state.map.layers,
   mapCentre: state.map.centre,
   zoomLevel: state.map.zoomLevel
 })
