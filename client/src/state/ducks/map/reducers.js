@@ -1,4 +1,4 @@
-import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS, CHANGE_LAYER, CHANGE_CENTRE } from "./types"
+import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS, CHANGE_LAYER, CHANGE_CENTRE, CHANGE_ZOOM } from "./types"
 
 /**
   store.state.map
@@ -29,7 +29,8 @@ import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS, CHANGE_LAYER, CHANGE_CENTRE } from
 
 const initialState = {
   isAirLayer: true,
-  centre: { lat: -33.9225, lng: 150.9254 }
+  centre: { lat: -33.9225, lng: 150.9254 },
+  zoomLevel: 15
 }
 
 const mapReducer = (state = initialState, action) => {
@@ -53,6 +54,11 @@ const mapReducer = (state = initialState, action) => {
       return {
         ...state,
         centre: action.payload
+      }
+    case CHANGE_ZOOM:
+      return {
+        ...state,
+        zoomLevel: action.payload
       }
     default:
       return state
