@@ -26,11 +26,22 @@ export const addVisualMarkers = () => dispatch => {
   .catch(err => console.log(err))
 }
 
-export const changeLayer = () => (dispatch, getState) => {
-  const { isAirLayer } = getState().map
+/**
+ * Change the types of sensors being displayed
+ * @param {[string]} typeArray 
+ */
+export const changeLayer = (typeArray) => (dispatch, getState) => {
+  const { layers } = getState().map
+  let nextLayers = {...layers}
+  typeArray.map(type => {
+    nextLayers = {
+      ...nextLayers,
+      [type]: !nextLayers[type]
+    }
+  })
   dispatch({
     type: CHANGE_LAYER,
-    payload: !isAirLayer
+    payload: nextLayers
   })
 }
 
