@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { compose, withProps, withHandlers } from 'recompose'
+import { compose, withProps, withHandlers, shouldUpdate } from 'recompose'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { DESK } from '../../../utils/const'
@@ -30,10 +30,13 @@ class Map extends Component {
     this.props.addVisualMarkers()
   }
 
-  shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.props !== nextProps || this.state !== nextState)
+  shouldComponentUpdate = (nextProps) => {
+    if (this.props.mapCentre !== nextProps.mapCentre
+        || this.props.airMarkers !== nextProps.airMarkers
+        || this.props.visualMarkers !== nextProps.visualMarkers)
       return true
     else return false
+    
   }
 
   handleMarkerClick = (marker, e) => {
@@ -77,11 +80,18 @@ class Map extends Component {
         containerElement: <div style={{ width: `100%`, height: `100%` }} />,
         mapElement: <div style={{ height: `100%`, width:`100%` }} />,
       }),
+      shouldUpdate((props, nextProps) => {
+        if (props.mapCentre !== nextProps.mapCentre)
+          return true
+        else if (props.zoomLevel !== nextProps.zoomLevel)
+          return true
+        else return false
+      }),
       withHandlers(() => {
         const refs = {
           map: undefined
         }
-
+    
         return {
           onMarkerClustererClick: () => (markerClusterer) => {
             markerClusterer.getMarkers()
@@ -89,8 +99,8 @@ class Map extends Component {
           onMapMounted: () => ref => {
             refs.map = ref
           },
-          onZoomChanged: () => () => {
-            this.props.changeZoom(refs.map.getZoom())
+          onZoomChanged: ({ onZoomChange }) => () => {
+            onZoomChange(refs.map.getZoom())
           }
         }
       }),
@@ -139,6 +149,7 @@ class Map extends Component {
         media={this.props.media}
         markers={markers}
         zoomLevel={this.props.zoomLevel}
+        onZoomChange={this.props.changeZoom}
       />
     )
   }
