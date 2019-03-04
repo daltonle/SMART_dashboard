@@ -18,7 +18,7 @@ class App extends Component {
             {matches => (
               <Switch>
                 <Route
-                  exact path='/dashboard'
+                  exact path={['/dashboard', '/']}
                   render={(props) => <DashboardMain {...props} media={matches ? MOBILE : DESK} />}
                 />
                 <Route 
