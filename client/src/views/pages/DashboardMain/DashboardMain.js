@@ -30,7 +30,7 @@ class DashboardMain extends Component {
       return (
         <div className={ styles.outer }>
           <div className={ styles.appbar }>
-            <AppBar media={this.props.media}/>
+            <AppBar active="dashboard" media={this.props.media}/>
           </div>
           <div className={ styles.mapContainer }>
             <Map media={this.props.media} zoomLevel={13}/>
@@ -68,7 +68,7 @@ class DashboardMain extends Component {
             </div>
           </div>
           <div className={ m_styles.appbar }>
-            <AppBar media={this.props.media} />
+            <AppBar  active="dashboard" media={this.props.media} />
           </div>
         </div>
       )

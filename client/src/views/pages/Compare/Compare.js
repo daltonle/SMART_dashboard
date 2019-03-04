@@ -123,7 +123,7 @@ class Compare extends Component {
       return (
         <div className={styles.outer}>
           <div className={styles.appbar}>
-            <AppBar media={this.props.media} />
+            <AppBar active="dashboard" media={this.props.media} />
           </div>
           <div className={styles.content}>
             <div className={classNames(styles.data, { [styles.detailsShown]: doShowDetails })}>
@@ -381,7 +381,7 @@ class Compare extends Component {
           }
           
           <div className={ m_styles.appbar }>
-            <AppBar media={this.props.media} />
+            <AppBar active="dashboard" media={this.props.media} />
           </div>
         </div>
       )

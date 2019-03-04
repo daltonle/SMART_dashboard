@@ -14,6 +14,8 @@
   float: right;
   margin: 1.5em 2.5em;
   vertical-align: middle;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .menuActive {
@@ -33,17 +35,25 @@
   padding-top: 1em;
 }
 
-.m_menuItems {
+.m_menuItemContainer {
   display: inline-block;
   padding-left: 1.5em;
   padding-right: 1.5em;
   font-size: .75em;
+
+  &>br {
+    line-height: .25em;
+  }
+
+  &>.m_menuItems {
+    text-decoration: none;
+  }
 }
 
-.m_menuItems > br {
-  line-height: .25em;
-}
-
-.m_menuActive > span {
+.m_menuActive {
   color: $primary-color;
+
+  &>.m_icon {
+    stroke: $primary-color;
+  }
 }
