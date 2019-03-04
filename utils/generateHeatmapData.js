@@ -5,11 +5,11 @@
  * 
  * @param {array} data [{x1,y1,x2,y2}]
  */
-const generateHeatmapData = (data) => {
+const generateHeatmapData = (data, reso_x, reso_y) => {
   // define unit
   const UNIT = 4
-  const WIDTH = 1280 / UNIT
-  const HEIGHT = 720 / UNIT
+  const WIDTH = reso_x / UNIT
+  const HEIGHT = reso_y / UNIT
 
   // initalise result matrix
   let result = []
@@ -53,7 +53,13 @@ const generateHeatmapData = (data) => {
 
   }
 
-  //TODO: Handle outliers
+  //TODO: Handle outliers, using log to scale down the data set
+  for (let i = 0; i < HEIGHT; i++) {
+    for (let j = 0; j < WIDTH; j++) {
+      if (result[i][j] !== 0)
+        result[i][j] = Math.log(result[i][j])
+    }
+  }
 
   return result
 }

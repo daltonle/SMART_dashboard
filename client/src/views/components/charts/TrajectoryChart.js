@@ -11,7 +11,9 @@ class TrajectoryChart extends Component {
   static propTypes = {
     media: PropTypes.string,
     id: PropTypes.string,
-    data: PropTypes.array
+    data: PropTypes.array,
+    reso_x: PropTypes.number,
+    reso_y: PropTypes.number
   }
 
   shouldComponentUpdate = (prevProps) => {
@@ -20,10 +22,8 @@ class TrajectoryChart extends Component {
   }
 
   render() {
-    const WIDTH_RATIO = 1280
-    const HEIGHT_RATIO = 720
-    const { containerWidth, media, data } = this.props
-    const customHeight = containerWidth / WIDTH_RATIO * HEIGHT_RATIO
+    const { containerWidth, media, data, reso_x, reso_y } = this.props
+    const customHeight = containerWidth / reso_x * reso_y
 
     const chartData = []
     if (data !== undefined) {
@@ -93,7 +93,9 @@ class TrajectoryChart extends Component {
 
 const mapStateToProps = (state) => ({
   id: state.sensor.visual.id,
-  data: state.sensor.visual.trajectory
+  data: state.sensor.visual.trajectory,
+  reso_x: state.sensor.visual.reso_x,
+  reso_y: state.sensor.visual.reso_y
 })
 
 const mapDispatchToProps = {}

@@ -1,9 +1,11 @@
-const router = require('express').Router()
+const Router = require('express-promise-router')
 const bodyParser = require('body-parser')
 const LTTB = require('downsample').LTTB
 const moment = require('moment')
 const db = require('../db')
 const generateHeatmapData = require('../utils/generateHeatmapData')
+
+const router = new Router()
 
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(bodyParser.json())
@@ -104,7 +106,7 @@ router.get('/visual/live/:long,:lat', (req, res, next) => {
   } = req.params
 
   let query = {
-    text: `SELECT id, name, description, to_char(ts, 'DD-MM-YYYY HH24:MI:SS'), pedestrians, vehicles, bicycles FROM vs_sensor
+    text: `SELECT id, name, description, to_char(ts, 'DD-MM-YYYY HH24:MI:SS'), pedestrians, vehicles, bicycles, reso_x, reso_y FROM vs_sensor
     WHERE vs_sensor.long=$1::numeric AND vs_sensor.lat=$2::numeric`,
     values: [long, lat]
   }
@@ -307,7 +309,7 @@ router.get('/visual/by-day/:name/:id/:year-:month-:day', (req, res, next) => {
 })
 
 // retrieve data for visual heatmap
-router.get('/visual/heatmap/:id', (req, res, next) => {
+router.get('/visual/heatmap/:id', async (req, res, next) => {
   let query = {
     text: `SELECT x1, y1, x2, y2 FROM vs_detections
           WHERE id_obj IN (SELECT id FROM vs_object WHERE id_sensor=$1)
@@ -315,10 +317,16 @@ router.get('/visual/heatmap/:id', (req, res, next) => {
           LIMIT 5000`,
     values: [req.params.id]
   }
-
-  db.query(query)
-    .then(result => res.json(generateHeatmapData(result.rows)))
-    .catch(next)
+  const { rows } = await db.query(query)
+  
+  db.query({
+    text: `SELECT reso_x, reso_y FROM vs_sensor
+          WHERE id=$1`,
+    values: [req.params.id]
+  })
+  .then(result => generateHeatmapData(rows, result.rows[0].reso_x, result.rows[0].reso_y))
+  .then(result => res.json(result))
+  .catch(next)
 })
 
 // retrieve data for visual trajectory tracking

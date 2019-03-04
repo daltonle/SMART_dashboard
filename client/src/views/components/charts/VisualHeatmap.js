@@ -12,15 +12,15 @@ class VisualHeatmap extends Component {
     media: PropTypes.string,
     id: PropTypes.string,
     data: PropTypes.array,
+    reso_x: PropTypes.number,
+    reso_y: PropTypes.number,
 
     getHeatmapData: PropTypes.func
   }
 
   render() {
-    const WIDTH_RATIO = 1280
-    const HEIGHT_RATIO = 720
-    const { containerWidth, media } = this.props
-    const customHeight = containerWidth / WIDTH_RATIO * HEIGHT_RATIO
+    const { containerWidth, media, reso_x, reso_y } = this.props
+    const customHeight = containerWidth / reso_x * reso_y
 
     const data = [
       {
@@ -83,7 +83,9 @@ class VisualHeatmap extends Component {
 
 const mapStateToProps = (state) => ({
   id: state.sensor.visual.id,
-  data: state.sensor.visual.heatmap
+  data: state.sensor.visual.heatmap,
+  reso_x: state.sensor.visual.reso_x,
+  reso_y: state.sensor.visual.reso_y
 })
 
 const mapDispatchToProps = {}
