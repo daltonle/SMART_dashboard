@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import propTypes from 'prop-types'
-import { compose, withProps, withHandlers } from 'recompose'
+import PropTypes from 'prop-types'
+import { compose, withProps, withHandlers, shouldUpdate } from 'recompose'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { DESK } from '../../../utils/const'
-import { addAirMarkers, addVisualMarkers, changeCentre } from '../../../state/ducks/map/actions'
+import { addAirMarkers, addVisualMarkers, changeCentre, changeZoom } from '../../../state/ducks/map/actions'
 import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
 import { mapStyles } from './MapStyles'
@@ -13,13 +13,16 @@ import { mapStyles } from './MapStyles'
 
 class Map extends Component {
   static propTypes = {
-    media: propTypes.string,
-    airMarkers: propTypes.array,
-    visualMarkers: propTypes.array,
-    isAirLayer: propTypes.bool,
-    centre: propTypes.object,
-    addAirMarkers: propTypes.func,
-    addVisualMarkers: propTypes.func
+    media: PropTypes.string,
+    airMarkers: PropTypes.array,
+    visualMarkers: PropTypes.array,
+    isAirLayer: PropTypes.bool,
+    centre: PropTypes.object,
+    zoomLevel: PropTypes.number,
+    addAirMarkers: PropTypes.func,
+    addVisualMarkers: PropTypes.func,
+    changeCentre: PropTypes.func,
+    changeZoom: PropTypes.func
   }
 
   componentDidMount = () => {  
@@ -27,10 +30,13 @@ class Map extends Component {
     this.props.addVisualMarkers()
   }
 
-  shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.props !== nextProps || this.state !== nextState)
+  shouldComponentUpdate = (nextProps) => {
+    if (this.props.mapCentre !== nextProps.mapCentre
+        || this.props.airMarkers !== nextProps.airMarkers
+        || this.props.visualMarkers !== nextProps.visualMarkers)
       return true
     else return false
+    
   }
 
   handleMarkerClick = (marker, e) => {
@@ -74,16 +80,37 @@ class Map extends Component {
         containerElement: <div style={{ width: `100%`, height: `100%` }} />,
         mapElement: <div style={{ height: `100%`, width:`100%` }} />,
       }),
-      withHandlers({
-        onMarkerClustererClick: () => (markerClusterer) => {
-          markerClusterer.getMarkers()
+      shouldUpdate((props, nextProps) => {
+        if (props.mapCentre !== nextProps.mapCentre)
+          return true
+        else if (props.zoomLevel !== nextProps.zoomLevel)
+          return true
+        else return false
+      }),
+      withHandlers(() => {
+        const refs = {
+          map: undefined
+        }
+    
+        return {
+          onMarkerClustererClick: () => (markerClusterer) => {
+            markerClusterer.getMarkers()
+          },
+          onMapMounted: () => ref => {
+            refs.map = ref
+          },
+          onZoomChanged: ({ onZoomChange }) => () => {
+            onZoomChange(refs.map.getZoom())
+          }
         }
       }),
       withGoogleMap
     )(props =>
       <GoogleMap
         defaultCenter={props.mapCentre}
-        defaultZoom={props.zoomLevel ? props.zoomLevel : 13}
+        defaultZoom={props.zoomLevel}
+        ref={props.onMapMounted}
+        onZoomChanged={props.onZoomChanged}
         defaultOptions={{
           styles: mapStyles,
           streetViewControl: false,
@@ -122,6 +149,7 @@ class Map extends Component {
         media={this.props.media}
         markers={markers}
         zoomLevel={this.props.zoomLevel}
+        onZoomChange={this.props.changeZoom}
       />
     )
   }
@@ -131,13 +159,15 @@ const mapStateToProps = state => ({
   airMarkers: state.map.airMarkers,
   visualMarkers: state.map.visualMarkers,
   isAirLayer: state.map.isAirLayer,
-  mapCentre: state.map.centre
+  mapCentre: state.map.centre,
+  zoomLevel: state.map.zoomLevel
 })
 
 const mapDispatchToProps = {
   addAirMarkers,
   addVisualMarkers,
-  changeCentre
+  changeCentre,
+  changeZoom
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Map))
