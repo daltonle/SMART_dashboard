@@ -11,16 +11,14 @@ import UpIcon from 'react-feather/dist/icons/chevron-up'
 import Select from 'react-select'
 import { AppBar } from '../../components/appbar/AppBar'
 import LocationPicker from '../../components/map/LocationPicker'
-import { LocationCard } from '../../components/map/LocationCard'
 import { DESK, MOBILE } from '../../../utils/const'
-import { LayersBttn, LegendsBttn, CompareBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
+import { LegendsBttn, CompareBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
 import { HelpBttn } from '../../components/help-button/HelpBttn'
 import CompareList from "../../components/compare-list/CompareList"
 import Live from "../../components/charts/compare/Live"
 import History from "../../components/charts/compare/History"
 import ByHour from "../../components/charts/compare/ByHour"
 import { colors } from "../../../styles/colors"
-import { changeLayer } from '../../../state/ducks/map/actions'
 import { changeType } from '../../../state/ducks/compare/actions'
 import { removeAllSensors } from '../../../state/ducks/compare/actions'
 

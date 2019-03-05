@@ -1,6 +1,4 @@
-import { 
-  SHOW_DETAILS, 
-  HIDE_DETAILS, 
+import {
   CHANGE_ZOOM_DOMAINS_HISTORY, 
   CHANGE_AIR_DOW_HOUR_CHART, 
   CHANGE_VISUAL_DOW_HOUR_CHART, 
@@ -31,7 +29,6 @@ import {
  */
 
 const initialState = {
-  showDetails: false,
   history: {
     zoomDomain: { x: [new Date(2019, 1, 1), new Date()] }
   },

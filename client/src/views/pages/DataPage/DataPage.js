@@ -23,7 +23,6 @@ class DataPage extends Component {
   static propTypes = {
     media: PropTypes.string,
     match: PropTypes.object,
-    layers: PropTypes.object,
     airSensor: PropTypes.object,
     visualSensor: PropTypes.object,
     mapCentre: PropTypes.object,
@@ -53,7 +52,6 @@ class DataPage extends Component {
       getVisualData,
       changeCentre
     } = this.props
-    console.log(history.location)
 
     let newCentre = {
       lng: parseFloat(match.params.long),
@@ -108,7 +106,7 @@ class DataPage extends Component {
   }
 
   render() {
-    const { airSensor, visualSensor, layers, history } = this.props
+    const { airSensor, visualSensor, history } = this.props
     const { location } = history
     const { doShowDetails } = this.state
 
@@ -439,7 +437,6 @@ class DataPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  layers: state.map.layers,
   airSensor: state.sensor.air,
   visualSensor: state.sensor.visual,
   mapCentre: state.map.centre

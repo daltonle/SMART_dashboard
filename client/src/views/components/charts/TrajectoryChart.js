@@ -41,7 +41,6 @@ class TrajectoryChart extends Component {
     const webLayout = { 
       width: containerWidth, 
       height: customHeight,
-      showlegend: true,
       legend: { x: 0, y: 1.25, orientation: "h" },
       plot_bgcolor: colors.backgroundColor,
       paper_bgcolor: colors.backgroundColor,

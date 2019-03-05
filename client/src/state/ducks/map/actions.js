@@ -3,9 +3,7 @@ import {
   ADD_VISUAL_MARKERS,
   CHANGE_LAYER,
   CHANGE_CENTRE,
-  CHANGE_ZOOM,
-  REMOVE_AIR_MARKERS,
-  REMOVE_VISUAL_MARKERS
+  CHANGE_ZOOM
 } from './types'
 
 const _addMarkers = (type, dispatch) => {

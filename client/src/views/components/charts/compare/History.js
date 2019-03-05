@@ -33,7 +33,7 @@ class History extends Component {
         }) - 1
         if (sensors[i].history[field]) {
           if (sensors[i].history[field].x) {
-            sensors[i].history[field].x.map(d => {
+            sensors[i].history[field].x.forEach(d => {
               chartData[idx].x.push(moment(d, "DD-MM-YYYY HH:mm:ss").toDate())
             })
             chartData[idx].y = [...sensors[i].history[field].y]

@@ -15,7 +15,7 @@ class VisualLiveChart extends Component {
   }
 
   render() {
-    const { sensorData, containerHeight, containerWidth, media } = this.props
+    const { sensorData, containerHeight, containerWidth } = this.props
     const liveData = [
       { type: "Pesdestrians", counter: sensorData === undefined ? 0 : parseFloat(sensorData.pedestrians)},
       { type: "Bicycles", counter: sensorData === undefined ? 0 : parseFloat(sensorData.bicycles)},

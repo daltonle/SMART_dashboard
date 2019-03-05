@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { DESK, MOBILE } from '../../../../utils/const'
+import { DESK } from '../../../../utils/const'
 import InfoIcon from 'react-feather/dist/icons/info'
 import LayersIcon from 'react-feather/dist/icons/layers'
 import CompareIcon from 'react-feather/dist/icons/bar-chart-2'

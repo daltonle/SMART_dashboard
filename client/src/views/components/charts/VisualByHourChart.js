@@ -32,12 +32,12 @@ class VisualByHourChart extends Component {
 
   handleDayDecreased = (day, e) => {
     e.preventDefault()
-    this.props.changeVisualDowChart(day==0 ? 6 : day-1)
+    this.props.changeVisualDowChart(day===0 ? 6 : day-1)
   }
 
   handleDayIncreased = (day, e) => {
     e.preventDefault()
-    this.props.changeVisualDowChart(day==6 ? 0 : day+1)
+    this.props.changeVisualDowChart(day===6 ? 0 : day+1)
   }
 
   handleTypeChanged = (selected) => {
