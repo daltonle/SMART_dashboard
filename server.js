@@ -22,8 +22,8 @@ const sensors = require('./routes/sensors')
 const sensorData = require('./routes/sensorData')
 const compare = require('./routes/compare')
 
-app.use('/sensors', sensors)
-app.use('/sensor-data', sensorData)
+app.use('/api/sensors', sensors)
+app.use('/api/sensor-data', sensorData)
 app.use('/api/compare', compare)
 
 // start server

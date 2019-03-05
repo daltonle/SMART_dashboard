@@ -35,7 +35,7 @@ let timer1, timer2
 export const getAirData = (sensor) => async (dispatch) => {
   let air = false, visual = false
 
-  let res1 = await fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
+  let res1 = await fetch(`/api/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
     .catch(err => console.log(err))
@@ -46,7 +46,7 @@ export const getAirData = (sensor) => async (dispatch) => {
   })
   if (res1 !== undefined) {
     air = true
-    fetch(`/sensor-data/history/air/pm2_5/${res1.id}`)
+    fetch(`/api/sensor-data/history/air/pm2_5/${res1.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -54,7 +54,7 @@ export const getAirData = (sensor) => async (dispatch) => {
         payload: res
       }))
       .catch(err => console.log(err))
-    fetch(`/sensor-data/history/air/pm10/${res1.id}`)
+    fetch(`/api/sensor-data/history/air/pm10/${res1.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -64,7 +64,7 @@ export const getAirData = (sensor) => async (dispatch) => {
       .catch(err => console.log(err))
   }
     
-  let res2 = await fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
+  let res2 = await fetch(`/api/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
     .catch(err => console.log(err))
@@ -75,7 +75,7 @@ export const getAirData = (sensor) => async (dispatch) => {
   })
   if (res2 !== undefined) {
     visual = true
-    fetch(`/sensor-data/history/visual/pedestrian/${res2.id}`)
+    fetch(`/api/sensor-data/history/visual/pedestrian/${res2.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -83,7 +83,7 @@ export const getAirData = (sensor) => async (dispatch) => {
         payload: res
       }))
       .catch(err => console.log(err))
-    fetch(`/sensor-data/history/visual/bicycle/${res2.id}`)
+    fetch(`/api/sensor-data/history/visual/bicycle/${res2.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -91,7 +91,7 @@ export const getAirData = (sensor) => async (dispatch) => {
         payload: res
       }))
       .catch(err => console.log(err))
-    fetch(`/sensor-data/history/visual/vehicle/${res2.id}`)
+    fetch(`/api/sensor-data/history/visual/vehicle/${res2.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -99,7 +99,7 @@ export const getAirData = (sensor) => async (dispatch) => {
         payload: res
       }))
       .catch(err => console.log(err))
-    fetch(`/sensor-data/visual/heatmap/${res2.id}`)
+    fetch(`/api/sensor-data/visual/heatmap/${res2.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -107,7 +107,7 @@ export const getAirData = (sensor) => async (dispatch) => {
         payload: res
       }))
       .catch(err => console.log(err))
-    fetch(`/sensor-data/visual/trajectory/${res2.id}`)
+    fetch(`/api/sensor-data/visual/trajectory/${res2.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -120,7 +120,7 @@ export const getAirData = (sensor) => async (dispatch) => {
   // get live data after every minute
   clearTimeout(timer1, timer2)
   const getAirDataLive = () => {
-    fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
+    fetch(`/api/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
     .then(res => {
@@ -135,7 +135,7 @@ export const getAirData = (sensor) => async (dispatch) => {
   if (air) getAirDataLive()
 
   const getVisualDataLive = () => {
-    fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
+    fetch(`/api/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
     .then(res => {
@@ -160,7 +160,7 @@ export const getAirData = (sensor) => async (dispatch) => {
 export const getVisualData = (sensor) => async (dispatch) => {
   let air = false, visual = false
 
-  let res1 = await fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
+  let res1 = await fetch(`/api/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
     .catch(err => console.log(err))
@@ -171,7 +171,7 @@ export const getVisualData = (sensor) => async (dispatch) => {
   })
   if (res1 !== undefined) {
     air = true
-    fetch(`/sensor-data/history/air/pm2_5/${res1.id}`)
+    fetch(`/api/sensor-data/history/air/pm2_5/${res1.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -179,7 +179,7 @@ export const getVisualData = (sensor) => async (dispatch) => {
         payload: res
       }))
       .catch(err => console.log(err))
-    fetch(`/sensor-data/history/air/pm10/${res1.id}`)
+    fetch(`/api/sensor-data/history/air/pm10/${res1.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -189,7 +189,7 @@ export const getVisualData = (sensor) => async (dispatch) => {
       .catch(err => console.log(err))
   }
     
-  let res2 = await fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
+  let res2 = await fetch(`/api/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
     .catch(err => console.log(err))
@@ -200,7 +200,7 @@ export const getVisualData = (sensor) => async (dispatch) => {
   })
   if (res2 !== undefined) {
     visual = true
-    fetch(`/sensor-data/history/visual/pedestrian/${res2.id}`)
+    fetch(`/api/sensor-data/history/visual/pedestrian/${res2.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -208,7 +208,7 @@ export const getVisualData = (sensor) => async (dispatch) => {
         payload: res
       }))
       .catch(err => console.log(err))
-    fetch(`/sensor-data/history/visual/bicycle/${res2.id}`)
+    fetch(`/api/sensor-data/history/visual/bicycle/${res2.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -216,7 +216,7 @@ export const getVisualData = (sensor) => async (dispatch) => {
         payload: res
       }))
       .catch(err => console.log(err))
-    fetch(`/sensor-data/history/visual/vehicle/${res2.id}`)
+    fetch(`/api/sensor-data/history/visual/vehicle/${res2.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -224,7 +224,7 @@ export const getVisualData = (sensor) => async (dispatch) => {
         payload: res
       }))
       .catch(err => console.log(err))
-    fetch(`/sensor-data/visual/heatmap/${res2.id}`)
+    fetch(`/api/sensor-data/visual/heatmap/${res2.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -232,7 +232,7 @@ export const getVisualData = (sensor) => async (dispatch) => {
         payload: res
       }))
       .catch(err => console.log(err))
-    fetch(`/sensor-data/visual/trajectory/${res2.id}`)
+    fetch(`/api/sensor-data/visual/trajectory/${res2.id}`)
       .then(res => res.text())
       .then(text => text.length ? JSON.parse(text) : undefined)
       .then(res => dispatch({
@@ -245,7 +245,7 @@ export const getVisualData = (sensor) => async (dispatch) => {
   // get live data after every minute
   clearTimeout(timer1, timer2)
   const getAirDataLive = () => {
-    fetch(`/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
+    fetch(`/api/sensor-data/air/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
     .then(res => {
@@ -260,7 +260,7 @@ export const getVisualData = (sensor) => async (dispatch) => {
   if (air) getAirDataLive()
 
   const getVisualDataLive = () => {
-    fetch(`/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
+    fetch(`/api/sensor-data/visual/live/${sensor.lng},${sensor.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
     .then(res => {
@@ -280,7 +280,7 @@ export const getVisualData = (sensor) => async (dispatch) => {
  * @param {string} id 
  */
 export const getAvgAirDataByHour = id => dispatch => {
-  fetch(`/sensor-data/air/by-hour/avg/${id}`)
+  fetch(`/api/sensor-data/air/by-hour/avg/${id}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -295,7 +295,7 @@ export const getAvgAirDataByHour = id => dispatch => {
  * @param {string} id 
  */
 export const getMinAirDataByHour = id => dispatch => {
-  fetch(`/sensor-data/air/by-hour/min/${id}`)
+  fetch(`/api/sensor-data/air/by-hour/min/${id}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -310,7 +310,7 @@ export const getMinAirDataByHour = id => dispatch => {
  * @param {string} id 
  */
 export const getMaxAirDataByHour = id => dispatch => {
-  fetch(`/sensor-data/air/by-hour/max/${id}`)
+  fetch(`/api/sensor-data/air/by-hour/max/${id}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -325,7 +325,7 @@ export const getMaxAirDataByHour = id => dispatch => {
  * @param {string} id 
  */
 export const getAvgVisualDataByHour = id => dispatch => {
-  fetch(`/sensor-data/visual/by-hour/avg/${id}`)
+  fetch(`/api/sensor-data/visual/by-hour/avg/${id}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -340,7 +340,7 @@ export const getAvgVisualDataByHour = id => dispatch => {
  * @param {string} id 
  */
 export const getMinVisualDataByHour = id => dispatch => {
-  fetch(`/sensor-data/visual/by-hour/min/${id}`)
+  fetch(`/api/sensor-data/visual/by-hour/min/${id}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -355,7 +355,7 @@ export const getMinVisualDataByHour = id => dispatch => {
  * @param {string} id 
  */
 export const getMaxVisualDataByHour = id => dispatch => {
-  fetch(`/sensor-data/visual/by-hour/max/${id}`)
+  fetch(`/api/sensor-data/visual/by-hour/max/${id}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -371,7 +371,7 @@ export const getMaxVisualDataByHour = id => dispatch => {
  * @param {string} day "YYYY-MM-DD"
  */
 export const getAirDataByDay = (id, day) => dispatch => {
-  fetch( `/sensor-data/air/by-day/pm2_5/${id}/${day}`)
+  fetch( `/api/sensor-data/air/by-day/pm2_5/${id}/${day}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -380,7 +380,7 @@ export const getAirDataByDay = (id, day) => dispatch => {
   }))
   .catch(err => console.log(err))
 
-  fetch( `/sensor-data/air/by-day/pm10/${id}/${day}`)
+  fetch( `/api/sensor-data/air/by-day/pm10/${id}/${day}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -396,7 +396,7 @@ export const getAirDataByDay = (id, day) => dispatch => {
  * @param {string} day "YYYY-MM-DD"
  */
 export const getVisualDataByDay = (id, day) => dispatch => {
-  fetch( `/sensor-data/visual/by-day/pedestrian/${id}/${day}`)
+  fetch( `/api/sensor-data/visual/by-day/pedestrian/${id}/${day}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -405,7 +405,7 @@ export const getVisualDataByDay = (id, day) => dispatch => {
   }))
   .catch(err => console.log(err))
 
-  fetch( `/sensor-data/visual/by-day/bicycle/${id}/${day}`)
+  fetch( `/api/sensor-data/visual/by-day/bicycle/${id}/${day}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -414,7 +414,7 @@ export const getVisualDataByDay = (id, day) => dispatch => {
   }))
   .catch(err => console.log(err))
 
-  fetch( `/sensor-data/visual/by-day/vehicle/${id}/${day}`)
+  fetch( `/api/sensor-data/visual/by-day/vehicle/${id}/${day}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({
@@ -429,7 +429,7 @@ export const getVisualDataByDay = (id, day) => dispatch => {
  * @param {string} id 
  */
 export const getHeatmapData = (id) => dispatch => {
-  fetch(`/sensor-data/visual/heatmap/${id}`)
+  fetch(`/api/sensor-data/visual/heatmap/${id}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
   .then(res => dispatch({

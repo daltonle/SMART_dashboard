@@ -39,7 +39,7 @@ Retrieves list of air sensors and their co-ordinates.
 
 #### HTTP Request
 
-`GET http://localhost:5000/sensors/air`
+`GET http://localhost:5000/api/sensors/air`
 
 #### Parameters
 
@@ -74,7 +74,7 @@ Retrieves list of visual sensors and their co-ordinates.
 
 #### HTTP Request
 
-`GET http://localhost:5000/sensors/visual`
+`GET http://localhost:5000/api/sensors/visual`
 
 #### Parameters
 
@@ -88,7 +88,7 @@ An array of sensor objects containing id and coordinates.
 
 #### HTTP Request
 
-`GET http://localhost:5000/sensors/air/{id}`
+`GET http://localhost:5000/api/sensors/air/{id}`
 
 #### Parameters
 
@@ -116,7 +116,7 @@ An array of sensor objects containing id and coordinates.
 
 #### HTTP Request
 
-`GET http://localhost:5000/sensors/visual/{id}`
+`GET http://localhost:5000/api/sensors/visual/{id}`
 
 #### Parameters
 
@@ -154,7 +154,7 @@ An array of sensor objects containing id and coordinates.
 
 #### HTTP Request
 
-`GET http://localhost:5000/sensors/air/{long}.{lat}.{alt}`
+`GET http://localhost:5000/api/sensors/air/{long}.{lat}.{alt}`
 
 #### Parameters
 
@@ -170,7 +170,7 @@ A JSON object with the air sensor info.
 
 #### HTTP Request
 
-`GET http://localhost:5000/sensors/visual/{long}.{lat}.{alt}`
+`GET http://localhost:5000/api/sensors/visual/{long}.{lat}.{alt}`
 
 #### Parameters
 
@@ -186,7 +186,7 @@ A JSON object with the visual sensor info.
 
 #### HTTP Request
 
-`GET http://localhost:5000/sensor-data/air/{id}`
+`GET http://localhost:5000/api/sensor-data/air/{id}`
 
 #### Parameters
 
@@ -217,7 +217,7 @@ Array of data collected and timestamps.
 
 #### HTTP Request
 
-`GET http://localhost:5000/sensor-data/air/{year}-{month}-{day}`
+`GET http://localhost:5000/api/sensor-data/air/{year}-{month}-{day}`
 
 #### Parameters
 
@@ -231,7 +231,7 @@ Array of data collected from 15 days prior up until 15 days after the chosen dat
 
 #### HTTP Request
 
-`GET http://localhost:5000/sensor-data/visual/{id}`
+`GET http://localhost:5000/api/sensor-data/visual/{id}`
 
 #### Parameters
 
@@ -245,7 +245,7 @@ Array of data collected and timestamps.
 
 #### HTTP Request
 
-`GET http://localhost:5000/sensor-data/visual/{year}-{month}-{day}`
+`GET http://localhost:5000/api/sensor-data/visual/{year}-{month}-{day}`
 
 #### Parameters
 

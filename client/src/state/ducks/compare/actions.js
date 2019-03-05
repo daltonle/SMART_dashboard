@@ -44,7 +44,7 @@ export const addCompareSensor = (id, desc, type) => async (dispatch, getState) =
     // set live data of this sensor to be updated every 30 seconds
     clearTimeout(timers[idx])
     const updateDataLive = async () => {
-      let liveData = await fetch(`/sensors/${type}/id=${nextSensors[idx].id}`)
+      let liveData = await fetch(`/api/sensors/${type}/id=${nextSensors[idx].id}`)
         .then(res => res.text())
         .then(text => text.length ? JSON.parse(text) : undefined)
       console.log(liveData)

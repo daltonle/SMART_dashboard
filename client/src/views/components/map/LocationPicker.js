@@ -94,7 +94,7 @@ class LocationPicker extends Component {
   }
 
   handleMarkerClick = (marker, type) => {
-    fetch(`/sensors/${type}/coordinates=${marker.long},${marker.lat}`)
+    fetch(`/api/sensors/${type}/coordinates=${marker.long},${marker.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
     .then(res => {

@@ -14,7 +14,7 @@ const _addMarkers = (type, dispatch) => {
     t = ADD_VISUAL_MARKERS
   }
   
-  fetch(`sensors/${type}`)
+  fetch(`/api/sensors/${type}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
     .then(res => dispatch({
