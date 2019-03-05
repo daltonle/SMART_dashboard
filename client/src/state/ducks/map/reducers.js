@@ -18,7 +18,6 @@ import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS, CHANGE_LAYER, CHANGE_CENTRE, CHANG
         alt: ''
       }
     ],
-    isAirLayer: bool,
     centre: {
       lat,
       long
@@ -28,7 +27,10 @@ import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS, CHANGE_LAYER, CHANGE_CENTRE, CHANG
 **/
 
 const initialState = {
-  isAirLayer: true,
+  layers: {
+    air: true,
+    visual: false
+  },
   centre: { lat: -33.9225, lng: 150.9254 },
   zoomLevel: 15
 }
@@ -48,7 +50,7 @@ const mapReducer = (state = initialState, action) => {
     case CHANGE_LAYER:
       return {
         ...state,
-        isAirLayer: action.payload
+        layers: action.payload
       }
     case CHANGE_CENTRE:
       return {

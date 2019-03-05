@@ -3,34 +3,51 @@ import {
   ADD_VISUAL_MARKERS,
   CHANGE_LAYER,
   CHANGE_CENTRE,
-  CHANGE_ZOOM
+  CHANGE_ZOOM,
+  REMOVE_AIR_MARKERS,
+  REMOVE_VISUAL_MARKERS
 } from './types'
 
-export const addAirMarkers = () => dispatch => {
-  fetch('/sensors/air')
+const _addMarkers = (type, dispatch) => {
+  let t
+  if (type === 'air') {
+    t = ADD_AIR_MARKERS
+  } else if (type === 'visual') {
+    t = ADD_VISUAL_MARKERS
+  }
+  
+  fetch(`sensors/${type}`)
     .then(res => res.json())
     .then(res => dispatch({
-      type: ADD_AIR_MARKERS,
+      type: t,
       payload: res
     }))
     .catch(err => console.log(err))
 }
 
-export const addVisualMarkers = () => dispatch => {
-  fetch('/sensors/visual')
-  .then(res => res.json())
-  .then(res => dispatch({
-    type: ADD_VISUAL_MARKERS,
-    payload: res
-  }))
-  .catch(err => console.log(err))
+export const addAllMarkers = () => dispatch => {
+  _addMarkers('air', dispatch)
+  _addMarkers('visual', dispatch)
 }
 
-export const changeLayer = () => (dispatch, getState) => {
-  const { isAirLayer } = getState().map
+export const addTypeMarkers = (type) => dispatch => {
+  _addMarkers(type, dispatch)
+}
+
+/**
+ * Change the types of sensors being displayed
+ * @param {string} typeArray 
+ */
+export const changeLayer = (type) => (dispatch, getState) => {
+  const { layers } = getState().map
+  let nextLayers = {...layers}
+  nextLayers = {
+    ...nextLayers,
+    [type]: !nextLayers[type]
+  }
   dispatch({
     type: CHANGE_LAYER,
-    payload: !isAirLayer
+    payload: nextLayers
   })
 }
 

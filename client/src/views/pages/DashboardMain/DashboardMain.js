@@ -7,17 +7,11 @@ import { DESK, MOBILE } from '../../../utils/const'
 import styles from './Dashboard_desktop.module.scss'
 import m_styles from './Dashboard_mobile.module.scss'
 import { LayersBttn, LegendsBttn, CompareBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
-import { changeLayer } from '../../../state/ducks/map/actions'
 
 class DashboardMain extends Component {
   static propTypes = {
-    media: propTypes.string,
-    changeLayer: propTypes.func
-  }
-
-  handleLayerClick = (e) => {
-    e.preventDefault()
-    this.props.changeLayer()
+    layers: propTypes.array,
+    media: propTypes.string
   }
 
   handleCompareClick = (e) => {
@@ -35,7 +29,7 @@ class DashboardMain extends Component {
           <div className={ styles.mapContainer }>
             <Map media={this.props.media} zoomLevel={13}/>
             <div className={styles.controlButton}>
-              <div onClick={this.handleLayerClick}>
+              <div>
                 <LayersBttn media={this.props.media}/>
               </div>
               <div>
@@ -53,8 +47,8 @@ class DashboardMain extends Component {
         <div className={ m_styles.outer }>
           <div className={ m_styles.mapContainer }>
             <Map media={this.props.media} zoomLevel={13}/>
-            <div className={m_styles.layerButton}>
-              <div onClick={this.handleLayerClick}>
+            <div>
+              <div>
                 <LayersBttn />
               </div>
             </div>
@@ -75,8 +69,6 @@ class DashboardMain extends Component {
   }
 }
 
-const mapDispatchToProps = {
-  changeLayer
-}
+const mapDispatchToProps = {}
 
 export default connect(null, mapDispatchToProps)(DashboardMain)

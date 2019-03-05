@@ -223,7 +223,7 @@ router.get('/visual/:id', async (req, res) => {
     x = [], y = []
     for (let i=0, l=tmp3.length; i < l; i++) {
       x.push(moment(tmp3[i].x).format("DD-MM-YYYY HH:mm:ss"))
-      x.push(tmp3[i].y)
+      y.push(tmp3[i].y)
     }
     historyVeh = { x,y }
 

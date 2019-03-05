@@ -23,7 +23,7 @@ class DataPage extends Component {
   static propTypes = {
     media: PropTypes.string,
     match: PropTypes.object,
-    isAirLayer: PropTypes.bool,
+    layers: PropTypes.object,
     airSensor: PropTypes.object,
     visualSensor: PropTypes.object,
     mapCentre: PropTypes.object,
@@ -45,37 +45,40 @@ class DataPage extends Component {
   // After component mounted, change map centre to the new position,
   // then fetch live data of sensors
   componentDidMount = () => {
-    let { 
-      isAirLayer,
+    const {
       match,
+      history,
       mapCentre,
-      airSensor,
-      visualSensor,
       getAirData,
       getVisualData,
-      changeCentre,
-      getDataHistoryPM10,
-      getDataHistoryPM2_5
+      changeCentre
     } = this.props
+    console.log(history.location)
 
     let newCentre = {
       lng: parseFloat(match.params.long),
       lat: parseFloat(match.params.lat)
     }
     if (mapCentre !== newCentre)
-    changeCentre(newCentre)
+      changeCentre(newCentre)
 
-    if (isAirLayer)
-      getAirData(newCentre)
-    else getVisualData(newCentre)    
+    if (history.location.state !== undefined) {
+      if (history.location.state.type === undefined)
+        this.props.history.push('/dashboard')
+      else if (history.location.state.type === 'air')
+        getAirData(newCentre)
+      else if (history.location.state.type === 'visual')
+        getVisualData(newCentre)    
+    } else this.props.history.push('/dashboard')
   }
 
   componentDidUpdate = (prevProps) => {
-    let {airSensor} = this.props
+    const { history } = this.props
     if (this.props.mapCentre !== prevProps.mapCentre) {
-      if (this.props.isAirLayer)
+      if (history.location.state.type === 'air')
         this.props.getAirData(this.props.mapCentre)
-      else this.props.getVisualData(this.props.mapCentre)
+      else if (history.location.state.type === 'visual')
+        this.props.getVisualData(this.props.mapCentre)
     }
   }
 
@@ -91,7 +94,7 @@ class DataPage extends Component {
 
   handleLayerClick = (e) => {
     e.preventDefault()
-    this.props.changeLayer()
+    // TODO: add handler
   }
 
   handleCompareClick = (e) => {
@@ -99,14 +102,14 @@ class DataPage extends Component {
     this.props.history.push('/compare')
   }
 
-  // REVIEW: push() or goBack()
   handleBackClick = (e) => {
     e.preventDefault()
     this.props.history.push('/dashboard')
   }
 
   render() {
-    let { airSensor, visualSensor, isAirLayer } = this.props
+    const { airSensor, visualSensor, layers, history } = this.props
+    const { location } = history
     const { doShowDetails } = this.state
 
     if (this.props.media === DESK)
@@ -120,9 +123,11 @@ class DataPage extends Component {
               <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick}/>
               <div className={styles.titleCard}>
                 <TitleCard
-                  name={isAirLayer ? 
-                    (airSensor===undefined ? 'No name.' : airSensor.description) : 
-                    (visualSensor===undefined ? 'No name.' : visualSensor.description) }
+                  name={(location.state === undefined) ? "No name" :
+                        (location.state.type==='air') ? 
+                        (airSensor===undefined ? 'No name.' : airSensor.description) : 
+                        (location.state.type==='visual') ?
+                        (visualSensor===undefined ? 'No name.' : visualSensor.description) : "No name."}
                   suburb='No location data'
                   position={{
                     lng: this.props.mapCentre.lng,
@@ -133,7 +138,7 @@ class DataPage extends Component {
               </div>
               <h3>Live feed</h3>
               { airSensor === undefined ? 
-                <h5 className={styles.noAir}>No air data.</h5> : 
+                <div style={{display: `none`}}></div> : 
                 <div className={styles.airDataContainer}>
                   <div>
                     <ParticleData
@@ -155,7 +160,7 @@ class DataPage extends Component {
               }
               
               { visualSensor === undefined ? 
-                <h5 className={styles.noVisual}>No visual data.</h5> :
+                <div style={{display: `none`}}></div> :
                 <VisualLiveChart />
               }
             </div>
@@ -261,9 +266,11 @@ class DataPage extends Component {
             </div>
             <div className={m_styles.titleCard}>
               <TitleCard
-                name={isAirLayer ? 
-                  (airSensor===undefined ? 'No name.' : airSensor.description) : 
-                  (visualSensor===undefined ? 'No name.' : visualSensor.description) }
+                name={(location.state === undefined) ? "No name" :
+                      (location.state.type==='air') ? 
+                      (airSensor===undefined ? 'No name.' : airSensor.description) : 
+                      (location.state.type==='visual') ?
+                      (visualSensor===undefined ? 'No name.' : visualSensor.description) : "No name."}
                 suburb='No location data'
                 position={{
                   lng: this.props.mapCentre.lng,
@@ -380,9 +387,11 @@ class DataPage extends Component {
               </div>
               <div className={m_styles.titleCard}>
                 <TitleCard
-                  name={isAirLayer ? 
-                    (airSensor===undefined ? 'No name.' : airSensor.description) : 
-                    (visualSensor===undefined ? 'No name.' : visualSensor.description) }
+                  name={(location.state === undefined) ? "No name" :
+                        (location.state.type==='air') ? 
+                        (airSensor===undefined ? 'No name.' : airSensor.description) : 
+                        (location.state.type==='visual') ?
+                        (visualSensor===undefined ? 'No name.' : visualSensor.description) : "No name."}
                   suburb='No location data'
                   position={{
                     lng: this.props.mapCentre.lng,
@@ -430,7 +439,7 @@ class DataPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  isAirLayer: state.map.isAirLayer,
+  layers: state.map.layers,
   airSensor: state.sensor.air,
   visualSensor: state.sensor.visual,
   mapCentre: state.map.centre

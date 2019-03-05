@@ -4,7 +4,7 @@ import { compose, withProps, withHandlers, shouldUpdate } from 'recompose'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { DESK } from '../../../utils/const'
-import { addAirMarkers, addVisualMarkers, changeCentre, changeZoom } from '../../../state/ducks/map/actions'
+import { addAllMarkers, changeCentre, changeZoom } from '../../../state/ducks/map/actions'
 import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
 import { mapStyles } from './MapStyles'
@@ -16,62 +16,67 @@ class Map extends Component {
     media: PropTypes.string,
     airMarkers: PropTypes.array,
     visualMarkers: PropTypes.array,
-    isAirLayer: PropTypes.bool,
+    layers: PropTypes.object,
     centre: PropTypes.object,
     zoomLevel: PropTypes.number,
-    addAirMarkers: PropTypes.func,
-    addVisualMarkers: PropTypes.func,
+    addAllMarkers: PropTypes.func,
     changeCentre: PropTypes.func,
     changeZoom: PropTypes.func
   }
 
   componentDidMount = () => {  
-    this.props.addAirMarkers()
-    this.props.addVisualMarkers()
+    this.props.addAllMarkers()
   }
 
   shouldComponentUpdate = (nextProps) => {
     if (this.props.mapCentre !== nextProps.mapCentre
         || this.props.airMarkers !== nextProps.airMarkers
-        || this.props.visualMarkers !== nextProps.visualMarkers)
+        || this.props.visualMarkers !== nextProps.visualMarkers
+        || this.props.layers !== nextProps.layers)
       return true
-    else return false
-    
+    else return false    
   }
 
-  handleMarkerClick = (marker, e) => {
+  handleMarkerClick = (marker, type, e) => {
     let newCentre = {
       lng: parseFloat(marker.long),
       lat: parseFloat(marker.lat)
     }
     this.props.changeCentre(newCentre)
-    this.props.history.push(`/dashboard/${marker.lat},${marker.long}`)
+    this.props.history.push({
+      pathname: `/dashboard/${marker.lat},${marker.long}`,
+      state: { type: type, id: marker.id}
+    })
   }
 
   render() {
+    const { layers } = this.props
     // load markers
-    let markers
-    if (this.props.isAirLayer && this.props.airMarkers !== undefined) {
-      let { airMarkers } = this.props
-      markers = airMarkers.map((marker, index) => (
+    let airMarkers=[], visualMarkers=[]
+    if (layers.air && this.props.airMarkers !== undefined) {
+      airMarkers = this.props.airMarkers.map((marker) => (
         <Marker
-          key={index}
+          key={marker.id}
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
-          icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
-          onClick={(e) => this.handleMarkerClick(marker, e)}
+          icon={{ url: require('../../../assets/icons/marker_1.svg') }}
+          onClick={(e) => this.handleMarkerClick(marker, "air", e)}
         />
       ))
     }
-    else if (!this.props.isAirLayer && this.props.visualMarkers !== undefined) {
-      markers = this.props.visualMarkers.map((marker, index) => (
+    if (layers.visual && this.props.visualMarkers !== undefined) {
+      visualMarkers = this.props.visualMarkers.map((marker) => (
         <Marker
-          key={index}
+          key={marker.id}
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
-          icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
-          onClick={(e) => this.handleMarkerClick(marker, e)}
+          icon={{ url: require('../../../assets/icons/marker_4.svg') }}
+          onClick={(e) => this.handleMarkerClick(marker, "visual", e)}
         />
       ))
     }
+    const markers = [
+      ...airMarkers,
+      ...visualMarkers
+    ] 
     // TODO: add Markers data + last fetch time to localStorage, test for this before fetch for new data
 
     const StyledMap = compose(
@@ -158,16 +163,15 @@ class Map extends Component {
 const mapStateToProps = state => ({
   airMarkers: state.map.airMarkers,
   visualMarkers: state.map.visualMarkers,
-  isAirLayer: state.map.isAirLayer,
+  layers: state.map.layers,
   mapCentre: state.map.centre,
   zoomLevel: state.map.zoomLevel
 })
 
 const mapDispatchToProps = {
-  addAirMarkers,
-  addVisualMarkers,
   changeCentre,
-  changeZoom
+  changeZoom,
+  addAllMarkers
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Map))

@@ -24,7 +24,7 @@ const compare = require('./routes/compare')
 
 app.use('/sensors', sensors)
 app.use('/sensor-data', sensorData)
-app.use('/compare', compare)
+app.use('/api/compare', compare)
 
 // start server
 const server = app.listen(port, () => {
