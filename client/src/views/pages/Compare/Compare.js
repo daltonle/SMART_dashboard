@@ -21,6 +21,7 @@ import History from "../../components/charts/compare/History"
 import ByHour from "../../components/charts/compare/ByHour"
 import { colors } from "../../../styles/colors"
 import { changeLayer } from '../../../state/ducks/map/actions'
+import { changeType } from '../../../state/ducks/compare/actions'
 import { removeAllSensors } from '../../../state/ducks/compare/actions'
 
 import styles from "./Compare_desktop.module.scss"
@@ -30,9 +31,9 @@ class Compare extends Component {
   static propTypes = {
     count: PropTypes.number,
     media: PropTypes.string,
-    isAirLayer: PropTypes.bool,
+    sensorType: PropTypes.string,
     
-    changeLayer: PropTypes.func,
+    changeType: PropTypes.func,
     removeAllSensors: PropTypes.func
   }
 
@@ -44,7 +45,7 @@ class Compare extends Component {
       type: 'avg',
 
       doShowCompareListMobile: false,
-      historyType: props.isAirLayer ? 'pm2_5' : 'pedestrian'
+      historyType: 'pm2_5'
     }
   }
 
@@ -54,12 +55,11 @@ class Compare extends Component {
     this.props.history.push(`/dashboard`)
   }
 
-  handleLayerClick = (e) => {
+  handleLayerClick = (type, e) => {
     e.preventDefault()
-    const { isAirLayer } = this.props
-    this.props.changeLayer()
+    this.props.changeType(type)
     this.props.removeAllSensors()
-    this.setState({ historyType: isAirLayer ? "pedestrian" : "pm2_5"})
+    this.setState({ historyType: type==='air' ? "pm2_5" : type==='visual' ? "pedestrian" : ""})
   }
 
   handleCompareClick = (e) => {
@@ -116,7 +116,7 @@ class Compare extends Component {
 
   render() {
     const { doShowDetails, day, type, doShowCompareListMobile, historyType } = this.state
-    const { isAirLayer, count } = this.props
+    const { sensorType, count } = this.props
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
     if (this.props.media === DESK)
@@ -130,6 +130,19 @@ class Compare extends Component {
               <div className={styles.header} >
                 <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick}/>
                 <h3>Compare</h3>
+              </div>
+              <h4>Sensor type</h4>
+              <div className={styles.typeRadio}>
+                <div onClick={e => this.handleLayerClick('air', e)} 
+                  className={classNames({ [styles.typeRadioItem]: true, [styles.typeRadioItemActive]: sensorType==='air'})}
+                >
+                  <h5>Air</h5>
+                </div>
+                <div onClick={e => this.handleLayerClick('visual', e)}
+                  className={classNames({ [styles.typeRadioItem]: true, [styles.typeRadioItemActive]: sensorType==='visual'})}
+                >
+                  <h5>Visual</h5>
+                </div>
               </div>
               <h5>Choose location from map</h5>
               <CompareList media={DESK}/>
@@ -164,7 +177,7 @@ class Compare extends Component {
                   />
                 </div>
                 {
-                  isAirLayer ?
+                  sensorType === 'air' ?
                   <div className={styles.chartGroup}>
                     <div className={styles.chartItemAir}>
                       <h4>PM2.5</h4>
@@ -175,6 +188,7 @@ class Compare extends Component {
                       <History field="pm10" media={this.props.media}/>
                     </div>
                   </div> :
+                  sensorType === 'visual' ? 
                   <div className={styles.chartGroup}>
                     <div className={styles.chartItemVisual}>
                       <h4>Pedestrian</h4>
@@ -188,7 +202,8 @@ class Compare extends Component {
                       <h4>Vehicles</h4>
                       <History field="vehicle" media={this.props.media}/>
                     </div>
-                  </div>
+                  </div> :
+                  <div style={{display: `none`}}></div>
                 }
                 <div className={styles.header} style={{marginTop: 0}}>
                   <h3>Data by hour</h3>
@@ -224,7 +239,7 @@ class Compare extends Component {
                   </div>
                 </div>
                 {
-                  isAirLayer ?
+                  sensorType === 'air' ?
                   <div className={styles.chartGroup}>
                     <div className={styles.chartItemAir}>
                       <h4>PM2.5</h4>
@@ -235,6 +250,7 @@ class Compare extends Component {
                       <ByHour field="pm10" day={day} type={type} media={this.props.media}/>
                     </div>
                   </div> :
+                  sensorType === 'visual' ?
                   <div className={styles.chartGroup}>
                     <div className={styles.chartItemVisual}>
                       <h4>Pedestrian</h4>
@@ -248,15 +264,13 @@ class Compare extends Component {
                       <h4>Vehicles</h4>
                       <ByHour field="vehicle" day={day} type={type} media={this.props.media}/>
                     </div>
-                  </div>
+                  </div> :
+                  <div style={{display: `none`}}></div>
                 }
               </div> :
               <div className={styles.mapContainer}>
                 <LocationPicker media={this.props.media}/>
                 <div className={styles.controlButton}>
-                  <div onClick={this.handleLayerClick}>
-                    <LayersBttn media={this.props.media} />
-                  </div>
                   <div>
                     <LegendsBttn media={this.props.media} />
                   </div>
@@ -306,7 +320,7 @@ class Compare extends Component {
                 />
               </div>
               {
-                isAirLayer ?
+                sensorType === 'air' ?
                 <div className={m_styles.historyChart}>
                   <div className={m_styles.options}>
                     <h5>Type</h5>
@@ -333,6 +347,7 @@ class Compare extends Component {
                   </div>
                   <History field={this.state.historyType} media={this.props.media}/>
                 </div> :
+                sensorType === 'visual' ?
                 <div className={m_styles.historyChart}>
                   <div className={m_styles.options}>
                     <h5>Type</h5>
@@ -359,14 +374,12 @@ class Compare extends Component {
                     </div>
                   </div>
                   <History field={this.state.historyType} media={this.props.media}/>
-                </div>
+                </div> :
+                <div style={{display: 'none'}}></div>
               }
             </div> :
             <div className={ m_styles.mapContainer }>
               <LocationPicker media={this.props.media}/>
-              <div className={m_styles.layerButton} onClick={this.handleLayerClick}>
-                <LayersBttn media={this.props.media}/>
-              </div>
               
               {
                 this.props.count > 1 ?
@@ -390,15 +403,12 @@ class Compare extends Component {
 
 const mapStateToProps = state => ({
   count: state.compare.count,
-  isAirLayer: state.map.isAirLayer
+  sensorType: state.compare.type
 })
 
 const mapDispatchToProps = {
-  changeLayer,
+  changeType,
   removeAllSensors
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Compare)
+export default connect(mapStateToProps, mapDispatchToProps)(Compare)

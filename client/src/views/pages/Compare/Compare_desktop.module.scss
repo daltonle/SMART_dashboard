@@ -55,6 +55,47 @@
       }
     }    
 
+    &>h4 {
+      margin: 0;
+    }
+
+    .typeRadio {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-self: stretch;
+      margin: 1rem 2.5rem 1.5rem 0;
+
+      .typeRadioItem {
+        width: 11rem;
+        height: 2.5rem;
+        border: 2px solid $neutral-color-5;
+        border-radius: 3px;
+        background-color: $neutral-color-1;
+        position: relative;
+        cursor: pointer;
+
+        &>h5 {
+          color: $neutral-color-7;
+          margin: 0;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%)
+        }
+      }
+  
+      .typeRadioItemActive {
+        border: 2px solid transparent;
+        background-color: $primary-color;
+
+        &>h5 {
+          color: $background-color;
+          font-weight: $font-weight-heavy;
+        }
+      }
+    }
+
     &>h5 {
       margin: 0;
       color: $neutral-color-5;

@@ -5,12 +5,14 @@ import {
   REMOVE_SENSOR,
   ADD_SENSOR_DATA,
   REMOVE_ALL_SENSORS,
-  UPDATE_LIVE_DATA
+  UPDATE_LIVE_DATA,
+  CHANGE_TYPE
 } from './types'
 
 
 const initialState = {
   count: 0,
+  type: 'air',
   sensors: []
 }
 
@@ -53,6 +55,11 @@ const compareReducer = (state = initialState, action) => {
         ...state,
         sensors: [],
         count: 0
+      }
+    case CHANGE_TYPE:
+      return {
+        ...state,
+        type: action.payload
       }
     default:
       return state

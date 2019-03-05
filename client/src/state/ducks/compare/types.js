@@ -1,6 +1,8 @@
 export const INCREMENT_COUNT = 'compare/INCREMENT_COUNT'
 export const DECREMENT_COUNT = 'compare/DECREMENT_COUNT'
 
+export const CHANGE_TYPE = 'compare/CHANGE_TYPE'
+
 export const ADD_SENSOR = 'compare/ADD_SENSOR'
 export const ADD_SENSOR_DATA = 'compare/ADD_SENSOR_DATA'
 export const UPDATE_LIVE_DATA = 'compare/UPDATE_LIVE_DATA'

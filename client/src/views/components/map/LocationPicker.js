@@ -4,7 +4,7 @@ import { compose, withProps, withHandlers } from 'recompose'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { DESK } from '../../../utils/const'
-import { addAirMarkers, addVisualMarkers, changeCentre } from '../../../state/ducks/map/actions'
+import { addAllMarkers, changeCentre } from '../../../state/ducks/map/actions'
 import { addCompareSensor } from '../../../state/ducks/compare/actions'
 import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
@@ -64,12 +64,11 @@ class LocationPicker extends Component {
     media: PropTypes.string,
     airMarkers: PropTypes.array,
     visualMarkers: PropTypes.array,
-    isAirLayer: PropTypes.bool,
+    sensorType: PropTypes.string,
     mapCentre: PropTypes.object,
     selectedSensors: PropTypes.array,
     count: PropTypes.number,
-    addAirMarkers: PropTypes.func,
-    addVisualMarkers: PropTypes.func,
+    addAllMarkers: PropTypes.func,
     addCompareSensor: PropTypes.func
   }
 
@@ -91,14 +90,10 @@ class LocationPicker extends Component {
   }
 
   componentDidMount = () => {  
-    this.props.addAirMarkers()
-    this.props.addVisualMarkers()
+    this.props.addAllMarkers()
   }
 
-  handleMarkerClick = (marker, e) => {
-    let type = 'air'
-    if (!this.props.isAirLayer) { type = 'visual' }
-
+  handleMarkerClick = (marker, type) => {
     fetch(`/sensors/${type}/coordinates=${marker.long},${marker.lat}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
@@ -125,7 +120,7 @@ class LocationPicker extends Component {
   }
 
   handleLocationAdded = () => {
-    this.props.addCompareSensor(this.state.selectedLocation.id, this.state.selectedLocation.name)
+    this.props.addCompareSensor(this.state.selectedLocation.id, this.state.selectedLocation.name, this.props.sensorType)
     this.setState({ cardVisible: false })
     // TODO: display success message on added
   }
@@ -135,26 +130,27 @@ class LocationPicker extends Component {
   }
 
   render() {
+    const { sensorType } = this.props
+
     // load markers
     let markers
-    if (this.props.isAirLayer && this.props.airMarkers !== undefined) {
-      let { airMarkers } = this.props
-      markers = airMarkers.map((marker, index) => (
+    if (sensorType==='air' && this.props.airMarkers !== undefined) {
+      markers = this.props.airMarkers.map((marker, index) => (
         <Marker
           key={index}
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
           icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
-          onClick={(e) => this.handleMarkerClick(marker, e)}
+          onClick={() => this.handleMarkerClick(marker, 'air')}
         />
       ))
     }
-    else if (!this.props.isAirLayer && this.props.visualMarkers !== undefined) {
+    if (sensorType==='visual' && this.props.visualMarkers !== undefined) {
       markers = this.props.visualMarkers.map((marker, index) => (
         <Marker
           key={index}
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
           icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
-          onClick={(e) => this.handleMarkerClick(marker, e)}
+          onClick={() => this.handleMarkerClick(marker, 'visual')}
         />
       ))
     }
@@ -188,15 +184,14 @@ class LocationPicker extends Component {
 const mapStateToProps = state => ({
   airMarkers: state.map.airMarkers,
   visualMarkers: state.map.visualMarkers,
-  isAirLayer: state.map.isAirLayer,
+  sensorType: state.compare.type,
   mapCentre: state.map.centre,
   selectedSensors: state.compare.sensors,
   count: state.compare.count
 })
 
 const mapDispatchToProps = {
-  addAirMarkers,
-  addVisualMarkers,
+  addAllMarkers,
   changeCentre,
   addCompareSensor
 }
