@@ -139,7 +139,7 @@ class LocationPicker extends Component {
         <Marker
           key={index}
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
-          icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
+          icon={{ url: require('../../../assets/icons/marker_1.svg') }}
           onClick={() => this.handleMarkerClick(marker, 'air')}
         />
       ))
@@ -149,7 +149,7 @@ class LocationPicker extends Component {
         <Marker
           key={index}
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
-          icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
+          icon={{ url: require('../../../assets/icons/marker_4.svg') }}
           onClick={() => this.handleMarkerClick(marker, 'visual')}
         />
       ))

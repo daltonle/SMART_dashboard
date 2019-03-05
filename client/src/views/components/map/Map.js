@@ -58,7 +58,7 @@ class Map extends Component {
         <Marker
           key={marker.id}
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
-          icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
+          icon={{ url: require('../../../assets/icons/marker_1.svg') }}
           onClick={(e) => this.handleMarkerClick(marker, "air", e)}
         />
       ))
@@ -68,7 +68,7 @@ class Map extends Component {
         <Marker
           key={marker.id}
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
-          icon={{ url: require('../../../assets/icons/marker_lvl4.svg') }}
+          icon={{ url: require('../../../assets/icons/marker_4.svg') }}
           onClick={(e) => this.handleMarkerClick(marker, "visual", e)}
         />
       ))
