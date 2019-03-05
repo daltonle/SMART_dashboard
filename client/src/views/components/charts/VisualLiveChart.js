@@ -1,75 +1,77 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Media from 'react-media'
-import { BREAK_POINT } from '../../../utils/const'
-import { VictoryBar, VictoryChart, VictoryAxis } from 'victory'
+import Plot from 'react-plotly.js'
 import withDimension from 'react-dimensions'
-import { MyVictoryTheme } from '../../../utils/victoryTheme'
+import { MOBILE } from '../../../utils/const'
+import { colors } from '../../../styles/colors'
 import styles from './VisualLiveChart.module.scss'
 
 class VisualLiveChart extends Component {
   static propTypes = {
-    sensorData: PropTypes.object,
+    sensor: PropTypes.object,
     media: PropTypes.string
   }
 
   render() {
-    const { sensorData, containerHeight, containerWidth } = this.props
-    const liveData = [
-      { type: "Pesdestrians", counter: sensorData === undefined ? 0 : parseFloat(sensorData.pedestrians)},
-      { type: "Bicycles", counter: sensorData === undefined ? 0 : parseFloat(sensorData.bicycles)},
-      { type: "Vehicles", counter: sensorData === undefined ? 0 : parseFloat(sensorData.vehicles)},
-    ]
+    const { sensor, containerHeight, containerWidth, media } = this.props
+    const data = [{
+      x: [sensor.pedestrians, sensor.bicycles, sensor.vehicles],
+      y: ['Pedestrian', 'Bicycle', 'Vehicle'],
+      type: 'bar',
+      orientation: 'h',
+      marker: { color: colors.green, opacity: 0.7 }
+    }]
+
+    // chart layout
+    const webLayout = { 
+      width: containerWidth, 
+      height: containerHeight,
+      showlegend: false,
+      legend: { x: 0, y: 1.25, orientation: "h" },
+      plot_bgcolor: colors.backgroundColor,
+      paper_bgcolor: colors.backgroundColor,
+      margin: {
+        t: 0,
+        pad: 8
+      }
+    }
+    
+    const mobileLayout = {
+      ...webLayout,
+      margin: {
+        t: 0,
+        l: 40,
+        r: 24,
+        b: 0,
+        pad: 8
+      }
+    }
+
+    // chart config
+    const webConfig = {
+      modeBarButtonsToRemove: ['toImage', 'sendDataToCloud', 'select2d', 'lasso2d', 'toggleSpikelines'],
+      displaylogo: false,
+      displayModeBar: false
+    }
+
+    const mobileCongig = {
+      ...webConfig,
+      displayModeBar: true
+    }
 
     return (
-      <Media query={`(max-width: ${BREAK_POINT}px)`}>
-        { matches => {
-          if (matches)
-            return (
-              <VictoryChart
-                horizontal
-                theme={MyVictoryTheme}
-                domainPadding={10}
-                height={containerHeight}
-                width={containerWidth}
-                padding={{left: 88, right: 100, top: 24, bottom: 80}}
-              >
-                <VictoryAxis />
-                <VictoryAxis dependentAxis />
-                <VictoryBar
-                  data={liveData}
-                  x='type'
-                  y='counter'
-                />
-              </VictoryChart>
-            )
-          else return (
-            <VictoryChart
-              horizontal
-              theme={MyVictoryTheme}
-              domainPadding={32}
-              height={containerHeight}
-              width={containerWidth}
-              padding={{left: 88, right: 100, top: 24, bottom: 80}}
-            >
-              <VictoryAxis />
-              <VictoryAxis dependentAxis />
-              <VictoryBar
-                data={liveData}
-                x='type'
-                y='counter'
-              />
-            </VictoryChart>
-          )
-        }}
-      </Media>
+      <Plot
+        data={data}
+        layout={media===MOBILE ? mobileLayout : webLayout}
+        config={media===MOBILE ? mobileCongig : webConfig}
+      />
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-  sensorData: state.sensor.visual
+  sensor: state.sensor.visual
 })
 
 const mapDispatchToProps = {

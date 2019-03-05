@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import Plot from 'react-plotly.js'
 import { getAvgVisualDataByHour, getMinVisualDataByHour, getMaxVisualDataByHour } from '../../../state/ducks/sensor/actions'
 import { changeVisualDowChart, changeVisualTypeHourChart } from '../../../state/ducks/charts/actions'
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryGroup, VictoryLegend, VictoryTooltip } from 'victory'
+import { MOBILE } from '../../../utils/const'
 import Select from 'react-select'
 import LeftIcon from 'react-feather/dist/icons/chevron-left'
 import RightIcon from 'react-feather/dist/icons/chevron-right'
 import withDimension from 'react-dimensions'
-import { MyVictoryTheme } from '../../../utils/victoryTheme'
+import { colors } from '../../../styles/colors'
 import styles from './VisualByHourChart.module.scss'
 
 class VisualByHourChart extends Component {
@@ -16,6 +17,7 @@ class VisualByHourChart extends Component {
     sensor: PropTypes.object,
     day: PropTypes.number,
     type: PropTypes.string,
+    media: PropTypes.string,
 
     getAvgVisualDataByHour: PropTypes.func,
     getMinVisualDataByHour: PropTypes.func,
@@ -44,38 +46,88 @@ class VisualByHourChart extends Component {
     this.props.changeVisualTypeHourChart(selected.value)
   }
 
-  render() {
-    const { sensor, containerHeight, containerWidth, day, type } = this.props
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-    let dataPedestrians = [],
-        dataBicycle = [],
-        dataVehicles = []
-    for (let i = 0; i < 7; i++) {
-      dataPedestrians[i] = []
-      dataBicycle[i] = []
-      dataVehicles[i] = []
-    }
-    if (sensor.byHour !== undefined) {
-      if (sensor.byHour[type] !== undefined) {
-        sensor.byHour[type]
-          .filter(d => d.type === 'pedestrian')
-          .map(d => dataPedestrians[d.dow].push({
-            hour: d.hour,
-            counter: Math.round(parseFloat(d.counter))
-          }))
-        sensor.byHour[type]
-          .filter(d => d.type === 'bicycle')
-          .map(d => dataBicycle[d.dow].push({
-            hour: d.hour,
-            counter: Math.round(parseFloat(d.counter))
-          }))
-        sensor.byHour[type]
-          .filter(d => d.type === 'vehicle')
-          .map(d => dataVehicles[d.dow].push({
-            hour: d.hour,
-            counter: Math.round(parseFloat(d.counter))
-          }))
+  getData = () => {
+    const { sensor, type } = this.props
+    let data = []
+    for (let i = 0; i < 7; i++)
+      data[i] = {
+        pedestrian: { x:[], y:[] },
+        bicycle: { x:[], y:[] },
+        vehicle: { x:[], y:[] }
       }
+    if (sensor.byHour !== undefined)
+      if (sensor.byHour[type] !== undefined) {
+        sensor.byHour[type].forEach(d => {
+          let { dow, hour, counter } = d
+          data[dow][d.type].x.push(hour)
+          data[dow][d.type].y.push(counter)
+        })
+      }
+    
+    return data
+  }
+
+  render() {
+    const { containerHeight, containerWidth, day, type, media } = this.props
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    const data = this.getData()
+
+    const chartData = [
+      {
+        ...data[day].pedestrian,
+        name: "Pedestrian",
+        type: 'bar',
+        marker: { color: colors.green, opacity: 0.7 }
+      },
+      {
+        ...data[day].bicycle,
+        name: "Bicycle",
+        type: "bar",
+        marker: { color: colors.red, opacity: 0.7 }
+      },
+      {
+        ...data[day].vehicle,
+        name: "Vehicle",
+        type: "bar",
+        marker: { color: colors.yellow, opacity: 0.7}
+      }
+    ]
+
+    // chart layout
+    const webLayout = { 
+      width: containerWidth, 
+      height: containerHeight,
+      showlegend: true,
+      legend: { x: 0, y: 1.25, orientation: "h" },
+      plot_bgcolor: colors.backgroundColor,
+      paper_bgcolor: colors.backgroundColor,
+      margin: {
+        t: 0,
+        pad: 8
+      }
+    }
+    
+    const mobileLayout = {
+      ...webLayout,
+      margin: {
+        t: 100,
+        l: 40,
+        r: 24,
+        b: 64,
+        pad: 8
+      }
+    }
+
+    // chart config
+    const webConfig = {
+      modeBarButtonsToRemove: ['toImage', 'sendDataToCloud', 'select2d', 'lasso2d', 'toggleSpikelines'],
+      displaylogo: false,
+      displayModeBar: 'hover'
+    }
+
+    const mobileCongig = {
+      ...webConfig,
+      displayModeBar: true
     }
 
     return (
@@ -96,74 +148,11 @@ class VisualByHourChart extends Component {
             />
           </div>
         </div>
-        <VictoryChart
-          theme={MyVictoryTheme}
-          height={containerHeight}
-          width={containerWidth}
-          padding={{left: 88, right: 100, top: 40, bottom: 100}}
-          singleQuadrantDomainPadding={{x: false}}
-          domainPadding={{x: 16, y: 40}}
-        >
-          
-          <VictoryAxis 
-            tickValues={[0,4,8,12,16,20,24]}
-          />
-          <VictoryAxis dependentAxis  
-            offsetX={88} 
-          />
-          <VictoryGroup
-            offset={6}
-            style={{
-              data: {
-                width: 4
-              }
-            }}
-            
-          >
-            <VictoryBar
-              animate={{
-                duration: 400,
-                onLoad: { duration: 200 }
-              }}
-              barRatio={1}
-              data={dataPedestrians[day]}
-              x="hour"
-              y="counter"
-              labelComponent={<VictoryTooltip  />}
-            />
-            <VictoryBar
-              animate={{
-                duration: 400,
-                onLoad: { duration: 200 }
-              }}
-              barRatio={1}
-              data={dataBicycle[day]}
-              x="hour"
-              y="counter"
-              labelComponent={<VictoryTooltip/>}
-            />
-            <VictoryBar
-              animate={{
-                duration: 400,
-                onLoad: { duration: 200 }
-              }}
-              barRatio={1}
-              data={dataVehicles[day]}
-              x="hour"
-              y="counter"
-              labelComponent={<VictoryTooltip/>}
-            />
-          </VictoryGroup>
-          <VictoryLegend 
-            x={48}
-            theme={MyVictoryTheme}
-            data={[
-              { name: "Pedestrian" },
-              { name: "Bicycle" },
-              { name: "Vehicles" }
-            ]}
-          />
-        </VictoryChart>
+        <Plot
+          data={chartData}
+          layout={media===MOBILE ? mobileLayout : webLayout}
+          config={media===MOBILE ? mobileCongig : webConfig}
+        />
       </div>
     )
   }

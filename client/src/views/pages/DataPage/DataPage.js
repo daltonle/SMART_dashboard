@@ -400,7 +400,7 @@ class DataPage extends Component {
               </div>
               <h4>Live feed</h4>
               { airSensor === undefined ? 
-                <h5 className={m_styles.noAir}>No air data.</h5> : 
+                <div style={{display: `none`}}></div> : 
                 <div className={styles.airDataContainer}>
                   <div>
                     <ParticleData
@@ -421,7 +421,7 @@ class DataPage extends Component {
                 </div>
               }
               { visualSensor === undefined ? 
-                <h5 className={m_styles.noVisual}>No visual data.</h5> :
+                <div style={{display: `none`}}></div> :
                 <VisualLiveChart />
               }
             </div>

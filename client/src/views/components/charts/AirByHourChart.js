@@ -158,69 +158,6 @@ class AirByHourChart extends Component {
           layout={media===MOBILE ? mobileLayout : webLayout}
           config={media===MOBILE ? mobileCongig : webConfig}
         />
-        {/*
-        <VictoryChart
-          theme={MyVictoryTheme}
-          height={containerHeight}
-          width={containerWidth}
-          padding={{left: 88, right: 100, top: 40, bottom: 100}}
-          singleQuadrantDomainPadding={{x: false}}
-          domainPadding={{x: 16, y: 40}}
-        >
-          
-          <VictoryAxis 
-            tickValues={[0,4,8,12,16,20,24]}
-          />
-          <VictoryAxis dependentAxis  
-            offsetX={88} 
-          />
-          <VictoryGroup
-            offset={10}
-            style={{
-              data: {
-                width: 8
-              }
-            }}
-            
-          >
-            <VictoryBar
-              style={{
-                margin: 10
-              }}
-              animate={{
-                duration: 400,
-                onLoad: { duration: 200 }
-              }}
-              barRatio={1}
-              data={data[day]}
-              x="hour"
-              y="pm2_5"
-              labelComponent={<VictoryTooltip  />}
-            />
-            <VictoryBar
-              animate={{
-                duration: 400,
-                onLoad: { duration: 200 }
-              }}
-              barRatio={1}
-              data={data[day]}
-              x="hour"
-              y="pm10"
-              labelComponent={<VictoryTooltip/>}
-            />
-          </VictoryGroup>
-          <VictoryLegend 
-            x={48}
-            theme={MyVictoryTheme}
-            height={100}
-            padding={{left: 40, bottom: 100, top: 24, right: 0}}
-            data={[
-              { name: "PM2.5" },
-              { name: "PM10" }
-            ]}
-          />
-        </VictoryChart>
-          */}
       </div>
     )
   }
