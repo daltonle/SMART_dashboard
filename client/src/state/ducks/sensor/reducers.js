@@ -1,8 +1,6 @@
 import { 
   GET_AIR_DATA_LIVE, 
-  GET_VISUAL_DATA_LIVE, 
-  GET_AIR_DATA_HISTORY, 
-  GET_VISUAL_DATA_HISTORY,
+  GET_VISUAL_DATA_LIVE,
   GET_AVG_AIR_DATA_BY_HOUR,
   GET_MIN_AIR_DATA_BY_HOUR,
   GET_MAX_AIR_DATA_BY_HOUR,
@@ -85,7 +83,7 @@ const sensorReducer = (state = initialState, action) => {
       return {
         ...state,
         visual: {
-          ...state.air,
+          ...state.visual,
           ...action.payload
         }
       }
