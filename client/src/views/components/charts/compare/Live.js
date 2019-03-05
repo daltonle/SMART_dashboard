@@ -11,12 +11,12 @@ import '../../../../styles/plotly.scss'
 class Live extends Component {
   static propTypes = {
     media: PropTypes.string,
-    isAirLayer: PropTypes.bool,
+    sensorType: PropTypes.string,
     sensors: PropTypes.array
   }
 
   render() {
-    const { containerHeight, containerWidth, sensors, isAirLayer, media } = this.props
+    const { containerHeight, containerWidth, sensors, sensorType, media } = this.props
     // pre-process data
     let dataPM2_5 = { x:[], y:[] }
     let dataPM10 = { x:[], y:[] }
@@ -24,7 +24,7 @@ class Live extends Component {
     let dataBicycle = { x:[], y:[] }
     let dataVehicle = { x:[], y:[] }
 
-    if (isAirLayer) {
+    if (sensorType === 'air') {
       for (let i = 0, l = sensors.length; i < l; i++) {
         dataPM2_5.x.push(media===MOBILE ? `${sensors[i].description.substr(0,10)}...` : `${sensors[i].description.substr(0,25)}...`)
         dataPM10.x.push(media===MOBILE ? `${sensors[i].description.substr(0,10)}...` : `${sensors[i].description.substr(0,25)}...`)
@@ -32,7 +32,7 @@ class Live extends Component {
         dataPM10.y.push(sensors[i].pm10)
       }
     }
-    else {
+    else if (sensorType === 'visual') {
       for (let i = 0, l = sensors.length; i < l; i++) {
         dataPedestrian.x.push(media===MOBILE ? `${sensors[i].description.substr(0,10)}...` : `${sensors[i].description.substr(0,25)}...`)
         dataBicycle.x.push(media===MOBILE ? `${sensors[i].description.substr(0,10)}...` : `${sensors[i].description.substr(0,25)}...`)
@@ -123,7 +123,7 @@ class Live extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  isAirLayer: state.map.isAirLayer,
+  sensorType: state.compare.type,
   sensors: state.compare.sensors
 })
 

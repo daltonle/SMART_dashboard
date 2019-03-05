@@ -40,7 +40,7 @@ const compareReducer = (state = initialState, action) => {
     case UPDATE_LIVE_DATA:
       const newSensors = [...state.sensors]
       if (newSensors[action.idx].id === action.payload.id) // only update if id matches
-        newSensors[action.idx] = {...action.payload}
+        newSensors[action.idx] = {...newSensors[action.idx],...action.payload}
       return {
         ...state,
         sensors: newSensors

@@ -54,9 +54,9 @@ class Map extends Component {
     // load markers
     let airMarkers=[], visualMarkers=[]
     if (layers.air && this.props.airMarkers !== undefined) {
-      airMarkers = this.props.airMarkers.map((marker, index) => (
+      airMarkers = this.props.airMarkers.map((marker) => (
         <Marker
-          key={index}
+          key={marker.id}
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
           icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
           onClick={(e) => this.handleMarkerClick(marker, "air", e)}
@@ -64,11 +64,11 @@ class Map extends Component {
       ))
     }
     if (layers.visual && this.props.visualMarkers !== undefined) {
-      visualMarkers = this.props.visualMarkers.map((marker, index) => (
+      visualMarkers = this.props.visualMarkers.map((marker) => (
         <Marker
-          key={index}
+          key={marker.id}
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
-          icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
+          icon={{ url: require('../../../assets/icons/marker_lvl4.svg') }}
           onClick={(e) => this.handleMarkerClick(marker, "visual", e)}
         />
       ))

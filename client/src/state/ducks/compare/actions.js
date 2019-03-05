@@ -27,11 +27,11 @@ export const addCompareSensor = (id, desc, type) => async (dispatch, getState) =
     payload: getState().compare.count + 1
   })
     
-  let res = await fetch(`compare/${type}/${id}`)
+  fetch(`/api/compare/${type}/${id}`)
   .then(res => res.text())
   .then(text => text.length ? JSON.parse(text) : undefined)
-  
-  if (res) {
+  .then(res => {
+    console.log(res)
     let nextSensors = [...getState().compare.sensors]
     let idx = nextSensors.findIndex(s => s.id === res.id) // undefined or in range [0, 4]
     if (idx)
@@ -47,7 +47,7 @@ export const addCompareSensor = (id, desc, type) => async (dispatch, getState) =
       let liveData = await fetch(`/sensors/${type}/id=${nextSensors[idx].id}`)
         .then(res => res.text())
         .then(text => text.length ? JSON.parse(text) : undefined)
-
+      console.log(liveData)
       dispatch({
         type: UPDATE_LIVE_DATA,
         payload: liveData,
@@ -58,7 +58,7 @@ export const addCompareSensor = (id, desc, type) => async (dispatch, getState) =
     }
 
     updateDataLive()
-  }  
+  })
 }
 
 /**
