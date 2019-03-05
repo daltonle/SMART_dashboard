@@ -4,7 +4,7 @@ import { compose, withProps, withHandlers, shouldUpdate } from 'recompose'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { DESK } from '../../../utils/const'
-import { addAirMarkers, addVisualMarkers, changeCentre, changeZoom } from '../../../state/ducks/map/actions'
+import { addAllMarkers, changeCentre, changeZoom } from '../../../state/ducks/map/actions'
 import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
 import { mapStyles } from './MapStyles'
@@ -19,21 +19,20 @@ class Map extends Component {
     layers: PropTypes.object,
     centre: PropTypes.object,
     zoomLevel: PropTypes.number,
-    addAirMarkers: PropTypes.func,
-    addVisualMarkers: PropTypes.func,
+    addAllMarkers: PropTypes.func,
     changeCentre: PropTypes.func,
     changeZoom: PropTypes.func
   }
 
   componentDidMount = () => {  
-    this.props.addAirMarkers()
-    this.props.addVisualMarkers()
+    this.props.addAllMarkers()
   }
 
   shouldComponentUpdate = (nextProps) => {
     if (this.props.mapCentre !== nextProps.mapCentre
         || this.props.airMarkers !== nextProps.airMarkers
-        || this.props.visualMarkers !== nextProps.visualMarkers)
+        || this.props.visualMarkers !== nextProps.visualMarkers
+        || this.props.layers !== nextProps.layers)
       return true
     else return false    
   }
@@ -170,10 +169,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-  addAirMarkers,
-  addVisualMarkers,
   changeCentre,
-  changeZoom
+  changeZoom,
+  addAllMarkers
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Map))

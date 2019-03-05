@@ -11,6 +11,7 @@ import { changeLayer } from '../../../state/ducks/map/actions'
 
 class DashboardMain extends Component {
   static propTypes = {
+    layers: propTypes.array,
     media: propTypes.string,
     changeLayer: propTypes.func
   }
@@ -35,7 +36,7 @@ class DashboardMain extends Component {
           <div className={ styles.mapContainer }>
             <Map media={this.props.media} zoomLevel={13}/>
             <div className={styles.controlButton}>
-              <div onClick={this.handleLayerClick}>
+              <div>
                 <LayersBttn media={this.props.media}/>
               </div>
               <div>
@@ -53,7 +54,7 @@ class DashboardMain extends Component {
         <div className={ m_styles.outer }>
           <div className={ m_styles.mapContainer }>
             <Map media={this.props.media} zoomLevel={13}/>
-            <div className={m_styles.layerButton}>
+            <div>
               <div onClick={this.handleLayerClick}>
                 <LayersBttn />
               </div>
