@@ -17,7 +17,8 @@ const _addMarkers = (type, dispatch) => {
   }
   
   fetch(`sensors/${type}`)
-    .then(res => res.json())
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
     .then(res => dispatch({
       type: t,
       payload: res
