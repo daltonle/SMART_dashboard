@@ -16,7 +16,7 @@ class Map extends Component {
     media: PropTypes.string,
     airMarkers: PropTypes.array,
     visualMarkers: PropTypes.array,
-    layers: PropTypes.array,
+    layers: PropTypes.object,
     centre: PropTypes.object,
     zoomLevel: PropTypes.number,
     addAirMarkers: PropTypes.func,
@@ -38,7 +38,7 @@ class Map extends Component {
     else return false    
   }
 
-  handleMarkerClick = (marker, e) => {
+  handleMarkerClick = (marker, type, e) => {
     let newCentre = {
       lng: parseFloat(marker.long),
       lat: parseFloat(marker.lat)
@@ -46,7 +46,7 @@ class Map extends Component {
     this.props.changeCentre(newCentre)
     this.props.history.push({
       pathname: `/dashboard/${marker.lat},${marker.long}`,
-      state: { type: marker.type, id: marker.id}
+      state: { type: type, id: marker.id}
     })
   }
 
@@ -58,11 +58,9 @@ class Map extends Component {
       airMarkers = this.props.airMarkers.map((marker, index) => (
         <Marker
           key={index}
-          id={marker.id}
-          type="air"
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
           icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
-          onClick={(e) => this.handleMarkerClick(marker, e)}
+          onClick={(e) => this.handleMarkerClick(marker, "air", e)}
         />
       ))
     }
@@ -70,11 +68,9 @@ class Map extends Component {
       visualMarkers = this.props.visualMarkers.map((marker, index) => (
         <Marker
           key={index}
-          id={marker.id}
-          type="visual"
           position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
           icon={{ url: require('../../../assets/icons/marker_lvl1.svg') }}
-          onClick={(e) => this.handleMarkerClick(marker, e)}
+          onClick={(e) => this.handleMarkerClick(marker, "visual", e)}
         />
       ))
     }
