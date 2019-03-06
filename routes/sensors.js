@@ -16,7 +16,7 @@ router.get('/air', (req, res, next) => {
 
 // retrieve all visual sensors
 router.get('/visual', (req, res, next) => {
-  let query = 'SELECT id, name, lat, long, alt, pedestrians, bicycles, vehicles FROM vs_sensor'
+  let query = 'SELECT id, name, lat, long, alt, pedestrians as pedestrian, bicycles as bicycle, vehicles as vehicle FROM vs_sensor'
   db.query(query)
     .then(result => res.json(result.rows))
     .catch(next)

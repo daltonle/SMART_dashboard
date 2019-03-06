@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40" height="40" viewBox="0 0 40 40">
+  <defs>
+    <filter id="Path_248" x="5.138" y="7.992" width="28.866" height="27.508" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="marker_v6" transform="translate(-245 -230)">
+    <circle id="Ellipse_26" data-name="Ellipse 26" cx="20" cy="20" r="20" transform="translate(245 230)" fill="rgba(105,45,57,0.15)"/>
+    <g transform="matrix(1, 0, 0, 1, 245, 230)" filter="url(#Path_248)">
+      <g id="Path_248-2" data-name="Path 248" transform="translate(11 15)" fill="#642b36">
+        <path d="M 13.57364845275879 8.25 L 13.14285850524902 8.25 L 3.999998331069946 8.25 L 3.569208383560181 8.25 L 3.782938241958618 7.875969886779785 L 8.354368209838867 -0.1240300014615059 L 8.571428298950195 -0.5038899779319763 L 8.788488388061523 -0.1240300014615059 L 13.35991859436035 7.875969886779785 L 13.57364845275879 8.25 Z" stroke="none"/>
+        <path d="M 13.14285850524902 8 L 8.571428298950195 0 L 3.999998331069946 8 L 13.14285850524902 8 M 14.00444793701172 8.5 L 13.14285850524902 8.5 L 3.999998331069946 8.5 L 3.138408184051514 8.5 L 3.565878391265869 7.751930236816406 L 8.137308120727539 -0.2480700016021729 L 8.571428298950195 -1.007779955863953 L 9.005548477172852 -0.2480700016021729 L 13.57697868347168 7.751930236816406 L 14.00444793701172 8.5 Z" stroke="none" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg>

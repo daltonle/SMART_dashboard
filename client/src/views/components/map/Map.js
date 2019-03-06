@@ -6,11 +6,11 @@ import { withRouter } from 'react-router-dom'
 import { DESK } from '../../../utils/const'
 import { addAllMarkers, changeCentre, changeZoom } from '../../../state/ducks/map/actions'
 import { getAirData, getVisualData } from '../../../state/ducks/sensor/actions'
-import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
+import { withGoogleMap, GoogleMap } from 'react-google-maps'
+import { MarkerWithLabel } from 'react-google-maps/lib/components/addons/MarkerWithLabel'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
+import { getAirMarkerLevel, getVisualMarkerLevel, customMarkerLabelStyle } from '../../../utils/markers'
 import { mapStyles } from './MapStyles'
-
-
 
 class Map extends Component {
   static propTypes = {
@@ -57,24 +57,38 @@ class Map extends Component {
     // load markers
     let airMarkers=[], visualMarkers=[]
     if (layers.air && this.props.airMarkers !== undefined) {
-      airMarkers = this.props.airMarkers.map((marker) => (
-        <Marker
-          key={marker.id}
-          position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
-          icon={{ url: require('../../../assets/icons/marker_1.svg') }}
-          onClick={(e) => this.handleMarkerClick(marker, "air", e)}
-        />
-      ))
+      airMarkers = this.props.airMarkers.map((marker) => {
+        let lvl = getAirMarkerLevel('pm2_5', marker.pm2_5)
+        return (
+          <MarkerWithLabel
+            key={marker.id}
+            position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
+            icon={{ url: require(`../../../assets/icons/marker_a${lvl}.svg`) }}
+            onClick={(e) => this.handleMarkerClick(marker, "air", e)}
+            labelAnchor={new window.google.maps.Point(24,-4)}
+            labelStyle={customMarkerLabelStyle}
+          >
+            <div>{marker.name}</div>
+          </MarkerWithLabel>
+        )
+      })
     }
     if (layers.visual && this.props.visualMarkers !== undefined) {
-      visualMarkers = this.props.visualMarkers.map((marker) => (
-        <Marker
-          key={marker.id}
-          position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
-          icon={{ url: require('../../../assets/icons/marker_4.svg') }}
-          onClick={(e) => this.handleMarkerClick(marker, "visual", e)}
-        />
-      ))
+      visualMarkers = this.props.visualMarkers.map((marker) => {
+        let lvl = getVisualMarkerLevel('pedestrian', marker.pedestrian)
+        return (
+          <MarkerWithLabel
+            key={marker.id}
+            position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
+            icon={{ url: require(`../../../assets/icons/marker_v${lvl}.svg`) }}
+            onClick={(e) => this.handleMarkerClick(marker, "visual", e)}
+            labelAnchor={new window.google.maps.Point(24,-4)}
+            labelStyle={customMarkerLabelStyle}
+          >
+            <div>{marker.name}</div>
+          </MarkerWithLabel>
+        )
+      })
     }
     const markers = [
       ...airMarkers,

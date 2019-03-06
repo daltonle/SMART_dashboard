@@ -6,8 +6,10 @@ import { withRouter } from 'react-router-dom'
 import { DESK } from '../../../utils/const'
 import { addAllMarkers, changeCentre } from '../../../state/ducks/map/actions'
 import { addCompareSensor } from '../../../state/ducks/compare/actions'
-import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
+import { withGoogleMap, GoogleMap } from 'react-google-maps'
+import { MarkerWithLabel } from 'react-google-maps/lib/components/addons/MarkerWithLabel'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
+import { getAirMarkerLevel, getVisualMarkerLevel, customMarkerLabelStyle } from '../../../utils/markers'
 import { LocationCard } from './LocationCard'
 import { mapStyles } from './MapStyles'
 
@@ -136,24 +138,38 @@ class LocationPicker extends Component {
     // load markers
     let markers
     if (sensorType==='air' && this.props.airMarkers !== undefined) {
-      markers = this.props.airMarkers.map((marker, index) => (
-        <Marker
-          key={index}
-          position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
-          icon={{ url: require('../../../assets/icons/marker_1.svg') }}
-          onClick={() => this.handleMarkerClick(marker, 'air')}
-        />
-      ))
+      markers = this.props.airMarkers.map((marker) => {
+        let lvl = getAirMarkerLevel('pm2_5', marker.pm2_5)
+        return (
+          <MarkerWithLabel
+            key={marker.id}
+            position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
+            icon={{ url: require(`../../../assets/icons/marker_a${lvl}.svg`) }}
+            onClick={(e) => this.handleMarkerClick(marker, "air", e)}
+            labelAnchor={new window.google.maps.Point(24,-4)}
+            labelStyle={customMarkerLabelStyle}
+          >
+            <div>{marker.name}</div>
+          </MarkerWithLabel>
+        )
+      })
     }
     if (sensorType==='visual' && this.props.visualMarkers !== undefined) {
-      markers = this.props.visualMarkers.map((marker, index) => (
-        <Marker
-          key={index}
-          position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
-          icon={{ url: require('../../../assets/icons/marker_4.svg') }}
-          onClick={() => this.handleMarkerClick(marker, 'visual')}
-        />
-      ))
+      markers = this.props.visualMarkers.map((marker) => {
+        let lvl = getVisualMarkerLevel('pedestrian', marker.pedestrian)
+        return (
+          <MarkerWithLabel
+            key={marker.id}
+            position={{ lng: parseFloat(marker.long), lat: parseFloat(marker.lat) }}
+            icon={{ url: require(`../../../assets/icons/marker_v${lvl}.svg`) }}
+            onClick={(e) => this.handleMarkerClick(marker, "visual", e)}
+            labelAnchor={new window.google.maps.Point(24,-4)}
+            labelStyle={customMarkerLabelStyle}
+          >
+            <div>{marker.name}</div>
+          </MarkerWithLabel>
+        )
+      })
     }
     // TODO: add Markers data + last fetch time to localStorage, test for this before fetch for new data
 
