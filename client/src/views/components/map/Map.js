@@ -52,13 +52,24 @@ class Map extends Component {
     })
   }
 
-  render() {
+  _loadMarkers = () => {
     const { layers } = this.props
-    // load markers
     let airMarkers=[], visualMarkers=[]
+    const max = 1.000001
+    const min = 0.999999
+
     if (layers.air && this.props.airMarkers !== undefined) {
-      airMarkers = this.props.airMarkers.map((marker) => {
+      airMarkers = this.props.airMarkers.map((marker, index) => {
         let lvl = getAirMarkerLevel('pm2_5', marker.pm2_5)
+        for (let i = 0; i < index; i++) {
+          if (this.props.airMarkers[i].long === marker.long &&
+            this.props.airMarkers[i].lat === marker.lat) {
+            marker.long = marker.long * (Math.random() * (max - min) + min)
+            marker.lat = marker.lat * (Math.random() * (max - min) + min)
+            break
+          }
+        }
+
         return (
           <MarkerWithLabel
             key={marker.id}
@@ -73,9 +84,19 @@ class Map extends Component {
         )
       })
     }
+
     if (layers.visual && this.props.visualMarkers !== undefined) {
-      visualMarkers = this.props.visualMarkers.map((marker) => {
+      visualMarkers = this.props.visualMarkers.map((marker, index) => {
         let lvl = getVisualMarkerLevel('pedestrian', marker.pedestrian)
+        for (let i = 0; i < index; i++) {
+          if (this.props.visualMarkers[i].long === marker.long &&
+            this.props.visualMarkers[i].lat === marker.lat) {
+            marker.long = marker.long * (Math.random() * (max - min) + min)
+            marker.lat = marker.lat * (Math.random() * (max - min) + min)
+            break
+          }
+        }
+
         return (
           <MarkerWithLabel
             key={marker.id}
@@ -90,11 +111,15 @@ class Map extends Component {
         )
       })
     }
-    const markers = [
+    
+    return [
       ...airMarkers,
       ...visualMarkers
     ] 
-    // TODO: add Markers data + last fetch time to localStorage, test for this before fetch for new data
+  }
+
+  render() {
+    const markers = this._loadMarkers()
 
     const StyledMap = compose(
       withProps({

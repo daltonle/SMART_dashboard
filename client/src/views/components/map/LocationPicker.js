@@ -132,14 +132,23 @@ class LocationPicker extends Component {
     this.setState({ cardVisible: false })
   }
 
-  render() {
+  _loadMarkers = () => {
     const { sensorType } = this.props
+    const max = 1.000001
+    const min = 0.999999
 
-    // load markers
-    let markers
     if (sensorType==='air' && this.props.airMarkers !== undefined) {
-      markers = this.props.airMarkers.map((marker) => {
+      return this.props.airMarkers.map((marker, index) => {
         let lvl = getAirMarkerLevel('pm2_5', marker.pm2_5)
+        for (let i = 0; i < index; i++) {
+          if (this.props.airMarkers[i].long === marker.long &&
+            this.props.airMarkers[i].lat === marker.lat) {
+            marker.long = marker.long * (Math.random() * (max - min) + min)
+            marker.lat = marker.lat * (Math.random() * (max - min) + min)
+            break
+          }
+        }
+
         return (
           <MarkerWithLabel
             key={marker.id}
@@ -154,9 +163,19 @@ class LocationPicker extends Component {
         )
       })
     }
+
     if (sensorType==='visual' && this.props.visualMarkers !== undefined) {
-      markers = this.props.visualMarkers.map((marker) => {
+      return this.props.visualMarkers.map((marker, index) => {
         let lvl = getVisualMarkerLevel('pedestrian', marker.pedestrian)
+        for (let i = 0; i < index; i++) {
+          if (this.props.visualMarkers[i].long === marker.long &&
+            this.props.visualMarkers[i].lat === marker.lat) {
+            marker.long = marker.long * (Math.random() * (max - min) + min)
+            marker.lat = marker.lat * (Math.random() * (max - min) + min)
+            break
+          }
+        }
+
         return (
           <MarkerWithLabel
             key={marker.id}
@@ -171,7 +190,13 @@ class LocationPicker extends Component {
         )
       })
     }
-    // TODO: add Markers data + last fetch time to localStorage, test for this before fetch for new data
+
+    return []
+  }
+
+  render() {
+    const { sensorType } = this.props
+    const markers = this._loadMarkers()
 
     const { selectedLocation, cardVisible, addable } = this.state
 
