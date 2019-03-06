@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { DESK } from '../../../utils/const'
 import { addAllMarkers, changeCentre, changeZoom } from '../../../state/ducks/map/actions'
+import { getAirData, getVisualData } from '../../../state/ducks/sensor/actions'
 import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
 import { mapStyles } from './MapStyles'
@@ -43,6 +44,8 @@ class Map extends Component {
       lat: parseFloat(marker.lat)
     }
     this.props.changeCentre(newCentre)
+    if (type==='air') this.props.getAirData(marker.id)
+    else this.props.getVisualData(marker.id)
     this.props.history.push({
       pathname: `/dashboard/${marker.lat},${marker.long}`,
       state: { type: type, id: marker.id}
@@ -132,6 +135,7 @@ class Map extends Component {
           averageCenter
           enableRetinaIcons
           gridSize={60}
+          maxZoom={16}
           styles={[
             {
               url: require('../../../assets/icons/marker_clusterer.svg'),
@@ -171,7 +175,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   changeCentre,
   changeZoom,
-  addAllMarkers
+  addAllMarkers,
+  getAirData,
+  getVisualData
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Map))

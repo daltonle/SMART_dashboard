@@ -8,7 +8,7 @@ router.use(bodyParser.json())
 
 // retrieve all air sensors
 router.get('/air', (req, res, next) => {
-  let query = 'SELECT id, lat, long, alt, pm2_5, pm10 FROM aq_sensor'
+  let query = 'SELECT id, name, lat, long, alt, pm2_5, pm10 FROM aq_sensor'
   db.query(query)
     .then(result => res.json(result.rows))
     .catch(next)
@@ -16,7 +16,7 @@ router.get('/air', (req, res, next) => {
 
 // retrieve all visual sensors
 router.get('/visual', (req, res, next) => {
-  let query = 'SELECT id, lat, long, alt, pedestrians, bicycles, vehicles FROM vs_sensor'
+  let query = 'SELECT id, name, lat, long, alt, pedestrians, bicycles, vehicles FROM vs_sensor'
   db.query(query)
     .then(result => res.json(result.rows))
     .catch(next)
@@ -26,7 +26,7 @@ router.get('/visual', (req, res, next) => {
 router.get('/air/id=:id', (req, res, next) => {
   let id = req.params.id
   let query = {
-    text: `SELECT id, long, lat, alt, name, description, pm2_5, pm10 FROM aq_sensor
+    text: `SELECT id, name, description, long, lat, alt, name, pm2_5, pm10 FROM aq_sensor
     WHERE id=$1::text`,
     values: [id]
   } 
@@ -40,7 +40,7 @@ router.get('/air/id=:id', (req, res, next) => {
 router.get('/visual/id=:id', (req, res, next) => {
   let id = req.params.id
   let query = {
-    text: `SELECT id, long, lat, alt, name, pedestrians, bicycles, vehicles, description FROM vs_sensor
+    text: `SELECT id, name, description, long, lat, alt, name, pedestrians, bicycles, vehicles FROM vs_sensor
     WHERE id=$1`,
     values: [id]
   }

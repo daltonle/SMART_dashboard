@@ -26,8 +26,7 @@ class DataPage extends Component {
     airSensor: PropTypes.object,
     visualSensor: PropTypes.object,
     mapCentre: PropTypes.object,
-    doShowDetails: PropTypes.bool,
-    
+
     changeLayer: PropTypes.func,
     changeCentre: PropTypes.func,
     getAirData: PropTypes.func,
@@ -40,7 +39,7 @@ class DataPage extends Component {
       doShowDetails: false
     }
   }
-  
+
   // After component mounted, change map centre to the new position,
   // then fetch live data of sensors
   componentDidMount = () => {
@@ -64,22 +63,28 @@ class DataPage extends Component {
       if (history.location.state.type === undefined)
         this.props.history.push('/dashboard')
       else if (history.location.state.type === 'air')
-        getAirData(newCentre)
+        getAirData(history.location.state.id)
       else if (history.location.state.type === 'visual')
-        getVisualData(newCentre)    
+        getVisualData(history.location.state.id)
     } else this.props.history.push('/dashboard')
   }
 
+  /*
   componentDidUpdate = (prevProps) => {
     const { history } = this.props
-    if (this.props.mapCentre !== prevProps.mapCentre) {
-      if (history.location.state.type === 'air')
-        this.props.getAirData(this.props.mapCentre)
-      else if (history.location.state.type === 'visual')
-        this.props.getVisualData(this.props.mapCentre)
+    if (this.props.history.location.state.id !== prevProps.history.location.state.id) {
+      console.log('here')
+      if (history.location.state.type === 'air') {
+        console.log("is getting air", history.location.state.id)
+        this.props.getAirData(history.location.state.id)
+      }
+      else if (history.location.state.type === 'visual') {
+        console.log("is getting visual", history.location.state.id)
+        this.props.getVisualData(history.location.state.id)
+      }
     }
   }
-
+*/
   handleExpand = (e) => {
     e.preventDefault()
     this.setState({ doShowDetails: true })
@@ -88,11 +93,6 @@ class DataPage extends Component {
   handleCollapse = (e) => {
     e.preventDefault()
     this.setState({ doShowDetails: false })
-  }
-
-  handleLayerClick = (e) => {
-    e.preventDefault()
-    // TODO: add handler
   }
 
   handleCompareClick = (e) => {
@@ -110,6 +110,10 @@ class DataPage extends Component {
     const { location } = history
     const { doShowDetails } = this.state
 
+    let sensorType = undefined
+    if (location.state)
+      sensorType = history.location.state.type
+
     if (this.props.media === DESK)
       return (
         <div className={styles.outer}>
@@ -118,15 +122,19 @@ class DataPage extends Component {
           </div>
           <div className={styles.content}>
             <div className={classNames(styles.data, { [styles.detailsShown]: doShowDetails })}>
-              <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick}/>
+              <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick} />
               <div className={styles.titleCard}>
                 <TitleCard
-                  name={(location.state === undefined) ? "No name" :
-                        (location.state.type==='air') ? 
-                        (airSensor===undefined ? 'No name.' : airSensor.description) : 
-                        (location.state.type==='visual') ?
-                        (visualSensor===undefined ? 'No name.' : visualSensor.description) : "No name."}
-                  suburb='No location data'
+                  suburb={(sensorType === undefined) ? "No location data" :
+                    (sensorType === 'air') ?
+                      (airSensor === undefined ? 'No location data' : airSensor.description) :
+                      (sensorType === 'visual') ?
+                        (visualSensor === undefined ? 'No location data' : visualSensor.description) : "No location data"}
+                  name={(sensorType === undefined) ? "No name" :
+                    (sensorType === 'air') ?
+                      (airSensor === undefined ? 'No name' : airSensor.name) :
+                      (sensorType === 'visual') ?
+                        (visualSensor === undefined ? 'No name' : visualSensor.name) : "No name"}
                   position={{
                     lng: this.props.mapCentre.lng,
                     lat: this.props.mapCentre.lat
@@ -135,8 +143,7 @@ class DataPage extends Component {
                 />
               </div>
               <h3>Live feed</h3>
-              { airSensor === undefined ? 
-                <div style={{display: `none`}}></div> : 
+              {sensorType === 'air' && airSensor !== undefined ?
                 <div className={styles.airDataContainer}>
                   <div>
                     <ParticleData
@@ -154,89 +161,90 @@ class DataPage extends Component {
                     />
                     <h5>PM10</h5>
                   </div>
-                </div>
+                </div> :
+                <div style={{ display: `none` }}></div>
               }
-              
-              { visualSensor === undefined ? 
-                <div style={{display: `none`}}></div> :
-                <VisualLiveChart />
+
+              {sensorType === 'visual' && visualSensor !== undefined ?
+                <VisualLiveChart /> :
+                <div style={{ display: `none` }}></div>
               }
             </div>
-            { doShowDetails ? 
+            {doShowDetails ?
               <div className={styles.chartDetails}>
                 <div className={styles.exitButton} onClick={this.handleCollapse}>
-                  <ExitIcon className={styles.icon}/>
+                  <ExitIcon className={styles.icon} />
                 </div>
-                <div className={styles.header} style={{marginTop: 0}}>
+                <div className={styles.header} style={{ marginTop: 0 }}>
                   <h3>History</h3>
-                  <HelpBttn 
-                    name="history-chart" 
-                    message="Data collected over time" 
+                  <HelpBttn
+                    name="history-chart"
+                    message="Data collected over time"
                   />
                 </div>
-                <HistoryChart media={DESK} />
-                {(airSensor !== undefined) ? 
+                <HistoryChart media={DESK} history={this.props.history} />
+                {(sensorType === 'air' && airSensor !== undefined) ?
                   <div className={styles.header}>
                     <h3>Air data by hour</h3>
-                    <HelpBttn 
-                      name="air-by-hour-chart" 
+                    <HelpBttn
+                      name="air-by-hour-chart"
                       message='Air quality data in each hour on each day of the week.<br><br>Use dropdown dialogue to view average/<br>minimum/maximum data.'
                     />
                   </div> : <div></div>
                 }
-                {(airSensor !== undefined) ? <AirByHourChart media={DESK} />: <div></div>}
-                {(airSensor !== undefined) ? 
+                {(sensorType === 'air' && airSensor !== undefined) ? <AirByHourChart media={DESK} /> : <div></div>}
+                {(sensorType === 'air' && airSensor !== undefined) ?
                   <div className={styles.header}>
                     <h3>Air data of a day</h3>
-                    <HelpBttn 
-                      name="air-of-day-chart" 
-                      message="Choose a date to view air quality data of that day." 
+                    <HelpBttn
+                      name="air-of-day-chart"
+                      message="Choose a date to view air quality data of that day."
                     />
                   </div> : <div></div>
                 }
-                {(airSensor !== undefined) ? <AirOfDayChart media={DESK} />: <div></div>}
-                {(visualSensor !== undefined) ? 
+                {(sensorType === 'air' && airSensor !== undefined) ? <AirOfDayChart media={DESK} /> : <div></div>}
+                {(sensorType === 'visual' && visualSensor !== undefined) ?
                   <div className={styles.header}>
                     <h3>Vehicles by hour</h3>
-                    <HelpBttn 
-                      name="vehicles-by-hour-chart" 
-                      message="Traffic data in each hour on each day of the week." 
+                    <HelpBttn
+                      name="vehicles-by-hour-chart"
+                      message="Traffic data in each hour on each day of the week."
                     />
-                  </div>: <div></div>}
-                {(visualSensor !== undefined) ? <VisualByHourChart media={DESK} />: <div></div>}
-                {(visualSensor !== undefined) ? 
+                  </div> : <div></div>}
+                {(sensorType === 'visual' && visualSensor !== undefined) ? <VisualByHourChart media={DESK} /> : <div></div>}
+                {(sensorType === 'visual' && visualSensor !== undefined) ?
                   <div className={styles.header}>
                     <h3>Visual data of a day</h3>
-                    <HelpBttn 
-                      name="vehicles-of-day-chart" 
-                      message="Choose a date to view traffic data on that day." 
+                    <HelpBttn
+                      name="vehicles-of-day-chart"
+                      message="Choose a date to view traffic data on that day."
                     />
                   </div> : <div></div>}
-                {(visualSensor !== undefined) ? <VisualOfDayChart media={DESK} />: <div></div>}
-                {(visualSensor !== undefined) ? 
+                {(sensorType === 'visual' && visualSensor !== undefined) ? <VisualOfDayChart media={DESK} /> : <div></div>}
+                {(sensorType === 'visual' && visualSensor !== undefined) ?
                   <div className={styles.header}>
                     <h3>Object detection</h3>
-                    <HelpBttn 
-                      name="heatmap" 
-                      message="This heatmap shows the object movement captured by the camera." 
+                    <HelpBttn
+                      name="heatmap"
+                      message="This heatmap shows the object movement captured by the camera."
                     />
                   </div> : <div></div>}
-                {(visualSensor !== undefined) ? <VisualHeatmap media={DESK} />: <div></div>}
-                {(visualSensor !== undefined) ? 
+                {(sensorType === 'visual' && visualSensor !== undefined) ? <VisualHeatmap media={DESK} /> : <div></div>}
+                {(sensorType === 'visual' && visualSensor !== undefined) ?
                   <div className={styles.header}>
                     <h3>Trajectory tracking</h3>
-                    <HelpBttn 
-                      name="trajectory" 
-                      message="This chart shows the trajectory of object centre detected by the camera." 
+                    <HelpBttn
+                      name="trajectory"
+                      message="This chart shows the trajectory of object centre detected by the camera."
                     />
                   </div> : <div></div>}
-                {(visualSensor !== undefined) ? <TrajectoryChart media={DESK} />: <div></div>}
+                {(sensorType === 'visual' && visualSensor !== undefined) ? <TrajectoryChart media={DESK} /> : <div></div>}
               </div> :
               <div className={styles.mapContainer}>
                 <div className={styles.expandButton} onClick={this.handleExpand}>
                   <ExpandIcon className={styles.icon} />
                 </div>
-                <Map media={this.props.media} zoomLevel={15}/>
+                <Map media={this.props.media} zoomLevel={15} />
                 <div className={styles.controlButton}>
                   <div onClick={this.handleLayerClick}>
                     <LayersBttn media={this.props.media} />
@@ -250,157 +258,41 @@ class DataPage extends Component {
                 </div>
               </div>
             }
-            
+
           </div>
         </div>
       );
     else if (this.props.media === MOBILE)
       return (
-        <div className={ m_styles.outer }>
-          { doShowDetails ? 
-          <div className={m_styles.chartDetails}>
-            <div className={m_styles.backButton} onClick={this.handleBackClick}>
-              <ArrowLeftIcon className={m_styles.icon} />
-            </div>
-            <div className={m_styles.titleCard}>
-              <TitleCard
-                name={(location.state === undefined) ? "No name" :
-                      (location.state.type==='air') ? 
-                      (airSensor===undefined ? 'No name.' : airSensor.description) : 
-                      (location.state.type==='visual') ?
-                      (visualSensor===undefined ? 'No name.' : visualSensor.description) : "No name."}
-                suburb='No location data'
-                position={{
-                  lng: this.props.mapCentre.lng,
-                  lat: this.props.mapCentre.lat
-                }}
-                media={this.props.media}
-                full={true}
-              />
-            </div>
-            <h4>Live feed</h4>
-            { airSensor === undefined ? 
-              <h5 className={m_styles.noAir}>No air data.</h5> : 
-              <div className={styles.airDataContainer}>
-                <div>
-                  <ParticleData
-                    data={airSensor === undefined ? -1 : airSensor.pm2_5}
-                    level={1}
-                    unit="ug/m3"
-                  />
-                  <h5>PM2.5</h5>
-                </div>
-                <div>
-                  <ParticleData
-                    data={airSensor === undefined ? -1 : airSensor.pm10}
-                    level={1}
-                    unit="ug/m3"
-                  />
-                  <h5>PM10</h5>
-                </div>
-              </div>
-            }
-            { visualSensor === undefined ? 
-              <h5 className={m_styles.noVisual}>No visual data.</h5> :
-              <VisualLiveChart />
-            }
-            <div className={m_styles.header} style={{marginTop: 0}}>
-              <h3>History</h3>
-              <HelpBttn 
-                name="history-chart" 
-                message="Data collected over time" 
-              />
-            </div>
-            <HistoryChart media={MOBILE} />
-            {(airSensor !== undefined) ? 
-              <div className={m_styles.header}>
-                <h3>Air data by hour</h3>
-                <HelpBttn 
-                  name="air-by-hour-chart" 
-                  message='Air quality data in each hour on each day of the week.<br><br>Use dropdown dialogue to view average/<br>minimum/maximum data.'
-                />
-              </div> : <div></div>
-            }
-            {(airSensor !== undefined) ? <AirByHourChart media={MOBILE} />: <div></div>}
-            {(airSensor !== undefined) ? 
-              <div className={m_styles.header}>
-                <h3>Air data of a day</h3>
-                <HelpBttn 
-                  name="air-of-day-chart" 
-                  message="Choose a date to view air quality data of that day." 
-                />
-              </div> : <div></div>
-            }
-            {(airSensor !== undefined) ? <AirOfDayChart media={MOBILE} />: <div></div>}
-            {(visualSensor !== undefined) ? 
-              <div className={m_styles.header}>
-                <h3>Vehicles by hour</h3>
-                <HelpBttn 
-                  name="vehicles-by-hour-chart" 
-                  message="Traffic data in each hour on each day of the week." 
-                />
-              </div>: <div></div>}
-            {(visualSensor !== undefined) ? <VisualByHourChart media={MOBILE} />: <div></div>}
-            {(visualSensor !== undefined) ? 
-              <div className={m_styles.header}>
-                <h3>Visual data of a day</h3>
-                <HelpBttn 
-                  name="vehicles-of-day-chart" 
-                  message="Choose a date to view traffic data on that day." 
-                />
-              </div> : <div></div>}
-            {(visualSensor !== undefined) ? <VisualOfDayChart media={MOBILE} />: <div></div>}
-            {(visualSensor !== undefined) ? 
-              <div className={m_styles.header} style={{marginBottom: `.5rem`}}>
-                <h3>Object detection</h3>
-                <HelpBttn 
-                  name="heatmap" 
-                  message="This heatmap shows the object movement captured by the camera." 
-                />
-              </div> : <div></div>}
-            {(visualSensor !== undefined) ? <VisualHeatmap media={MOBILE} />: <div></div>}
-            {(visualSensor !== undefined) ? 
-              <div className={m_styles.header}>
-                <h3>Trajectory tracking</h3>
-                <HelpBttn 
-                  name="trajectory" 
-                  message="This chart shows the trajectory of object centre detected by the camera." 
-                />
-              </div> : <div></div>}
-            {(visualSensor !== undefined) ? <TrajectoryChart media={MOBILE} />: <div></div>}
-          </div> :
-          <div className={m_styles.content}>
-            <div className={ m_styles.mapContainer }>
-              <Map media={this.props.media} zoomLevel={15}/>
+        <div className={m_styles.outer}>
+          {doShowDetails ?
+            <div className={m_styles.chartDetails}>
               <div className={m_styles.backButton} onClick={this.handleBackClick}>
                 <ArrowLeftIcon className={m_styles.icon} />
               </div>
-              <div className={m_styles.layerButton} onClick={this.handleLayerClick}>
-                <LayersBttn media={this.props.media}/>
-              </div>
-            </div>
-            <div className={m_styles.data}>
-              <div className={m_styles.expandButton} onClick={this.handleExpand}>
-                <ExpandUpIcon className={m_styles.icon} />
-              </div>
               <div className={m_styles.titleCard}>
                 <TitleCard
-                  name={(location.state === undefined) ? "No name" :
-                        (location.state.type==='air') ? 
-                        (airSensor===undefined ? 'No name.' : airSensor.description) : 
-                        (location.state.type==='visual') ?
-                        (visualSensor===undefined ? 'No name.' : visualSensor.description) : "No name."}
-                  suburb='No location data'
+                  suburb={(sensorType === undefined) ? "No location data" :
+                    (sensorType === 'air') ?
+                      (airSensor === undefined ? 'No location data' : airSensor.description) :
+                      (sensorType === 'visual') ?
+                        (visualSensor === undefined ? 'No location data' : visualSensor.description) : "No location data"}
+                  name={(sensorType === undefined) ? "No name" :
+                    (sensorType === 'air') ?
+                      (airSensor === undefined ? 'No name' : airSensor.name) :
+                      (sensorType === 'visual') ?
+                        (visualSensor === undefined ? 'No name' : visualSensor.name) : "No name"}
                   position={{
                     lng: this.props.mapCentre.lng,
                     lat: this.props.mapCentre.lat
                   }}
                   media={this.props.media}
+                  full={true}
                 />
               </div>
               <h4>Live feed</h4>
-              { airSensor === undefined ? 
-                <div style={{display: `none`}}></div> : 
+              {sensorType === 'air' && airSensor === undefined ?
+                <h5 className={m_styles.noAir}>No air data.</h5> :
                 <div className={styles.airDataContainer}>
                   <div>
                     <ParticleData
@@ -420,15 +312,139 @@ class DataPage extends Component {
                   </div>
                 </div>
               }
-              { visualSensor === undefined ? 
-                <div style={{display: `none`}}></div> :
+              {sensorType === 'visual' && visualSensor === undefined ?
+                <h5 className={m_styles.noVisual}>No visual data.</h5> :
                 <VisualLiveChart />
               }
+              <div className={m_styles.header} style={{ marginTop: 0 }}>
+                <h3>History</h3>
+                <HelpBttn
+                  name="history-chart"
+                  message="Data collected over time"
+                />
+              </div>
+              <HistoryChart media={MOBILE}  history={this.props.history}  />
+              {(sensorType === 'air' && airSensor !== undefined) ?
+                <div className={m_styles.header}>
+                  <h3>Air data by hour</h3>
+                  <HelpBttn
+                    name="air-by-hour-chart"
+                    message='Air quality data in each hour on each day of the week.<br><br>Use dropdown dialogue to view average/<br>minimum/maximum data.'
+                  />
+                </div> : <div></div>
+              }
+              {(sensorType === 'air' && airSensor !== undefined) ? <AirByHourChart media={MOBILE} /> : <div></div>}
+              {(sensorType === 'air' && airSensor !== undefined) ?
+                <div className={m_styles.header}>
+                  <h3>Air data of a day</h3>
+                  <HelpBttn
+                    name="air-of-day-chart"
+                    message="Choose a date to view air quality data of that day."
+                  />
+                </div> : <div></div>
+              }
+              {(sensorType === 'air' && airSensor !== undefined) ? <AirOfDayChart media={MOBILE} /> : <div></div>}
+              {(sensorType === 'visual' && visualSensor !== undefined) ?
+                <div className={m_styles.header}>
+                  <h3>Vehicles by hour</h3>
+                  <HelpBttn
+                    name="vehicles-by-hour-chart"
+                    message="Traffic data in each hour on each day of the week."
+                  />
+                </div> : <div></div>}
+              {(sensorType === 'visual' && visualSensor !== undefined) ? <VisualByHourChart media={MOBILE} /> : <div></div>}
+              {(sensorType === 'visual' && visualSensor !== undefined) ?
+                <div className={m_styles.header}>
+                  <h3>Visual data of a day</h3>
+                  <HelpBttn
+                    name="vehicles-of-day-chart"
+                    message="Choose a date to view traffic data on that day."
+                  />
+                </div> : <div></div>}
+              {(sensorType === 'visual' && visualSensor !== undefined) ? <VisualOfDayChart media={MOBILE} /> : <div></div>}
+              {(sensorType === 'visual' && visualSensor !== undefined) ?
+                <div className={m_styles.header} style={{ marginBottom: `.5rem` }}>
+                  <h3>Object detection</h3>
+                  <HelpBttn
+                    name="heatmap"
+                    message="This heatmap shows the object movement captured by the camera."
+                  />
+                </div> : <div></div>}
+              {(sensorType === 'visual' && visualSensor !== undefined) ? <VisualHeatmap media={MOBILE} /> : <div></div>}
+              {(sensorType === 'visual' && visualSensor !== undefined) ?
+                <div className={m_styles.header}>
+                  <h3>Trajectory tracking</h3>
+                  <HelpBttn
+                    name="trajectory"
+                    message="This chart shows the trajectory of object centre detected by the camera."
+                  />
+                </div> : <div></div>}
+              {(sensorType === 'visual' && visualSensor !== undefined) ? <TrajectoryChart media={MOBILE} /> : <div></div>}
+            </div> :
+            <div className={m_styles.content}>
+              <div className={m_styles.mapContainer}>
+                <Map media={this.props.media} zoomLevel={15} />
+                <div className={m_styles.backButton} onClick={this.handleBackClick}>
+                  <ArrowLeftIcon className={m_styles.icon} />
+                </div>
+                <div className={m_styles.layerButton} onClick={this.handleLayerClick}>
+                  <LayersBttn media={this.props.media} />
+                </div>
+              </div>
+              <div className={m_styles.data}>
+                <div className={m_styles.expandButton} onClick={this.handleExpand}>
+                  <ExpandUpIcon className={m_styles.icon} />
+                </div>
+                <div className={m_styles.titleCard}>
+                  <TitleCard
+                    suburb={(sensorType === undefined) ? "No location data" :
+                      (sensorType === 'air') ?
+                        (airSensor === undefined ? 'No location data' : airSensor.description) :
+                        (sensorType === 'visual') ?
+                          (visualSensor === undefined ? 'No location data' : visualSensor.description) : "No location data"}
+                    name={(location.state === undefined) ? "No name" :
+                      (sensorType === 'air') ?
+                        (airSensor === undefined ? 'No name' : airSensor.name) :
+                        (sensorType === 'visual') ?
+                          (visualSensor === undefined ? 'No name' : visualSensor.name) : "No name"}
+                    position={{
+                      lng: this.props.mapCentre.lng,
+                      lat: this.props.mapCentre.lat
+                    }}
+                    media={this.props.media}
+                  />
+                </div>
+                <h4>Live feed</h4>
+                {sensorType === 'air' && airSensor === undefined ?
+                  <div style={{ display: `none` }}></div> :
+                  <div className={styles.airDataContainer}>
+                    <div>
+                      <ParticleData
+                        data={airSensor === undefined ? -1 : airSensor.pm2_5}
+                        level={1}
+                        unit="ug/m3"
+                      />
+                      <h5>PM2.5</h5>
+                    </div>
+                    <div>
+                      <ParticleData
+                        data={airSensor === undefined ? -1 : airSensor.pm10}
+                        level={1}
+                        unit="ug/m3"
+                      />
+                      <h5>PM10</h5>
+                    </div>
+                  </div>
+                }
+                {sensorType === 'visual' && visualSensor === undefined ?
+                  <div style={{ display: `none` }}></div> :
+                  <VisualLiveChart />
+                }
+              </div>
             </div>
-          </div>
           }
-          
-          <div className={ m_styles.appbar }>
+
+          <div className={m_styles.appbar}>
             <AppBar active="dashboard" media={this.props.media} />
           </div>
         </div>

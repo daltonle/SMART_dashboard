@@ -8,6 +8,7 @@ h1, h2 {
 }
 
 .icon {
+  flex-shrink: 0;
   display: inline-block;
   stroke: $neutral-color-7;
   height: 1em;

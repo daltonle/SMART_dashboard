@@ -46,16 +46,11 @@ router.get('/air/:long,:lat', (req, res, next) => {
 })
 
 // retrieve live data of air sensor based on coordinates
-router.get('/air/live/:long,:lat', (req, res, next) => {
-  let {
-    long,
-    lat
-  } = req.params
-
+router.get('/air/live/:id', (req, res, next) => {
   let query = {
     text: `SELECT id, name, description, pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') FROM aq_sensor
-    WHERE aq_sensor.long=$1::numeric AND aq_sensor.lat=$2::numeric`,
-    values: [long, lat]
+    WHERE id=$1`,
+    values: [req.params.id]
   }
   
   db.query(query)
@@ -99,16 +94,12 @@ router.get('/visual/:long,:lat', (req, res, next) => {
 })
 
 // retrieve live visual data of a sensor based on coordinates
-router.get('/visual/live/:long,:lat', (req, res, next) => {
-  let {
-    long,
-    lat
-  } = req.params
+router.get('/visual/live/:id', (req, res, next) => {
 
   let query = {
     text: `SELECT id, name, description, to_char(ts, 'DD-MM-YYYY HH24:MI:SS'), pedestrians, vehicles, bicycles, reso_x, reso_y FROM vs_sensor
-    WHERE vs_sensor.long=$1::numeric AND vs_sensor.lat=$2::numeric`,
-    values: [long, lat]
+    WHERE id=$1`,
+    values: [req.params.id]
   }
   
   db.query(query)

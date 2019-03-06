@@ -17,7 +17,12 @@ class HistoryChart extends Component {
   }
 
   render() {
-    const { containerHeight, containerWidth, airSensor, visualSensor } = this.props
+    const { containerHeight, containerWidth, airSensor, visualSensor, history } = this.props
+    let sensorType = undefined
+    if (history.location.state) {
+      sensorType = history.location.state.type
+    }
+
     // pre-process data
     let dataPM2_5 = { x:[], y:[] }
     let dataPM10 = { x:[], y:[] }
@@ -25,34 +30,34 @@ class HistoryChart extends Component {
     let dataBicycle = { x:[], y:[] }
     let dataVehicle = { x:[], y:[] }
 
-    if (airSensor !== undefined) {
-      if (airSensor.historyPM2_5 !== undefined) {
+    if (sensorType === 'air' && airSensor !== undefined) {
+      if (airSensor.historyPM2_5) {
         for (let i = 0, l = airSensor.historyPM2_5.length; i < l; i++) {
           dataPM2_5.x.push(moment(airSensor.historyPM2_5[i].x, "DD-MM-YYYY HH:mm:ss").toDate())
           dataPM2_5.y.push(airSensor.historyPM2_5[i].y)
         }
       }
-      if (airSensor.historyPM10 !== undefined) {
+      if (airSensor.historyPM10) {
         for (let i = 0, l = airSensor.historyPM10.length; i < l; i++) {
           dataPM10.x.push(moment(airSensor.historyPM10[i].x, "DD-MM-YYYY HH:mm:ss").toDate())
           dataPM10.y.push(airSensor.historyPM10[i].y)
         }
       }
     }
-    if (visualSensor !== undefined) {
-      if (visualSensor.historyPedestrian !== undefined) {
+    if (sensorType === 'visual' && visualSensor !== undefined) {
+      if (visualSensor.historyPedestrian) {
         for (let i = 0, l = visualSensor.historyPedestrian.length; i < l; i++) {
           dataPedestrian.x.push(moment(visualSensor.historyPedestrian[i].x, "DD-MM-YYYY HH:mm:ss").toDate())
           dataPedestrian.y.push(visualSensor.historyPedestrian[i].y)
         }
       }
-      if (visualSensor.historyBicycle !== undefined) {
+      if (visualSensor.historyBicycle) {
         for (let i = 0, l = visualSensor.historyBicycle.length; i < l; i++) {
           dataBicycle.x.push(moment(visualSensor.historyBicycle[i].x, "DD-MM-YYYY HH:mm:ss").toDate())
           dataBicycle.y.push(visualSensor.historyBicycle[i].y)
         }
       }
-      if (visualSensor.historyVehicle !== undefined) {
+      if (visualSensor.historyVehicle) {
         for (let i = 0, l = visualSensor.historyVehicle.length; i < l; i++) {
           dataVehicle.x.push(moment(visualSensor.historyVehicle[i].x, "DD-MM-YYYY HH:mm:ss").toDate())
           dataVehicle.y.push(visualSensor.historyVehicle[i].y)

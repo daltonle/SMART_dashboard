@@ -31,7 +31,7 @@ class CompareList extends Component {
 
   render() {
     const { sensors, media } = this.props
-    const items = sensors.map(s => <CompareItem name={s.description} key={s.id} id={s.id} onItemDelete={this.handleItemDelete}/>)
+    const items = sensors.map(s => <CompareItem name={s.name} key={s.id} id={s.id} onItemDelete={this.handleItemDelete}/>)
 
     return (
       <div className={media===MOBILE ? styles.mobileList : styles.list}>

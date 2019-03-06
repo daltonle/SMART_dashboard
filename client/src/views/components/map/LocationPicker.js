@@ -43,6 +43,7 @@ const StyledMap = compose(
       averageCenter
       enableRetinaIcons
       gridSize={60}
+      maxZoom={16}
       styles={[
         {
           url: require('../../../assets/icons/marker_clusterer.svg'),
@@ -94,7 +95,7 @@ class LocationPicker extends Component {
   }
 
   handleMarkerClick = (marker, type) => {
-    fetch(`/api/sensors/${type}/coordinates=${marker.long},${marker.lat}`)
+    fetch(`/api/sensors/${type}/id=${marker.id}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
     .then(res => {
@@ -105,8 +106,8 @@ class LocationPicker extends Component {
       this.setState({
         selectedLocation: {
           id: res.id,
-          name: res.description,
-          suburb: "No location data",
+          name: res.name,
+          suburb: res.description,
           position: {
             lat: res.lat,
             lng: res.long
