@@ -8,7 +8,7 @@ router.use(bodyParser.json())
 
 // retrieve all air sensors
 router.get('/air', (req, res, next) => {
-  let query = 'SELECT id, lat, long, alt FROM aq_sensor'
+  let query = 'SELECT id, lat, long, alt, pm2_5, pm10 FROM aq_sensor'
   db.query(query)
     .then(result => res.json(result.rows))
     .catch(next)
@@ -16,7 +16,7 @@ router.get('/air', (req, res, next) => {
 
 // retrieve all visual sensors
 router.get('/visual', (req, res, next) => {
-  let query = 'SELECT id, lat, long, alt FROM vs_sensor'
+  let query = 'SELECT id, lat, long, alt, pedestrians, bicycles, vehicles FROM vs_sensor'
   db.query(query)
     .then(result => res.json(result.rows))
     .catch(next)

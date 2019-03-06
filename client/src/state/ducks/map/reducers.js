@@ -29,7 +29,7 @@ import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS, CHANGE_LAYER, CHANGE_CENTRE, CHANG
 const initialState = {
   layers: {
     air: true,
-    visual: false
+    visual: true
   },
   centre: { lat: -33.9225, lng: 150.9254 },
   zoomLevel: 15
