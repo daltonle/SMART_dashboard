@@ -65,7 +65,7 @@ export const getAirData = (id) => (dispatch) => {
     .catch(err => console.log(err))
 
   const getAirDataLive = () => {
-    timers.push(setTimeout(getAirDataLive, 3000))
+    timers.push(setTimeout(getAirDataLive, 60000))
     fetch(`/api/sensor-data/air/live/${id}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
@@ -140,7 +140,7 @@ export const getVisualData = (id) => (dispatch) => {
 
   // get live data after every minute
   const getVisualDataLive = () => {
-    timers.push(setTimeout(getVisualDataLive, 6000))
+    timers.push(setTimeout(getVisualDataLive, 60000))
     fetch(`/api/sensor-data/visual/live/${id}`)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : undefined)
