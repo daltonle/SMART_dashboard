@@ -6,7 +6,7 @@ export const colors = {
   primaryColor : "#068FAB",
   red : "#FF595E",
   green : "#02A27F",
-  yellow : "#FFCA3A",
+  yellow : "#D1A630",
   orange : "#E66337",
   purple : "#5E50B5",
   maroon : "#692D39",
@@ -20,3 +20,5 @@ export const colors = {
 }
 
 export const colorScale = [ colors.green, colors.red, colors.yellow, colors.purple, colors.orange, colors.maroon, colors.primaryColor]
+
+export const markerColorScale = [colors.green, colors.yellow, colors.orange, colors.red, colors.purple, colors.maroon]

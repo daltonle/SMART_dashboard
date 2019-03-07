@@ -3,7 +3,9 @@ import {
   ADD_VISUAL_MARKERS,
   CHANGE_LAYER,
   CHANGE_CENTRE,
-  CHANGE_ZOOM
+  CHANGE_ZOOM,
+  CHANGE_AIR_ATTR,
+  CHANGE_VISUAL_ATTR
 } from './types'
 
 const _addMarkers = (type, dispatch) => {
@@ -61,5 +63,19 @@ export const changeZoom = (zoomLevel) => dispatch => {
   dispatch({
     type: CHANGE_ZOOM,
     payload: zoomLevel
+  })
+}
+
+export const changeAirAttr = (attr) => dispatch => {
+  dispatch({
+    type: CHANGE_AIR_ATTR,
+    payload: attr
+  })
+}
+
+export const changeVisualAttr = (attr) => dispatch => {
+  dispatch({
+    type: CHANGE_VISUAL_ATTR,
+    payload: attr
   })
 }

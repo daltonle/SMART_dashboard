@@ -20,6 +20,8 @@ class Map extends Component {
     layers: PropTypes.object,
     centre: PropTypes.object,
     zoomLevel: PropTypes.number,
+    airAttr: PropTypes.string,
+    visualAttr: PropTypes.string,
     addAllMarkers: PropTypes.func,
     changeCentre: PropTypes.func,
     changeZoom: PropTypes.func
@@ -33,7 +35,9 @@ class Map extends Component {
     if (this.props.mapCentre !== nextProps.mapCentre
         || this.props.airMarkers !== nextProps.airMarkers
         || this.props.visualMarkers !== nextProps.visualMarkers
-        || this.props.layers !== nextProps.layers)
+        || this.props.layers !== nextProps.layers
+        || this.props.airAttr !== nextProps.airAttr
+        || this.props.visualAttr !== nextProps.visualAttr)
       return true
     else return false    
   }
@@ -60,7 +64,7 @@ class Map extends Component {
 
     if (layers.air && this.props.airMarkers !== undefined) {
       airMarkers = this.props.airMarkers.map((marker, index) => {
-        let lvl = getAirMarkerLevel('pm2_5', marker.pm2_5)
+        let lvl = getAirMarkerLevel(this.props.airAttr, marker[this.props.airAttr])
         for (let i = 0; i < index; i++) {
           if (this.props.airMarkers[i].long === marker.long &&
             this.props.airMarkers[i].lat === marker.lat) {
@@ -87,7 +91,7 @@ class Map extends Component {
 
     if (layers.visual && this.props.visualMarkers !== undefined) {
       visualMarkers = this.props.visualMarkers.map((marker, index) => {
-        let lvl = getVisualMarkerLevel('pedestrian', marker.pedestrian)
+        let lvl = getVisualMarkerLevel(this.props.visualAttr, marker[this.props.visualAttr])
         for (let i = 0; i < index; i++) {
           if (this.props.visualMarkers[i].long === marker.long &&
             this.props.visualMarkers[i].lat === marker.lat) {
@@ -208,7 +212,9 @@ const mapStateToProps = state => ({
   visualMarkers: state.map.visualMarkers,
   layers: state.map.layers,
   mapCentre: state.map.centre,
-  zoomLevel: state.map.zoomLevel
+  zoomLevel: state.map.zoomLevel,
+  airAttr: state.map.airAttr,
+  visualAttr: state.map.visualAttr
 })
 
 const mapDispatchToProps = {

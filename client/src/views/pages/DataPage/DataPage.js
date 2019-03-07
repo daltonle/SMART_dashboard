@@ -12,7 +12,7 @@ import { DESK, MOBILE } from '../../../utils/const'
 import { AppBar } from '../../components/appbar/AppBar'
 import { VisualLiveChart, HistoryChart, AirByHourChart, VisualByHourChart, AirOfDayChart, VisualOfDayChart, VisualHeatmap, TrajectoryChart } from '../../components/charts'
 import Map from '../../components/map/Map'
-import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
+import { CompareBttn, SettingsBttn, LegendsBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
 import { HelpBttn } from '../../components/help-button/HelpBttn'
 import { ParticleData } from '../../components/particleData/ParticleData'
 import { TitleCard } from '../../components/titleCard/TitleCard'
@@ -257,7 +257,7 @@ class DataPage extends Component {
                 <Map media={this.props.media} zoomLevel={15} />
                 <div className={styles.controlButton}>
                   <div onClick={this.handleLayerClick}>
-                    <LayersBttn media={this.props.media} />
+                    <SettingsBttn media={this.props.media} />
                   </div>
                   <div>
                     <LegendsBttn media={this.props.media} />
@@ -400,7 +400,7 @@ class DataPage extends Component {
                   <ArrowLeftIcon className={m_styles.icon} />
                 </div>
                 <div className={m_styles.layerButton} onClick={this.handleLayerClick}>
-                  <LayersBttn media={this.props.media} />
+                  <SettingsBttn media={this.props.media} />
                 </div>
               </div>
               <div className={m_styles.data}>

@@ -54,19 +54,73 @@
   position: relative;
 
   .dialogue {
-    padding: .5rem 1rem 2rem 1.5rem;
+    padding: 1rem 2rem 2rem 2.5rem;
     position: absolute;
     width: 22.5rem;
     background-color: $background-color;
     top: 0;
-    transform: translate(-26rem, 0);
+    transform: translate(-28rem, 0);
     box-shadow: 0.185em 0.1875em 0.75em rgba(0, 0, 0, .3);
     border-radius: 5px;
+
+    .options {
+      font-size: .875rem;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 1rem 0 1rem 0;
+
+      &>* {
+        flex-shrink: 0;
+      }
+
+      .item {
+        background-color: $neutral-color-3;
+        border-radius: 3px;
+        padding: 0.5rem 1rem .5rem 1rem;
+        margin-right: .5rem;
+        cursor: pointer;
+
+        h5 {
+          margin: 0;
+          color: $neutral-color-8;
+        }
+      }
+
+      .chosen {
+        background-color: $primary-color;
+        h5 {
+          color: $background-color;
+        }
+      }
+
+      .attrName {
+        flex-grow: 1;
+        &>h5 {
+          margin: 0;
+          font-weight: $font-weight-heavy;
+        }
+      }
+    }
+
+    .header {
+      margin: 0;
+      align-self: stretch;
+      position: relative;
+      z-index: 1001;
+
+      h4 {
+        margin: 0;
+        display: inline-block;
+      }
+    }
 
     .sensorType {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      margin-bottom: 2rem;
 
       .layerItem {
         flex-shrink: none;
@@ -87,32 +141,19 @@
 
       .layerItemActive {
         @extend .layerItem;
-        border: 1px solid transparent;
         background-color: $primary-color;
     
         h4 {
           color: $background-color;
-          font-weight: $font-weight-heavy;
         }
-        /*
-        @extend .layerItem;
-        border: 2px solid $primary-color;
-        background-color: $background-color;
-    
-        h4 {
-          color: $primary-color;
-          font-weight: $font-weight-heavy;
-        }
-        */
       }
   
       .layerItemInactive {
         @extend .layerItem;
-        border: 1px solid $neutral-color-5;
-        background-color: $neutral-color-1;
+        background-color: $neutral-color-3;
   
         h4 {
-          color: $neutral-color-7;
+          color: $neutral-color-8;
         }
       }
     }

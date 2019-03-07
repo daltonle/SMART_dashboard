@@ -6,7 +6,7 @@ import { AppBar } from '../../components/appbar/AppBar'
 import { DESK, MOBILE } from '../../../utils/const'
 import styles from './Dashboard_desktop.module.scss'
 import m_styles from './Dashboard_mobile.module.scss'
-import { LayersBttn, LegendsBttn, CompareBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
+import { SettingsBttn, LegendsBttn, CompareBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
 
 class DashboardMain extends Component {
   static propTypes = {
@@ -30,7 +30,7 @@ class DashboardMain extends Component {
             <Map media={this.props.media} zoomLevel={13}/>
             <div className={styles.controlButton}>
               <div>
-                <LayersBttn media={this.props.media}/>
+                <SettingsBttn media={this.props.media}/>
               </div>
               <div>
                 <LegendsBttn media={this.props.media} />
@@ -49,7 +49,7 @@ class DashboardMain extends Component {
             <Map media={this.props.media} zoomLevel={13}/>
             <div>
               <div>
-                <LayersBttn />
+                <SettingsBttn />
               </div>
             </div>
             <div className={m_styles.controlButton}>

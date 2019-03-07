@@ -2,16 +2,17 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { DESK } from '../../../../utils/const'
 import InfoIcon from 'react-feather/dist/icons/info'
-import LayersIcon from 'react-feather/dist/icons/layers'
+import SettingsIcon from 'react-feather/dist/icons/settings'
 import CompareIcon from 'react-feather/dist/icons/bar-chart-2'
 import ReactTooltip from 'react-tooltip'
 import classNames from 'classnames'
+import { HelpBttn } from '../../help-button/HelpBttn'
 import { compose, withState, withHandlers } from 'recompose'
-import { changeLayer } from '../../../../state/ducks/map/actions'
+import { changeLayer, changeAirAttr, changeVisualAttr } from '../../../../state/ducks/map/actions'
 import styles from './ControlBttns.module.scss'
 
 /**
- * Control buttons used for desktop map
+ * Control buttons used for map
  */
 
 export const LegendsBttn = ({ media }) => {
@@ -30,23 +31,15 @@ export const LegendsBttn = ({ media }) => {
     </button>
   )
 }
-/*
-export class LayersBttn extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      hidden: true,
-      air: props.layers.air,
-      visual: props.layers.visual
-    }
-  }
 
-
-}
-*/
-export const LayersBttn = compose(
+export const SettingsBttn = compose(
   withState('hidden', 'toggleDialogue', true),
-  connect(state => ({layers: state.map.layers}), { changeLayer }),
+  withState('airAttr', 'handleAirAttrChanged', 'pm2_5'),
+  connect(state => ({
+    layers: state.map.layers,
+    airAttr: state.map.airAttr,
+    visualAttr: state.map.visualAttr
+  }), { changeLayer, changeAirAttr, changeVisualAttr }),
   withHandlers(() => ({
     handleToggleAir: ({ changeLayer }) => () => {
       changeLayer('air')
@@ -55,18 +48,31 @@ export const LayersBttn = compose(
       changeLayer('visual')
     }
   }))
-)(({ media, hidden, toggleDialogue, layers, handleToggleAir, handleToggleVisual }) => {
+)((props) => {
+  const { 
+    media, 
+    hidden, 
+    toggleDialogue, 
+    layers, 
+    handleToggleAir, 
+    handleToggleVisual, 
+    airAttr, 
+    visualAttr, 
+    changeAirAttr, 
+    changeVisualAttr } = props
+  
   if (media === DESK)
     return (
       <div className={styles.container}>
-        <button className={styles.bttn} data-tip data-for='layers' onClick={() => toggleDialogue(n => !n)}>
-          <LayersIcon className={styles.icon} />
+        <button className={styles.bttn} data-tip data-for='layers' 
+        onClick={() => toggleDialogue(n => !n)} >
+          <SettingsIcon className={styles.icon} />
           <ReactTooltip id='layers' place="left" type="light" effect="solid">
-            <span>Switch layer</span>
+            <span>Settings</span>
           </ReactTooltip>
         </button>
         <div className={classNames({[styles.dialogue]: true, [styles.hidden]: hidden})}>
-          <h3>Sensor type</h3>
+          <h4>Sensor type</h4>
           <div className={styles.sensorType}>
             <div 
               className={classNames({ [styles.layerItemActive]: layers.air, [styles.layerItemInactive]: !layers.air})}
@@ -79,13 +85,71 @@ export const LayersBttn = compose(
               <h4>Visual</h4>            
             </div>
           </div>
+          <div className={styles.header}>
+            <h4>Filter attribute</h4>
+            <HelpBttn
+              name="filter-attr"
+              message='Attribute which markers levels are based on'
+            />
+          </div>
+          <div className={styles.options} style={{zIndex: 1009}}>
+            <div className={styles.attrName}>
+              <h5>Air</h5>
+            </div>
+            <div onClick={() => changeAirAttr('pm2_5')} className={classNames({ [styles.item]: true, [styles.chosen]: airAttr==='pm2_5'})}>
+              <h5>PM2.5</h5>
+            </div>
+            <div onClick={() => changeAirAttr('pm10')} className={classNames({ [styles.item]: true, [styles.chosen]: airAttr==='pm10'})}>
+              <h5>PM10</h5>
+            </div>
+          </div>
+          <div className={styles.options} style={{zIndex: 0}}>
+            <div className={styles.attrName}>
+              <h5>Visual</h5>
+            </div>
+            <div onClick={() => changeVisualAttr('pedestrian')} className={classNames({ [styles.item]: true, [styles.chosen]: visualAttr==='pedestrian'})}>
+              <h5>Pedestrian</h5>
+            </div>
+            <div onClick={() => changeVisualAttr('bicycle')} className={classNames({ [styles.item]: true, [styles.chosen]: visualAttr==='bicycle'})}>
+              <h5>Bicycle</h5>
+            </div>
+            <div onClick={() => changeVisualAttr('vehicle')} className={classNames({ [styles.item]: true, [styles.chosen]: visualAttr==='vehicle'})}>
+              <h5>Vehicle</h5>
+            </div>
+          </div>
         </div>
       </div>
     )
   else return (
-    <button className={styles.bttnMobile}>
-      <LayersIcon className={styles.icon} />
-    </button>
+    <div className={styles.container}>
+      <button className={styles.bttn} data-tip data-for='layers' 
+      onClick={() => {
+        toggleDialogue(n => !n)
+        setTimeout(() => {
+          toggleDialogue(n => !n)
+        }, 5000);
+      }}>
+        <SettingsIcon className={styles.icon} />
+        <ReactTooltip id='layers' place="left" type="light" effect="solid">
+          <span>Settings</span>
+        </ReactTooltip>
+      </button>
+      <div className={classNames({[styles.dialogue]: true, [styles.hidden]: hidden})}>
+        <h3>Sensor type</h3>
+        <div className={styles.sensorType}>
+          <div 
+            className={classNames({ [styles.layerItemActive]: layers.air, [styles.layerItemInactive]: !layers.air})}
+            onClick={handleToggleAir}>
+            <h4>Air</h4>            
+          </div>
+          <div 
+            className={classNames({ [styles.layerItemActive]: layers.visual, [styles.layerItemInactive]: !layers.visual})}
+            onClick={handleToggleVisual}>
+            <h4>Visual</h4>            
+          </div>
+        </div>
+      </div>
+    </div>
   )
 })
 

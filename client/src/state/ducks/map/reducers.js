@@ -1,4 +1,12 @@
-import { ADD_AIR_MARKERS, ADD_VISUAL_MARKERS, CHANGE_LAYER, CHANGE_CENTRE, CHANGE_ZOOM } from "./types"
+import { 
+  ADD_AIR_MARKERS, 
+  ADD_VISUAL_MARKERS, 
+  CHANGE_LAYER, 
+  CHANGE_CENTRE, 
+  CHANGE_ZOOM, 
+  CHANGE_AIR_ATTR,
+  CHANGE_VISUAL_ATTR
+} from "./types"
 
 /**
   store.state.map
@@ -32,7 +40,9 @@ const initialState = {
     visual: true
   },
   centre: { lat: -33.9225, lng: 150.9254 },
-  zoomLevel: 15
+  zoomLevel: 15,
+  airAttr: 'pm2_5',
+  visualAttr: 'pedestrian'
 }
 
 const mapReducer = (state = initialState, action) => {
@@ -61,6 +71,16 @@ const mapReducer = (state = initialState, action) => {
       return {
         ...state,
         zoomLevel: action.payload
+      }
+    case CHANGE_AIR_ATTR:
+      return {
+        ...state,
+        airAttr: action.payload
+      }
+    case CHANGE_VISUAL_ATTR:
+      return {
+        ...state,
+        visualAttr: action.payload
       }
     default:
       return state
