@@ -250,7 +250,7 @@ class DataPage extends Component {
                 </div>
                 <Map media={this.props.media} zoomLevel={15} />
                 <div className={styles.controlButton}>
-                  <div onClick={this.handleLayerClick}>
+                  <div>
                     <SettingsBttn media={this.props.media} />
                   </div>
                   <div>
@@ -392,9 +392,6 @@ class DataPage extends Component {
                 <Map media={this.props.media} zoomLevel={15} />
                 <div className={m_styles.backButton} onClick={this.handleBackClick}>
                   <ArrowLeftIcon className={m_styles.icon} />
-                </div>
-                <div className={m_styles.layerButton} onClick={this.handleLayerClick}>
-                  <SettingsBttn media={this.props.media} />
                 </div>
               </div>
               <div className={m_styles.data}>

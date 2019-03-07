@@ -53,6 +53,9 @@ class DashboardMain extends Component {
               </div>
             </div>
             <div className={m_styles.controlButton}>
+              <div>
+                <SettingsBttn media={this.props.media}/>
+              </div>
               <div onClick={this.handleCompareClick}>
                 <CompareBttn media={this.props.media} />
               </div>

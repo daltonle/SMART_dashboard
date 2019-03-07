@@ -12,7 +12,7 @@ import Select from 'react-select'
 import { AppBar } from '../../components/appbar/AppBar'
 import LocationPicker from '../../components/map/LocationPicker'
 import { DESK, MOBILE } from '../../../utils/const'
-import { LegendsBttn, CompareBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
+import { SettingsBttn, LegendsBttn, CompareBttn } from '../../components/mapControl/ControlBttns/ControlBttns'
 import { HelpBttn } from '../../components/help-button/HelpBttn'
 import CompareList from "../../components/compare-list/CompareList"
 import Live from "../../components/charts/compare/Live"
@@ -270,6 +270,9 @@ class Compare extends Component {
                 <LocationPicker media={this.props.media}/>
                 <div className={styles.controlButton}>
                   <div>
+                    <SettingsBttn media={this.props.media} sensorTypeDisabled/>
+                  </div>
+                  <div>
                     <LegendsBttn media={this.props.media} />
                   </div>
                   <div onClick={this.handleCompareClick}>
@@ -378,7 +381,6 @@ class Compare extends Component {
             </div> :
             <div className={ m_styles.mapContainer }>
               <LocationPicker media={this.props.media}/>
-              
               {
                 this.props.count > 1 ?
                 <div className={m_styles.start} onClick={this.handleStartCompare}>
@@ -390,7 +392,24 @@ class Compare extends Component {
               }
             </div>
           }
-          
+          {this.state.doShowDetails ?
+          <div></div> :
+          <div className={m_styles.sensorTypeControl}>
+            <h4>Sensor type</h4>
+            <div className={m_styles.typeRadio}>
+              <div onClick={e => this.handleLayerClick('air', e)} 
+                className={classNames({ [m_styles.typeRadioItem]: true, [m_styles.typeRadioItemActive]: sensorType==='air'})}
+              >
+                <h5>Air</h5>
+              </div>
+              <div onClick={e => this.handleLayerClick('visual', e)}
+                className={classNames({ [m_styles.typeRadioItem]: true, [m_styles.typeRadioItemActive]: sensorType==='visual'})}
+              >
+                <h5>Visual</h5>
+              </div>
+            </div>
+          </div>
+          }
           <div className={ m_styles.appbar }>
             <AppBar active="dashboard" media={this.props.media} />
           </div>

@@ -54,7 +54,7 @@
   position: relative;
 
   .dialogue {
-    padding: 1rem 2rem 2rem 2.5rem;
+    padding: 2.5rem 2rem 2rem 2.5rem;
     position: absolute;
     width: 22.5rem;
     background-color: $background-color;
@@ -62,6 +62,11 @@
     transform: translate(-28rem, 0);
     box-shadow: 0.185em 0.1875em 0.75em rgba(0, 0, 0, .3);
     border-radius: 5px;
+
+    &>h4 {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+    }
 
     .options {
       font-size: .875rem;
