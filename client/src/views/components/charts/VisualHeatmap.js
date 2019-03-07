@@ -46,6 +46,7 @@ class VisualHeatmap extends Component {
       legend: { x: 0, y: 1.25, orientation: "h" },
       plot_bgcolor: colors.backgroundColor,
       paper_bgcolor: colors.backgroundColor,
+      yaxis: { autorange: 'reversed' },
       margin: {
         t: 40,
         pad: 8

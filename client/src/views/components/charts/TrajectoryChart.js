@@ -66,7 +66,7 @@ class TrajectoryChart extends Component {
         pad: 8
       },
       xaxis: { range: [0, parseInt(reso_x)] },
-      yaxis: { range: [0, parseInt(reso_y)] },
+      yaxis: { range: [parseInt(reso_y), 0] },
       showlegend: false
     }
 
