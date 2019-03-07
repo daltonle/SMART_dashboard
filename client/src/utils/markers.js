@@ -14,11 +14,13 @@ export const customMarkerLabelStyle = {
  * Maximum number of thresholds is 5.
  */
 const airLevels = {
+  num: 4,
   pm2_5: [50, 100, 150, 200],
   pm10: [100, 200, 300, 400]
 }
 
 const visualLevels = {
+  num: 5,
   pedestrian: [10, 20, 30, 40, 50],
   bicycle: [10, 20, 30, 40, 50],
   vehicle: [10, 20, 30, 40, 50]
@@ -31,11 +33,11 @@ const visualLevels = {
  */
 export const getAirMarkerLevel = (name, data) => {
   const thresholds = airLevels[name]
-  for (let i = 0; i < thresholds.length && i <= 4; i++) {
+  for (let i = 0; i < airLevels.num; i++) {
     if (data < thresholds[i])
       return (i+1)
   }
-  return 6
+  return airLevels.num+1
 }
 
 /**
@@ -45,9 +47,9 @@ export const getAirMarkerLevel = (name, data) => {
  */
 export const getVisualMarkerLevel = (name, data) => {
   const thresholds = visualLevels[name]
-  for (let i = 0; i < thresholds.length && i <= 4; i++) {
+  for (let i = 0; i < visualLevels.num; i++) {
     if (data < thresholds[i])
       return (i+1)
   }
-  return 6
+  return visualLevels.num+1
 }
