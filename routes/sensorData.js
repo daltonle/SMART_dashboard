@@ -319,19 +319,25 @@ router.get('/visual/heatmap/:id/:startDate,:endDate', async (req, res, next) => 
 })
 
 // retrieve data for visual trajectory tracking
-router.get('/visual/trajectory/:id/:startDate,:endDate', (req, res, next) => {
+router.get('/visual/trajectory/:id/:startDate,:endDate', async (req, res, next) => {
   let query = {
     text: `SELECT id_obj, array_agg((x1+x2)/2 ORDER BY ts DESC) as x, array_agg((y1+y2)/2) as y FROM vs_detections
           WHERE id_obj IN (SELECT id FROM vs_object WHERE id_sensor=$1) AND '[${req.params.startDate}, ${req.params.endDate}]'::daterange @> ts::date
           GROUP BY id_obj
           ORDER BY id_obj ASC
-          LIMIT 500`,
+          LIMIT 1000`,
     values: [req.params.id]
   }
 
-  db.query(query)
-    .then(result => res.json(result.rows))
-    .catch(next)
+  let data = await db.query(query).then(result => result.rows)
+
+  let count = await db.query({
+    text: `SELECT COUNT(id_obj) FROM vs_detections
+    WHERE id_obj IN (SELECT id FROM vs_object WHERE id_sensor=$1)`,
+    values: [req.params.id]
+  }).then(result => result.rows[0].count)
+
+  res.json({ data, count })
 })
 
 module.exports = router

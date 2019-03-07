@@ -13,8 +13,8 @@ class VisualHeatmap extends Component {
     media: PropTypes.string,
     id: PropTypes.string,
     data: PropTypes.array,
-    reso_x: PropTypes.number,
-    reso_y: PropTypes.number,
+    reso_x: PropTypes.string,
+    reso_y: PropTypes.string,
     analysisPeriod: PropTypes.object,
 
     getHeatmapData: PropTypes.func

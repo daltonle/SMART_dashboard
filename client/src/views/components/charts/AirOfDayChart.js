@@ -32,7 +32,7 @@ class AirOfDayChart extends Component {
     const { id, getAirDataByDay } = this.props
 
     if (id !== undefined) {
-      getAirDataByDay(this.props.id, moment(selectedDate).format("YYYY-MM-DD"))
+      getAirDataByDay(id, moment(selectedDate).format("YYYY-MM-DD"))
     }
   }
 

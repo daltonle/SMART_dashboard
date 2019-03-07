@@ -12,16 +12,16 @@ class TrajectoryChart extends Component {
   static propTypes = {
     media: PropTypes.string,
     id: PropTypes.string,
-    data: PropTypes.array,
-    reso_x: PropTypes.number,
-    reso_y: PropTypes.number,
+    trajectory: PropTypes.object,
+    reso_x: PropTypes.string,
+    reso_y: PropTypes.string,
     analysisPeriod: PropTypes.object,
 
     getTrajectoryData: PropTypes.func
   }
 
   shouldComponentUpdate = (nextProps) => {
-    if (this.props.data !== nextProps.data || this.props.analysisPeriod !== nextProps.analysisPeriod)
+    if (this.props.trajectory !== nextProps.trajectory || this.props.analysisPeriod !== nextProps.analysisPeriod)
       return true
   }
 
@@ -34,8 +34,13 @@ class TrajectoryChart extends Component {
 
 
   render() {
-    const { containerWidth, media, data, reso_x, reso_y } = this.props
+    const { containerWidth, media, reso_x, reso_y, trajectory } = this.props
     const customHeight = containerWidth / reso_x * reso_y
+    let data = [], count = 0
+    if (trajectory) {
+      data = trajectory.data
+      count = trajectory.count
+    }
 
     const chartData = []
     if (data !== undefined) {
@@ -60,8 +65,8 @@ class TrajectoryChart extends Component {
         t: 24,
         pad: 8
       },
-      xaxis: { range: [0, reso_x] },
-      yaxis: { range: [0, reso_y] },
+      xaxis: { range: [0, parseInt(reso_x)] },
+      yaxis: { range: [0, parseInt(reso_y)] },
       showlegend: false
     }
 
@@ -90,7 +95,7 @@ class TrajectoryChart extends Component {
 
     return (
       <div>
-        <h5 className={media==='MOBILE' ? styles.m_sum : styles.sum}>{(data) ? data.length : 0} objects detected.</h5>
+        <h5 className={media==='MOBILE' ? styles.m_sum : styles.sum}>{count} objects detected.</h5>
         <Plot
           data={chartData}
           layout={media === MOBILE ? mobileLayout : webLayout}
@@ -103,7 +108,7 @@ class TrajectoryChart extends Component {
 
 const mapStateToProps = (state) => ({
   id: state.sensor.visual.id,
-  data: state.sensor.visual.trajectory,
+  trajectory: state.sensor.visual.trajectory,
   reso_x: state.sensor.visual.reso_x,
   reso_y: state.sensor.visual.reso_y,
   analysisPeriod: state.charts.analysisPeriod

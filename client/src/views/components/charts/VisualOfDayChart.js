@@ -32,7 +32,7 @@ class VisualOfDayChart extends Component {
     const { id, getVisualDataByDay } = this.props
 
     if (id !== undefined) {
-      getVisualDataByDay(id, selectedDate.getFullYear(), selectedDate.getMonth()+1, selectedDate.getDate())
+      getVisualDataByDay(id, moment(selectedDate).format('YYYY-MM-DD'))
     }
   }
 
