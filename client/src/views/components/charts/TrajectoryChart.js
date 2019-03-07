@@ -50,21 +50,21 @@ class TrajectoryChart extends Component {
     }
 
     // chart layout
-    const webLayout = { 
-      width: containerWidth, 
+    const webLayout = {
+      width: containerWidth,
       height: customHeight,
       legend: { x: 0, y: 1.25, orientation: "h" },
       plot_bgcolor: colors.backgroundColor,
       paper_bgcolor: colors.backgroundColor,
       margin: {
-        t: 40,
+        t: 24,
         pad: 8
       },
-      xaxis: {range: [0,1280]},
-      yaxis: {range: [0,720]},
+      xaxis: { range: [0, reso_x] },
+      yaxis: { range: [0, reso_y] },
       showlegend: false
     }
-    
+
     const mobileLayout = {
       ...webLayout,
       margin: {
@@ -88,12 +88,13 @@ class TrajectoryChart extends Component {
       displayModeBar: true
     }
 
-    return(
+    return (
       <div>
+        <h5 className={media==='MOBILE' ? styles.m_sum : styles.sum}>{(data) ? data.length : 0} objects detected.</h5>
         <Plot
           data={chartData}
-          layout={media===MOBILE ? mobileLayout : webLayout}
-          config={media===MOBILE ? mobileConfig : webConfig}
+          layout={media === MOBILE ? mobileLayout : webLayout}
+          config={media === MOBILE ? mobileConfig : webConfig}
         />
       </div>
     )

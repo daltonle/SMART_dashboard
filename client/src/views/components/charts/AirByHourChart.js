@@ -28,7 +28,7 @@ class AirByHourChart extends Component {
   }
   
   componentDidMount = () => {
-    const { getAvgAirDataByHour, getMinAirDataByHour, getMaxAirDataByHour, sensor, analysisPeriod } = this.props
+    const { getAvgAirDataByHour, getMinAirDataByHour, getMaxAirDataByHour, sensor } = this.props
     getAvgAirDataByHour(sensor.id)
     getMinAirDataByHour(sensor.id)
     getMaxAirDataByHour(sensor.id)
@@ -36,7 +36,7 @@ class AirByHourChart extends Component {
 
   componentDidUpdate = async (prevProps) => {
     if (this.props.analysisPeriod !== prevProps.analysisPeriod) {
-      const { getAvgAirDataByHour, getMinAirDataByHour, getMaxAirDataByHour, sensor, analysisPeriod } = this.props
+      const { getAvgAirDataByHour, getMinAirDataByHour, getMaxAirDataByHour, sensor } = this.props
       await getAvgAirDataByHour(sensor.id)
       await getMinAirDataByHour(sensor.id)
       await getMaxAirDataByHour(sensor.id)

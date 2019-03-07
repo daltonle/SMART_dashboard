@@ -1,6 +1,6 @@
 import moment from 'moment'
 import {
-  GET_AIR_DATA_LIVE, 
+  GET_AIR_DATA_LIVE,
   GET_VISUAL_DATA_LIVE,
   GET_AVG_AIR_DATA_BY_HOUR,
   GET_MIN_AIR_DATA_BY_HOUR,
@@ -25,9 +25,9 @@ import {
 } from './types'
 
 let timers = []
-const clearTimer = () => { 
+const clearTimer = () => {
   for (let i = 0; i < timers.length; i++)
-    window.clearTimeout(timers[i]) 
+    window.clearTimeout(timers[i])
 }
 
 
@@ -46,7 +46,7 @@ export const getAirData = (id) => (dispatch) => {
         type: GET_AIR_DATA_LIVE,
         payload: response
       })
-      
+
     })
     .catch(err => console.log(err))
   fetch(`/api/sensor-data/history/air/pm2_5/${id}`)
@@ -69,15 +69,15 @@ export const getAirData = (id) => (dispatch) => {
   const getAirDataLive = () => {
     timers.push(setTimeout(getAirDataLive, 60000))
     fetch(`/api/sensor-data/air/live/${id}`)
-    .then(res => res.text())
-    .then(text => text.length ? JSON.parse(text) : undefined)
-    .then(res => {
-      dispatch({
-        type: UPDATE_AIR_DATA_LIVE,
-        payload: res
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => {
+        dispatch({
+          type: UPDATE_AIR_DATA_LIVE,
+          payload: res
+        })
       })
-    })
-    .catch(err => console.log(err))
+      .catch(err => console.log(err))
   }
   getAirDataLive()
 }
@@ -88,6 +88,8 @@ export const getAirData = (id) => (dispatch) => {
  */
 export const getVisualData = (id) => (dispatch, getState) => {
   clearTimer()
+  const startDate = moment(getState().charts.analysisPeriod.startDate).format('YYYY-MM-DD')
+  const endDate = moment(getState().charts.analysisPeriod.endDate).format('YYYY-MM-DD')
 
   fetch(`/api/sensor-data/visual/live/${id}`)
     .then(res => res.text())
@@ -123,20 +125,36 @@ export const getVisualData = (id) => (dispatch, getState) => {
       payload: res
     }))
     .catch(err => console.log(err))
+  fetch(`/api/sensor-data/visual/heatmap/${id}/${startDate},${endDate}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_VISUAL_HEATMAP_DATA,
+      payload: res
+    }))
+    .catch(err => console.log(err))
+  fetch(`/api/sensor-data/visual/trajectory/${id}/${startDate},${endDate}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_TRAJECTORY_DATA,
+      payload: res
+    }))
+    .catch(err => console.log(err))
 
   // get live data after every minute
   const getVisualDataLive = () => {
     timers.push(setTimeout(getVisualDataLive, 60000))
     fetch(`/api/sensor-data/visual/live/${id}`)
-    .then(res => res.text())
-    .then(text => text.length ? JSON.parse(text) : undefined)
-    .then(res => {
-      dispatch({
-        type: UPDATE_VISUAL_DATA_LIVE,
-        payload: res
+      .then(res => res.text())
+      .then(text => text.length ? JSON.parse(text) : undefined)
+      .then(res => {
+        dispatch({
+          type: UPDATE_VISUAL_DATA_LIVE,
+          payload: res
+        })
       })
-    })
-    .catch(err => console.log(err))
+      .catch(err => console.log(err))
   }
   getVisualDataLive()
 }
@@ -149,13 +167,13 @@ export const getAvgAirDataByHour = id => (dispatch, getState) => {
   const startDate = moment(getState().charts.analysisPeriod.startDate).format('YYYY-MM-DD')
   const endDate = moment(getState().charts.analysisPeriod.endDate).format('YYYY-MM-DD')
   fetch(`/api/sensor-data/air/by-hour/avg/${id}/${startDate},${endDate}`)
-  .then(res => res.text())
-  .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => dispatch({
-    type: GET_AVG_AIR_DATA_BY_HOUR,
-    payload: res
-  }))
-  .catch(err => console.log(err))
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_AVG_AIR_DATA_BY_HOUR,
+      payload: res
+    }))
+    .catch(err => console.log(err))
 }
 
 /**
@@ -166,13 +184,13 @@ export const getMinAirDataByHour = id => (dispatch, getState) => {
   const startDate = moment(getState().charts.analysisPeriod.startDate).format('YYYY-MM-DD')
   const endDate = moment(getState().charts.analysisPeriod.endDate).format('YYYY-MM-DD')
   fetch(`/api/sensor-data/air/by-hour/min/${id}/${startDate},${endDate}`)
-  .then(res => res.text())
-  .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => dispatch({
-    type: GET_MIN_AIR_DATA_BY_HOUR,
-    payload: res
-  }))
-  .catch(err => console.log(err))
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_MIN_AIR_DATA_BY_HOUR,
+      payload: res
+    }))
+    .catch(err => console.log(err))
 }
 
 /**
@@ -183,13 +201,13 @@ export const getMaxAirDataByHour = id => (dispatch, getState) => {
   const startDate = moment(getState().charts.analysisPeriod.startDate).format('YYYY-MM-DD')
   const endDate = moment(getState().charts.analysisPeriod.endDate).format('YYYY-MM-DD')
   fetch(`/api/sensor-data/air/by-hour/max/${id}/${startDate},${endDate}`)
-  .then(res => res.text())
-  .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => dispatch({
-    type: GET_MAX_AIR_DATA_BY_HOUR,
-    payload: res
-  }))
-  .catch(err => console.log(err))
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_MAX_AIR_DATA_BY_HOUR,
+      payload: res
+    }))
+    .catch(err => console.log(err))
 }
 
 /**
@@ -200,13 +218,13 @@ export const getAvgVisualDataByHour = id => (dispatch, getState) => {
   const startDate = moment(getState().charts.analysisPeriod.startDate).format('YYYY-MM-DD')
   const endDate = moment(getState().charts.analysisPeriod.endDate).format('YYYY-MM-DD')
   fetch(`/api/sensor-data/visual/by-hour/avg/${id}/${startDate},${endDate}`)
-  .then(res => res.text())
-  .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => dispatch({
-    type: GET_AVG_VISUAL_DATA_BY_HOUR,
-    payload: res
-  }))
-  .catch(err => console.log(err))
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_AVG_VISUAL_DATA_BY_HOUR,
+      payload: res
+    }))
+    .catch(err => console.log(err))
 }
 
 /**
@@ -217,13 +235,13 @@ export const getMinVisualDataByHour = id => (dispatch, getState) => {
   const startDate = moment(getState().charts.analysisPeriod.startDate).format('YYYY-MM-DD')
   const endDate = moment(getState().charts.analysisPeriod.endDate).format('YYYY-MM-DD')
   fetch(`/api/sensor-data/visual/by-hour/min/${id}/${startDate},${endDate}`)
-  .then(res => res.text())
-  .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => dispatch({
-    type: GET_MIN_VISUAL_DATA_BY_HOUR,
-    payload: res
-  }))
-  .catch(err => console.log(err))
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_MIN_VISUAL_DATA_BY_HOUR,
+      payload: res
+    }))
+    .catch(err => console.log(err))
 }
 
 /**
@@ -234,13 +252,13 @@ export const getMaxVisualDataByHour = id => (dispatch, getState) => {
   const startDate = moment(getState().charts.analysisPeriod.startDate).format('YYYY-MM-DD')
   const endDate = moment(getState().charts.analysisPeriod.endDate).format('YYYY-MM-DD')
   fetch(`/api/sensor-data/visual/by-hour/max/${id}/${startDate},${endDate}`)
-  .then(res => res.text())
-  .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => dispatch({
-    type: GET_MAX_VISUAL_DATA_BY_HOUR,
-    payload: res
-  }))
-  .catch(err => console.log(err))
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_MAX_VISUAL_DATA_BY_HOUR,
+      payload: res
+    }))
+    .catch(err => console.log(err))
 }
 
 /**
@@ -249,57 +267,57 @@ export const getMaxVisualDataByHour = id => (dispatch, getState) => {
  * @param {string} day "YYYY-MM-DD"
  */
 export const getAirDataByDay = (id, day) => dispatch => {
-  fetch( `/api/sensor-data/air/by-day/pm2_5/${id}/${day}`)
-  .then(res => res.text())
-  .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => dispatch({
-    type: GET_PM25_BY_DAY,
-    payload: res
-  }))
-  .catch(err => console.log(err))
+  fetch(`/api/sensor-data/air/by-day/pm2_5/${id}/${day}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_PM25_BY_DAY,
+      payload: res
+    }))
+    .catch(err => console.log(err))
 
-  fetch( `/api/sensor-data/air/by-day/pm10/${id}/${day}`)
-  .then(res => res.text())
-  .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => dispatch({
-    type: GET_PM10_BY_DAY,
-    payload: res
-  }))
-  .catch(err => console.log(err))
+  fetch(`/api/sensor-data/air/by-day/pm10/${id}/${day}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_PM10_BY_DAY,
+      payload: res
+    }))
+    .catch(err => console.log(err))
 }
-  
+
 /**
  * Get visual data from a specific day
  * @param {string} id 
  * @param {string} day "YYYY-MM-DD"
  */
 export const getVisualDataByDay = (id, day) => dispatch => {
-  fetch( `/api/sensor-data/visual/by-day/pedestrian/${id}/${day}`)
-  .then(res => res.text())
-  .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => dispatch({
-    type: GET_PEDESTRIAN_BY_DAY,
-    payload: res
-  }))
-  .catch(err => console.log(err))
+  fetch(`/api/sensor-data/visual/by-day/pedestrian/${id}/${day}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_PEDESTRIAN_BY_DAY,
+      payload: res
+    }))
+    .catch(err => console.log(err))
 
-  fetch( `/api/sensor-data/visual/by-day/bicycle/${id}/${day}`)
-  .then(res => res.text())
-  .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => dispatch({
-    type: GET_BICYCLE_BY_DAY,
-    payload: res
-  }))
-  .catch(err => console.log(err))
+  fetch(`/api/sensor-data/visual/by-day/bicycle/${id}/${day}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_BICYCLE_BY_DAY,
+      payload: res
+    }))
+    .catch(err => console.log(err))
 
-  fetch( `/api/sensor-data/visual/by-day/vehicle/${id}/${day}`)
-  .then(res => res.text())
-  .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => dispatch({
-    type: GET_VEHICLE_BY_DAY,
-    payload: res
-  }))
-  .catch(err => console.log(err))
+  fetch(`/api/sensor-data/visual/by-day/vehicle/${id}/${day}`)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_VEHICLE_BY_DAY,
+      payload: res
+    }))
+    .catch(err => console.log(err))
 }
 
 /**
@@ -310,13 +328,13 @@ export const getHeatmapData = (id) => (dispatch, getState) => {
   const startDate = moment(getState().charts.analysisPeriod.startDate).format('YYYY-MM-DD')
   const endDate = moment(getState().charts.analysisPeriod.endDate).format('YYYY-MM-DD')
   fetch(`/api/sensor-data/visual/heatmap/${id}/${startDate},${endDate}`)
-  .then(res => res.text())
-  .then(text => text.length ? JSON.parse(text) : undefined)
-  .then(res => dispatch({
-    type: GET_VISUAL_HEATMAP_DATA,
-    payload: res
-  }))
-  .catch(err => console.log(err))
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : undefined)
+    .then(res => dispatch({
+      type: GET_VISUAL_HEATMAP_DATA,
+      payload: res
+    }))
+    .catch(err => console.log(err))
 }
 
 /**

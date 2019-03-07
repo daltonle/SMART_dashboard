@@ -69,24 +69,18 @@ class DataPage extends Component {
         getAirData(history.location.state.id)
       else if (history.location.state.type === 'visual') {
         getVisualData(history.location.state.id)
-        this.props.getHeatmapData(history.location.state.id)
-        this.props.getTrajectoryData(history.location.state.id)
       }
         
     } else this.props.history.push('/dashboard')
   }
-
-  /*
+/*
   componentDidUpdate = (prevProps) => {
     const { history } = this.props
     if (this.props.history.location.state.id !== prevProps.history.location.state.id) {
-      console.log('here')
       if (history.location.state.type === 'air') {
-        console.log("is getting air", history.location.state.id)
         this.props.getAirData(history.location.state.id)
       }
       else if (history.location.state.type === 'visual') {
-        console.log("is getting visual", history.location.state.id)
         this.props.getVisualData(history.location.state.id)
       }
     }
@@ -195,7 +189,7 @@ class DataPage extends Component {
                 <HistoryChart media={DESK} history={this.props.history} />
                 {(sensorType === 'air' && airSensor !== undefined) ?
                   <div className={styles.header}>
-                    <h3>Air data by hour</h3>
+                    <h3>Air quality peak analysis per hour</h3>
                     <HelpBttn
                       name="air-by-hour-chart"
                       message='Air quality data in each hour on each day of the week.<br><br>Use dropdown dialogue to view average/<br>minimum/maximum data.'
@@ -215,7 +209,7 @@ class DataPage extends Component {
                 {(sensorType === 'air' && airSensor !== undefined) ? <AirOfDayChart media={DESK} /> : <div></div>}
                 {(sensorType === 'visual' && visualSensor !== undefined) ?
                   <div className={styles.header}>
-                    <h3>Vehicles by hour</h3>
+                    <h3>Traffic detected per hour</h3>
                     <HelpBttn
                       name="vehicles-by-hour-chart"
                       message="Traffic data in each hour on each day of the week."
