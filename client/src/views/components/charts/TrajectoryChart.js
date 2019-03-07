@@ -5,6 +5,7 @@ import Plot from 'react-plotly.js'
 import { MOBILE } from '../../../utils/const'
 import { colors } from '../../../styles/colors'
 import withDimension from 'react-dimensions'
+import { getTrajectoryData } from '../../../state/ducks/sensor/actions'
 import styles from './TrajectoryChart.module.scss'
 
 class TrajectoryChart extends Component {
@@ -13,13 +14,24 @@ class TrajectoryChart extends Component {
     id: PropTypes.string,
     data: PropTypes.array,
     reso_x: PropTypes.number,
-    reso_y: PropTypes.number
+    reso_y: PropTypes.number,
+    analysisPeriod: PropTypes.object,
+
+    getTrajectoryData: PropTypes.func
   }
 
-  shouldComponentUpdate = (prevProps) => {
-    if (this.props.data !== prevProps.data)
+  shouldComponentUpdate = (nextProps) => {
+    if (this.props.data !== nextProps.data || this.props.analysisPeriod !== nextProps.analysisPeriod)
       return true
   }
+
+  componentDidUpdate = (prevProps) => {
+    if (this.props.analysisPeriod !== prevProps.analysisPeriod) {
+      this.props.getTrajectoryData(this.props.id)
+      this.forceUpdate()
+    }
+  }
+
 
   render() {
     const { containerWidth, media, data, reso_x, reso_y } = this.props
@@ -76,8 +88,6 @@ class TrajectoryChart extends Component {
       displayModeBar: true
     }
 
-    console.log(data)
-
     return(
       <div>
         <Plot
@@ -94,10 +104,13 @@ const mapStateToProps = (state) => ({
   id: state.sensor.visual.id,
   data: state.sensor.visual.trajectory,
   reso_x: state.sensor.visual.reso_x,
-  reso_y: state.sensor.visual.reso_y
+  reso_y: state.sensor.visual.reso_y,
+  analysisPeriod: state.charts.analysisPeriod
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  getTrajectoryData
+}
 
 export default withDimension({
   className: styles.wrapper

@@ -45,7 +45,7 @@ router.get('/air/:long,:lat', (req, res, next) => {
     .catch(next)
 })
 
-// retrieve live data of air sensor based on coordinates
+// retrieve live data of air sensor based on id
 router.get('/air/live/:id', (req, res, next) => {
   let query = {
     text: `SELECT id, name, description, pm2_5, pm10, to_char(ts, 'DD-MM-YYYY HH24:MI:SS') FROM aq_sensor
@@ -126,7 +126,6 @@ router.get('/air/by-period/:id/:year-:month-:day', (req, res, next) => {
     values: [id]
   }
 
-  console.log(query)
   db.query(query)
     .then(result => res.json(result.rows))
     .catch(next)
@@ -151,21 +150,20 @@ router.get('/visual/by-period/:id/:year-:month-:day', (req, res, next) => {
     values: [id]
   }
 
-  console.log(query)
   db.query(query)
     .then(result => res.json(result.rows))
     .catch(next)
 })
 
 // retrieve average air quality by hour
-router.get('/air/by-hour/avg/:id', (req, res, next) => {
+router.get('/air/by-hour/avg/:id/:startDate,:endDate', (req, res, next) => {
   let query = {
     text: `SELECT extract(dow from ts) as dow,
                   extract(hour from ts) as hour,
                   avg(pm2_5) as pm2_5,
                   avg(pm10) as pm10
           FROM aq_data
-          WHERE id_aq = $1
+          WHERE id_aq = $1 AND '[${req.params.startDate}, ${req.params.endDate}]'::daterange @> ts::date
           GROUP BY 1,2`,
     values: [req.params.id]
   }
@@ -176,14 +174,14 @@ router.get('/air/by-hour/avg/:id', (req, res, next) => {
 })
 
 // retrieve min air quality by hour
-router.get('/air/by-hour/min/:id', (req, res, next) => {
+router.get('/air/by-hour/min/:id/:startDate,:endDate', (req, res, next) => {
   let query = {
     text: `SELECT extract(dow from ts) as dow,
                   extract(hour from ts) as hour,
                   min(pm2_5) as pm2_5,
                   min(pm10) as pm10
           FROM aq_data
-          WHERE id_aq = $1
+          WHERE id_aq = $1 AND '[${req.params.startDate}, ${req.params.endDate}]'::daterange @> ts::date
           GROUP BY 1,2`,
     values: [req.params.id]
   }
@@ -194,14 +192,14 @@ router.get('/air/by-hour/min/:id', (req, res, next) => {
 })
 
 // retrieve max air quality by hour
-router.get('/air/by-hour/max/:id', (req, res, next) => {
+router.get('/air/by-hour/max/:id/:startDate,:endDate', (req, res, next) => {
   let query = {
     text: `SELECT extract(dow from ts) as dow,
                   extract(hour from ts) as hour,
                   max(pm2_5) as pm2_5,
                   max(pm10) as pm10
           FROM aq_data
-          WHERE id_aq = $1
+          WHERE id_aq = $1 AND '[${req.params.startDate}, ${req.params.endDate}]'::daterange @> ts::date
           GROUP BY 1,2`,
     values: [req.params.id]
   }
@@ -212,14 +210,14 @@ router.get('/air/by-hour/max/:id', (req, res, next) => {
 })
 
 // retrieve average vehicle count by hour
-router.get('/visual/by-hour/avg/:id', (req, res, next) => {
+router.get('/visual/by-hour/avg/:id/:startDate,:endDate', (req, res, next) => {
   let query = {
     text: `SELECT extract(dow from ts) as dow,
                   extract(hour from ts) as hour,
                   type,
                   avg(counter) as counter
           FROM vs_count
-          WHERE id_vs = $1
+          WHERE id_vs = $1 AND '[${req.params.startDate}, ${req.params.endDate}]'::daterange @> ts::date
           GROUP BY 1,2,3`,
     values: [req.params.id]
   }
@@ -230,14 +228,14 @@ router.get('/visual/by-hour/avg/:id', (req, res, next) => {
 })
 
 // retrieve min vehicle count by hour
-router.get('/visual/by-hour/min/:id', (req, res, next) => {
+router.get('/visual/by-hour/min/:id/:startDate,:endDate', (req, res, next) => {
   let query = {
     text: `SELECT extract(dow from ts) as dow,
                   extract(hour from ts) as hour,
                   type,
                   min(counter) as counter
           FROM vs_count
-          WHERE id_vs = $1
+          WHERE id_vs = $1 AND '[${req.params.startDate}, ${req.params.endDate}]'::daterange @> ts::date
           GROUP BY 1,2,3`,
     values: [req.params.id]
   }
@@ -248,14 +246,14 @@ router.get('/visual/by-hour/min/:id', (req, res, next) => {
 })
 
 // retrieve max vehicle count by hour
-router.get('/visual/by-hour/max/:id', (req, res, next) => {
+router.get('/visual/by-hour/max/:id/:startDate,:endDate', (req, res, next) => {
   let query = {
     text: `SELECT extract(dow from ts) as dow,
                   extract(hour from ts) as hour,
                   type,
                   max(counter) as counter
           FROM vs_count
-          WHERE id_vs = $1
+          WHERE id_vs = $1 AND '[${req.params.startDate}, ${req.params.endDate}]'::daterange @> ts::date
           GROUP BY 1,2,3`,
     values: [req.params.id]
   }
@@ -300,10 +298,10 @@ router.get('/visual/by-day/:name/:id/:year-:month-:day', (req, res, next) => {
 })
 
 // retrieve data for visual heatmap
-router.get('/visual/heatmap/:id', async (req, res, next) => {
+router.get('/visual/heatmap/:id/:startDate,:endDate', async (req, res, next) => {
   let query = {
     text: `SELECT x1, y1, x2, y2 FROM vs_detections
-          WHERE id_obj IN (SELECT id FROM vs_object WHERE id_sensor=$1)
+          WHERE id_obj IN (SELECT id FROM vs_object WHERE id_sensor=$1) AND '[${req.params.startDate}, ${req.params.endDate}]'::daterange @> ts::date
           ORDER BY ts DESC
           LIMIT 5000`,
     values: [req.params.id]
@@ -321,10 +319,10 @@ router.get('/visual/heatmap/:id', async (req, res, next) => {
 })
 
 // retrieve data for visual trajectory tracking
-router.get('/visual/trajectory/:id', (req, res, next) => {
+router.get('/visual/trajectory/:id/:startDate,:endDate', (req, res, next) => {
   let query = {
     text: `SELECT id_obj, array_agg((x1+x2)/2 ORDER BY ts DESC) as x, array_agg((y1+y2)/2) as y FROM vs_detections
-          WHERE id_obj IN (SELECT id FROM vs_object WHERE id_sensor=$1)
+          WHERE id_obj IN (SELECT id FROM vs_object WHERE id_sensor=$1) AND '[${req.params.startDate}, ${req.params.endDate}]'::daterange @> ts::date
           GROUP BY id_obj
           ORDER BY id_obj ASC
           LIMIT 500`,

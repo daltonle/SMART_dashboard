@@ -7,7 +7,7 @@ import ExitIcon from 'react-feather/dist/icons/x'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { changeCentre, changeLayer } from '../../../state/ducks/map/actions'
-import { getAirData, getVisualData } from '../../../state/ducks/sensor/actions'
+import { getAirData, getVisualData, getHeatmapData, getTrajectoryData } from '../../../state/ducks/sensor/actions'
 import { DESK, MOBILE } from '../../../utils/const'
 import { AppBar } from '../../components/appbar/AppBar'
 import { VisualLiveChart, HistoryChart, AirByHourChart, VisualByHourChart, AirOfDayChart, VisualOfDayChart, VisualHeatmap, TrajectoryChart } from '../../components/charts'
@@ -16,6 +16,7 @@ import { CompareBttn, LayersBttn, LegendsBttn } from '../../components/mapContro
 import { HelpBttn } from '../../components/help-button/HelpBttn'
 import { ParticleData } from '../../components/particleData/ParticleData'
 import { TitleCard } from '../../components/titleCard/TitleCard'
+import PeriodPicker from '../../components/period-picker/PeriodPicker'
 import styles from './DataPage_desktop.module.scss'
 import m_styles from './DataPage_mobile.module.scss'
 
@@ -30,7 +31,9 @@ class DataPage extends Component {
     changeLayer: PropTypes.func,
     changeCentre: PropTypes.func,
     getAirData: PropTypes.func,
-    getVisualData: PropTypes.func
+    getVisualData: PropTypes.func,
+    getTrajectoryData: PropTypes.func,
+    getHeatmapData: PropTypes.func
   }
 
   constructor(props) {
@@ -64,8 +67,12 @@ class DataPage extends Component {
         this.props.history.push('/dashboard')
       else if (history.location.state.type === 'air')
         getAirData(history.location.state.id)
-      else if (history.location.state.type === 'visual')
+      else if (history.location.state.type === 'visual') {
         getVisualData(history.location.state.id)
+        this.props.getHeatmapData(history.location.state.id)
+        this.props.getTrajectoryData(history.location.state.id)
+      }
+        
     } else this.props.history.push('/dashboard')
   }
 
@@ -174,6 +181,9 @@ class DataPage extends Component {
               <div className={styles.chartDetails}>
                 <div className={styles.exitButton} onClick={this.handleCollapse}>
                   <ExitIcon className={styles.icon} />
+                </div>
+                <div className={styles.periodPicker}>
+                  <PeriodPicker />
                 </div>
                 <div className={styles.header} style={{ marginTop: 0 }}>
                   <h3>History</h3>
@@ -291,8 +301,7 @@ class DataPage extends Component {
                 />
               </div>
               <h4>Live feed</h4>
-              {sensorType === 'air' && airSensor === undefined ?
-                <h5 className={m_styles.noAir}>No air data.</h5> :
+              {sensorType === 'air' && airSensor !== undefined ?
                 <div className={styles.airDataContainer}>
                   <div>
                     <ParticleData
@@ -310,12 +319,15 @@ class DataPage extends Component {
                     />
                     <h5>PM10</h5>
                   </div>
-                </div>
+                </div> :
+                <div></div>
               }
-              {sensorType === 'visual' && visualSensor === undefined ?
-                <h5 className={m_styles.noVisual}>No visual data.</h5> :
-                <VisualLiveChart />
+              {sensorType === 'visual' && visualSensor !== undefined ?
+                <VisualLiveChart /> : <div></div>
               }
+              <div className={m_styles.periodPicker}>
+                <PeriodPicker />
+              </div>
               <div className={m_styles.header} style={{ marginTop: 0 }}>
                 <h3>History</h3>
                 <HelpBttn
@@ -415,8 +427,7 @@ class DataPage extends Component {
                   />
                 </div>
                 <h4>Live feed</h4>
-                {sensorType === 'air' && airSensor === undefined ?
-                  <div style={{ display: `none` }}></div> :
+                {sensorType === 'air' && airSensor !== undefined ?
                   <div className={styles.airDataContainer}>
                     <div>
                       <ParticleData
@@ -434,11 +445,11 @@ class DataPage extends Component {
                       />
                       <h5>PM10</h5>
                     </div>
-                  </div>
+                  </div> :
+                  <div style={{ display: `none` }}></div>
                 }
-                {sensorType === 'visual' && visualSensor === undefined ?
-                  <div style={{ display: `none` }}></div> :
-                  <VisualLiveChart />
+                {sensorType === 'visual' && visualSensor !== undefined ?
+                  <VisualLiveChart /> : <div></div>
                 }
               </div>
             </div>
@@ -462,7 +473,9 @@ const mapDispatchToProps = {
   changeLayer,
   changeCentre,
   getAirData,
-  getVisualData
+  getVisualData,
+  getHeatmapData,
+  getTrajectoryData
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DataPage)

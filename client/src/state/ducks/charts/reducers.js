@@ -3,7 +3,8 @@ import {
   CHANGE_AIR_DOW_HOUR_CHART, 
   CHANGE_VISUAL_DOW_HOUR_CHART, 
   CHANGE_AIR_TYPE_HOUR_CHART,
-  CHANGE_VISUAL_TYPE_HOUR_CHART
+  CHANGE_VISUAL_TYPE_HOUR_CHART,
+  UPDATE_ANALYSIS_PERIOD
 } from './types'
 
 /**
@@ -41,6 +42,11 @@ const initialState = {
       dow: new Date().getDay(),
       type: 'avg'
     }
+  },
+  analysisPeriod: {
+    name: 'day',
+    startDate: new Date(),
+    endDate: new Date()
   }
 }
 
@@ -97,6 +103,11 @@ const chartsReducer = (state = initialState, action) => {
             type: action.payload
           }
         }
+      }
+    case UPDATE_ANALYSIS_PERIOD:
+      return {
+        ...state,
+        analysisPeriod: action.payload
       }
     default:
       return state

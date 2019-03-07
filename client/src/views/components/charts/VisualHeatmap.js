@@ -5,6 +5,7 @@ import Plot from 'react-plotly.js'
 import { MOBILE } from '../../../utils/const'
 import { colors } from '../../../styles/colors'
 import withDimension from 'react-dimensions'
+import { getHeatmapData } from '../../../state/ducks/sensor/actions'
 import styles from './VisualHeatmap.module.scss'
 
 class VisualHeatmap extends Component {
@@ -14,8 +15,16 @@ class VisualHeatmap extends Component {
     data: PropTypes.array,
     reso_x: PropTypes.number,
     reso_y: PropTypes.number,
+    analysisPeriod: PropTypes.object,
 
     getHeatmapData: PropTypes.func
+  }
+
+  componentDidUpdate = (prevProps) => {
+    if (this.props.analysisPeriod !== prevProps.analysisPeriod) {
+      this.props.getHeatmapData(this.props.id)
+      this.forceUpdate()
+    }
   }
 
   render() {
@@ -66,8 +75,6 @@ class VisualHeatmap extends Component {
       displayModeBar: true
     }
 
-    console.log(data)
-
     return(
       <div>
         <Plot
@@ -85,10 +92,13 @@ const mapStateToProps = (state) => ({
   id: state.sensor.visual.id,
   data: state.sensor.visual.heatmap,
   reso_x: state.sensor.visual.reso_x,
-  reso_y: state.sensor.visual.reso_y
+  reso_y: state.sensor.visual.reso_y,
+  analysisPeriod: state.charts.analysisPeriod
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  getHeatmapData
+}
 
 export default withDimension({
   className: styles.wrapper

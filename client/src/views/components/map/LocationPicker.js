@@ -195,7 +195,6 @@ class LocationPicker extends Component {
   }
 
   render() {
-    const { sensorType } = this.props
     const markers = this._loadMarkers()
 
     const { selectedLocation, cardVisible, addable } = this.state

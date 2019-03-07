@@ -3,7 +3,8 @@ import {
   CHANGE_AIR_DOW_HOUR_CHART,
   CHANGE_VISUAL_DOW_HOUR_CHART,
   CHANGE_AIR_TYPE_HOUR_CHART,
-  CHANGE_VISUAL_TYPE_HOUR_CHART
+  CHANGE_VISUAL_TYPE_HOUR_CHART,
+  UPDATE_ANALYSIS_PERIOD
 } from './types'
 
 export const changeZoomDomain = domain => dispatch => {
@@ -38,5 +39,12 @@ export const changeVisualTypeHourChart = aggType => dispatch => {
   dispatch({
     type: CHANGE_VISUAL_TYPE_HOUR_CHART,
     payload: aggType
+  })
+}
+
+export const updateAnalysisPeriod = (period) => dispatch => {
+  dispatch({
+    type: UPDATE_ANALYSIS_PERIOD,
+    payload: period
   })
 }

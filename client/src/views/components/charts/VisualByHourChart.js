@@ -18,6 +18,7 @@ class VisualByHourChart extends Component {
     day: PropTypes.number,
     type: PropTypes.string,
     media: PropTypes.string,
+    analysisPeriod: PropTypes.object,
 
     getAvgVisualDataByHour: PropTypes.func,
     getMinVisualDataByHour: PropTypes.func,
@@ -30,6 +31,15 @@ class VisualByHourChart extends Component {
     this.props.getAvgVisualDataByHour(this.props.sensor.id)
     this.props.getMinVisualDataByHour(this.props.sensor.id)
     this.props.getMaxVisualDataByHour(this.props.sensor.id)
+  }
+
+  componentDidUpdate = async (prevProps) => {
+    if (this.props.analysisPeriod !== prevProps.analysisPeriod) {
+      await this.props.getAvgVisualDataByHour(this.props.sensor.id)
+      await this.props.getMinVisualDataByHour(this.props.sensor.id)
+      await this.props.getMaxVisualDataByHour(this.props.sensor.id)
+      this.forceUpdate()
+    }
   }
 
   handleDayDecreased = (day, e) => {
@@ -161,7 +171,8 @@ class VisualByHourChart extends Component {
 const mapStateToProps = (state) => ({
   sensor: state.sensor.visual,
   day: state.charts.byHour.visual.dow,
-  type: state.charts.byHour.visual.type
+  type: state.charts.byHour.visual.type,
+  analysisPeriod: state.charts.analysisPeriod
 })
 
 const mapDispatchToProps = {

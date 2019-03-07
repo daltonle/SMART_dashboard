@@ -18,6 +18,7 @@ class AirByHourChart extends Component {
     sensor: PropTypes.object,
     day: PropTypes.number,
     type: PropTypes.string,
+    analysisPeriod: PropTypes.object,
 
     getAvgAirDataByHour: PropTypes.func,
     getMinAirDataByHour: PropTypes.func, 
@@ -27,9 +28,20 @@ class AirByHourChart extends Component {
   }
   
   componentDidMount = () => {
-    this.props.getAvgAirDataByHour(this.props.sensor.id)
-    this.props.getMinAirDataByHour(this.props.sensor.id)
-    this.props.getMaxAirDataByHour(this.props.sensor.id)
+    const { getAvgAirDataByHour, getMinAirDataByHour, getMaxAirDataByHour, sensor, analysisPeriod } = this.props
+    getAvgAirDataByHour(sensor.id)
+    getMinAirDataByHour(sensor.id)
+    getMaxAirDataByHour(sensor.id)
+  }
+
+  componentDidUpdate = async (prevProps) => {
+    if (this.props.analysisPeriod !== prevProps.analysisPeriod) {
+      const { getAvgAirDataByHour, getMinAirDataByHour, getMaxAirDataByHour, sensor, analysisPeriod } = this.props
+      await getAvgAirDataByHour(sensor.id)
+      await getMinAirDataByHour(sensor.id)
+      await getMaxAirDataByHour(sensor.id)
+      this.forceUpdate()
+    }
   }
 
   handleDayDecreased = (day, e) => {
@@ -166,7 +178,8 @@ class AirByHourChart extends Component {
 const mapStateToProps = (state) => ({
   sensor: state.sensor.air,
   day: state.charts.byHour.air.dow,
-  type: state.charts.byHour.air.type
+  type: state.charts.byHour.air.type,
+  analysisPeriod: state.charts.analysisPeriod
 })
 
 const mapDispatchToProps = {
