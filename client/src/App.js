@@ -6,8 +6,9 @@ import Media from 'react-media'
 import { DESK, MOBILE, BREAK_POINT } from './utils/const'
 import store from './state/store'
 import DashboardMain from './views/pages/DashboardMain/DashboardMain'
+import About from './views/pages/About/About'
 import DataPage from './views/pages/DataPage/DataPage'
-import Compare from './views/pages/Compare/Compare';
+import Compare from './views/pages/Compare/Compare'
 
 class App extends Component {
   render() {
@@ -20,6 +21,10 @@ class App extends Component {
                 <Route
                   exact path={['/dashboard', '/']}
                   render={(props) => <DashboardMain {...props} media={matches ? MOBILE : DESK} />}
+                />
+                <Route
+                  path='/about'
+                  render={(props) => <About {...props} media={matches ? MOBILE : DESK} />} 
                 />
                 <Route 
                   path='/dashboard/:lat,:long'

@@ -15,7 +15,7 @@ export const AppBar = (props) => {
 }
 
 const AppBarDesktop = (props) => (
-  <div className={styles.container}>
+  <div className={classNames({ [styles.container]: true, [styles.noShadow]: props.noShadow})}>
     <Link to="/about" className={classNames({[styles.menuActive]: props.active === 'about', [styles.menuItems]: true})}>ABOUT</Link>
     <Link to="/dashboard" className={classNames({[styles.menuActive]: props.active === 'dashboard', [styles.menuItems]: true})}>DASHBOARD</Link>
   </div>
@@ -24,11 +24,11 @@ const AppBarDesktop = (props) => (
 const AppBarMobile = (props) => (
   <div className={styles.m_background}>
     <div className={styles.m_container}>
-      <div className={classNames({[styles.m_menuActive]: props.active === 'dashboard', [styles.m_menuItemContainer]: true})}>
+      <div onclick={() => props.history.push('/dashboard')} className={classNames({[styles.m_menuActive]: props.active === 'dashboard', [styles.m_menuItemContainer]: true})}>
         <ActivityIcon size={16} className={styles.m_icon}/><br/>
         <Link to="/dashboard" className={classNames({[styles.m_menuActive]: props.active === 'dashboard', [styles.m_menuItems]: true})}>Dashboard</Link>
       </div>
-      <div className={classNames({[styles.m_menuActive]: props.active === 'about', [styles.m_menuItemContainer]: true})}>
+      <div onclick={() => props.history.push('/about')} className={classNames({[styles.m_menuActive]: props.active === 'about', [styles.m_menuItemContainer]: true})}>
         <InfoIcon size={16} className={styles.m_icon}/><br/>
         <Link to="/about" className={classNames({[styles.m_menuActive]: props.active === 'about', [styles.m_menuItems]: true})}>About</Link>
       </div>

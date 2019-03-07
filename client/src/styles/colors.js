@@ -16,7 +16,9 @@ export const colors = {
   backgroundColor: "#FCFCFC",
   black: "#202124",
   primaryColor_1: "#BBE0E8",
-  primaryColor_3: "#60B7C9"
+  primaryColor_3: "#60B7C9",
+  primaryColor_7: "#045C6D",
+  primaryColor_9: "#02272F"
 }
 
 export const colorScale = [ colors.green, colors.red, colors.yellow, colors.purple, colors.orange, colors.maroon, colors.primaryColor]

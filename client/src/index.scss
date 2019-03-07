@@ -18,7 +18,7 @@ body {
   font-family: $font-family;
   font-weight: $font-weight-regular;
   font-size: 100%;
-  color: $black;
+  color: $primary-color-9;
   line-height: $font-height;
   z-index: 0;
 }
@@ -50,7 +50,7 @@ h6 {
 }
 
 p {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 200;
   line-height: 1.8;
 }

@@ -1,0 +1,131 @@
+@import '../../../styles/colors.scss';
+@import '../../../styles/font.scss';
+
+.outer {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-flow: column;
+}
+
+.appbar {
+  z-index: 1;
+}
+
+.content {
+  flex-grow: 1;
+  background-color: $background-color;
+  padding: 0 2.5rem 0 2.5rem;
+  
+  .header {
+    max-width: 60rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2.5rem;
+  }
+
+  .aboutPara {
+    max-width: 60rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.m_content {
+  padding: 0 1.5rem 0 1.5rem;
+}
+
+.footer {
+  background-color: $primary-color-9;
+  padding: 2rem 2.5rem 2rem 2.5rem;
+
+  .linkDiv {
+    margin-bottom: .5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    padding: .5rem 1rem .5rem 1rem;
+    &:hover {
+      background-color: rgba(250,250,250, .1);
+      border-radius: 3px;
+      box-shadow: 0 0.1875em 2em rgba(0, 0, 0, .3);
+    }
+  
+    .link {
+      position:absolute; 
+      width:100%;
+      height:100%;
+      top:0;
+      left: 0;
+    }
+  }
+  
+  .icon {
+    height: 1rem;
+    widows: 1rem;
+    stroke: $background-color;
+    opacity: 0.8;
+    margin-right: .5rem;
+  }
+
+  .footerContent {
+    max-width: 60rem;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    span {
+      color: $background-color;
+      opacity: 0.8;
+    }
+  }
+}
+
+.m_footer {
+  background-color: $primary-color-9;
+  padding: 2rem 1.5rem 2rem 1.5rem;
+
+  .m_footerContent {
+    max-width: 60rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    .linkDiv {
+      margin-bottom: .5rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      margin: .5rem 0 .5rem 0;
+    
+      .link {
+        position:absolute; 
+        width:100%;
+        height:100%;
+        top:0;
+        left: 0;
+      }
+    }
+    
+    .icon {
+      height: 1rem;
+      widows: 1rem;
+      stroke: $background-color;
+      opacity: 0.8;
+      margin-right: .5rem;
+    }
+
+    span {
+      color: $background-color;
+      opacity: 0.8;
+    }
+  }
+}
+
+
