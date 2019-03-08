@@ -152,11 +152,17 @@ class VisualOfDayChart extends Component {
             ref={el => this.onDatepickerRef(el)}
           />
         </div>
-        <Plot
-          data={data}
-          config={media===MOBILE ? mobileCongig : webConfig}
-          layout={media===MOBILE ? mobileLayout : webLayout}
-        />
+        {
+          (data[0].x.length===0 && data[1].x.length===0 && data[2].x.length===0) ?
+          <div className={styles.noData}>
+            <p>No data.</p>
+          </div> :
+          <Plot
+            data={data}
+            config={media===MOBILE ? mobileCongig : webConfig}
+            layout={media===MOBILE ? mobileLayout : webLayout}
+          />
+        }
       </div>
     )
   }
