@@ -1,8 +1,168 @@
 {
   "map": {
-    "airMarkers": [],
-    "visualMarkers": [],
-    "isAirLayer": true,
-    "centre": {}
+    "layers": {
+      "air": true,
+      "visual": true
+    },
+    "centre": {
+      "lng": 150.923869,
+      "lat": -33.92249
+    },
+    "zoomLevel": 16,
+    "airAttr": "pm2_5",
+    "visualAttr": "pedestrian",
+    "airMarkers": [
+      {
+        "id": "70B3D5499FE5C1AE",
+        "name": "aq_03",
+        "lat": "0.0",
+        "long": "0.0",
+        "alt": "0.0",
+        "pm2_5": "3",
+        "pm10": "4"
+      }
+    ],
+    "visualMarkers": [
+      {
+        "id": "MAC-00-04-4b-c4-8a-12",
+        "name": "MAC-00-04-4b-c4-8a-12",
+        "lat": "-33.923780",
+        "long": "150.922297",
+        "alt": "0.0",
+        "pedestrian": "0",
+        "bicycle": "0",
+        "vehicle": "0"
+      }
+    ]
+  },
+  "sensor": {
+    "visual": {
+      "id": "MAC-00-04-4b-c4-8a-18",
+      "name": "MAC-00-04-4b-c4-8a-18",
+      "description": "CCTV6 Cnr Macquarie and Moore (Macquarie House)",
+      "to_char": "08-03-2019 13:53:58",
+      "pedestrians": "38",
+      "vehicles": "3",
+      "bicycles": "0",
+      "reso_x": "1280",
+      "reso_y": "960",
+      "updateTime": "08-03-2019 13:54:01",
+      "historyPedestrian": [
+        {
+          "x": "08-03-2019 13:53:26",
+          "y": 11
+        },
+        {
+          "x": "08-03-2019 13:43:58",
+          "y": 28
+        }
+      ],
+      "historyBicycle": [],
+      "historyVehicle": [],
+      "trajectory": {
+        "data": [
+          {
+            "id_obj": "0000304e-36f4-4c5b-8d08-fa5370c775c9",
+            "x": [
+              991.311919522821,
+              992.9344735119589,
+              992.0883257742315
+            ],
+            "y": [
+              211.83541781552427,
+              212.8006347099777,
+              212.88074423413772
+            ]
+          }
+        ],
+        "count": "87255"
+      },
+      "byHour": {
+        "max": [
+          {
+            "dow": 5,
+            "hour": 0,
+            "type": "pedestrian",
+            "counter": "14"
+          },
+          {
+            "dow": 5,
+            "hour": 0,
+            "type": "vehicle",
+            "counter": "7"
+          }
+        ],
+        "min": [],
+        "avg": []
+      },
+      "byDay": {
+        "bicycle": [
+          {
+            "x": "08-03-2019 00:00:20",
+            "y": 0
+          },
+          {
+            "x": "08-03-2019 00:00:52",
+            "y": 0
+          }
+        ],
+        "pedestrian": [],
+        "vehicle": []
+      },
+      "heatmap": []
+    }
+  },
+  "charts": {
+    "history": {
+      "zoomDomain": {
+        "x": [
+          "2019-01-31T13:00:00.000Z",
+          "2019-03-08T02:38:06.838Z"
+        ]
+      }
+    },
+    "byHour": {
+      "air": {
+        "dow": 5,
+        "type": "avg"
+      },
+      "visual": {
+        "dow": 5,
+        "type": "avg"
+      }
+    },
+    "analysisPeriod": {
+      "name": "day",
+      "startDate": "2019-03-08T02:38:06.838Z",
+      "endDate": "2019-03-08T02:38:06.838Z"
+    }
+  },
+  "compare": {
+    "count": 2,
+    "type": "air",
+    "sensors": [
+      {
+        "id": "70B3D5499F603EEE",
+        "description": "AQ7 Northumberland Street carpark - towards Moore St",
+        "name": "aq_15",
+        "long": "150.922289",
+        "lat": "-33.924005",
+        "alt": "0.0",
+        "pm2_5": "26",
+        "pm10": "53",
+        "to_char": "08-03-2019 14:12:03",
+        "history": {
+          "pm2_5": {
+            "x": [],
+            "y": []
+          },
+          "pm10": {
+            "x": [],
+            "y": []
+          }
+        },
+        "byHour": {}
+      }
+    ]
   }
 }
