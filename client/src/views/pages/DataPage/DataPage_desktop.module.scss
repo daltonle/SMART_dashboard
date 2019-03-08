@@ -34,7 +34,7 @@
       border-right: 1px solid $neutral-color-3;
     }
 
-    .backButton {
+    &>.backButton {
       stroke: $black;
       height: 1.25rem;
       width: 1.25rem;
@@ -172,3 +172,34 @@ div.periodPicker {
   margin-bottom: 1rem;
   z-index: 1002;
 }
+
+div.headerImg {
+  align-self: stretch;
+  position: relative;
+  margin-bottom: 1rem;
+
+  .backButton {
+    position: absolute;
+    top: 2.5rem;
+    left: 2.5rem;
+    height: 2.5rem;
+    width:2.5rem;
+    border-radius: 50%;
+    border: 1px transparent; 
+    box-shadow: 0.1875em 0 2em rgba(0, 0, 0, .3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+  
+    .icon {
+      stroke: $black;
+      height: 1.25rem;
+      width: 1.25rem;
+      flex-shrink: 0;
+    }
+  }
+}
+

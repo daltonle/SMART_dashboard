@@ -33,6 +33,7 @@ class VisualLiveChart extends Component {
       paper_bgcolor: colors.backgroundColor,
       margin: {
         t: 0,
+        b:0,
         pad: 8
       }
     }
