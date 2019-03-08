@@ -19,7 +19,8 @@ const About = ({ media, history }) => {
           <div className={styles.aboutPara}>
             <p>
               This project was done by Dalton Le as part of the 2018/2019 Summer Research Scholarships with
-              UOW SMART Infrastructure Facility.
+              SMART Infrastructure Facility, Univesity of Wollongong. For more information please visit SMART
+              website or email <b>duong.daltonle@gmail.com</b>.
             </p>
           </div>
         </div>
@@ -45,7 +46,8 @@ const About = ({ media, history }) => {
           <div className={styles.aboutPara}>
             <p>
               This project was done by Dalton Le as part of the 2018/2019 Summer Research Scholarships with
-              UOW SMART Infrastructure Facility.
+              SMART Infrastructure Facility, Univesity of Wollongong. For more information please visit SMART
+              website or email <b>duong.daltonle@gmail.com</b>.
             </p>
           </div>
         </div>
