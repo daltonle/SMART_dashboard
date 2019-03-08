@@ -65,7 +65,10 @@ export const LegendsBttn = compose(
     return (
       <div className={styles.legendContainer}>
         <button className={styles.bttn} data-tip data-for='legends'
-        onClick={() => toggleDialogue(n => !n)}>
+        onClick={() => {
+          toggleDialogue(n => !n)
+          setTimeout(() => toggleDialogue(n => !n), 7000)
+        }}>
           <InfoIcon className={styles.icon} />
           <ReactTooltip id='legends' place="left" type="light" effect="solid">
             <span>Legends</span>
@@ -100,7 +103,10 @@ export const LegendsBttn = compose(
     )
   else return (
     <div className={styles.legendContainer}>
-      <button className={styles.bttn} onClick={() => toggleDialogue(n => !n)}>
+      <button className={styles.bttn} onClick={() => {
+        toggleDialogue(n => !n)
+        setTimeout(() => toggleDialogue(n => !n), 7000)
+      }}>
         <InfoIcon className={styles.icon} />
       </button>
       <div className={classNames({ [styles.info]: true, [styles.hidden]: hidden })}
@@ -171,7 +177,10 @@ export const SettingsBttn = compose(
     return (
       <div className={styles.settingsContainer}>
         <button className={styles.bttn} data-tip data-for='layers' 
-        onClick={() => toggleDialogue(n => !n)} >
+        onClick={() => {
+          toggleDialogue(n => !n)
+          setTimeout(() => toggleDialogue(n => !n), 7000)
+        }} >
           <SettingsIcon className={styles.icon} />
           <ReactTooltip id='layers' place="left" type="light" effect="solid">
             <span>Settings</span>
@@ -231,7 +240,10 @@ export const SettingsBttn = compose(
   else return (
     <div className={m_styles.settingsContainer}>
       <button className={styles.bttnMobile} data-tip data-for='layers' 
-      onClick={() => toggleDialogue(n => !n)} >
+      onClick={() => {
+        toggleDialogue(n => !n)
+        setTimeout(() => toggleDialogue(n => !n), 7000)
+      }} >
         <SettingsIcon className={m_styles.icon} />
       </button>
       <div className={classNames({[m_styles.dialogue]: true, [m_styles.hidden]: hidden})}>

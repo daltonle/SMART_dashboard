@@ -1,4 +1,4 @@
-# SMART_air project
+# SMART Dashboard project
 
 A dashboard displaying air quality data collected from sensors across Wollongong and Sydney, using Node.js, Express.js, React and PostgreSQL.
 

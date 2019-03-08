@@ -1,6 +1,6 @@
 {
   "name": "smart_dashboard",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Dashboard of air quality data",
   "main": "server.js",
   "scripts": {
