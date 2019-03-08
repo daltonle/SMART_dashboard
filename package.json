@@ -14,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/daltonle/SMART_air.git"
   },
-  "author": "Dalton Le",
+  "author": "Dalton Le <duong.daltonle@gmail.com",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/daltonle/SMART_air/issues"
