@@ -48,6 +48,15 @@
       margin-bottom: 2rem;
       font-weight: $font-weight-heavy;
     }
+
+    &>h6 {
+      margin: 0;
+      margin-right: 2.5rem;
+      margin-top: 1rem;
+      align-self: flex-end;
+      color: $neutral-color-3;
+      font-style: italic;
+    }
   }
 
   .mapContainer {

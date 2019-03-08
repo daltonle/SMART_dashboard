@@ -170,6 +170,11 @@ class DataPage extends Component {
                 <VisualLiveChart /> :
                 <div style={{ display: `none` }}></div>
               }
+              <h6>Last update: {
+                sensorType === 'air' && airSensor !== undefined ? airSensor.updateTime : ""
+              }{
+                sensorType === 'visual' && visualSensor !== undefined ? visualSensor.updateTime : ""
+              }</h6>
             </div>
             {doShowDetails ?
               <div className={styles.chartDetails}>
@@ -295,6 +300,11 @@ class DataPage extends Component {
                 />
               </div>
               <h4>Live feed</h4>
+              <h6>Last update: {
+                sensorType === 'air' && airSensor !== undefined ? airSensor.updateTime : ""
+              }{
+                sensorType === 'visual' && visualSensor !== undefined ? visualSensor.updateTime : ""
+              }</h6>
               {sensorType === 'air' && airSensor !== undefined ?
                 <div className={styles.airDataContainer}>
                   <div>
@@ -442,6 +452,11 @@ class DataPage extends Component {
                 {sensorType === 'visual' && visualSensor !== undefined ?
                   <VisualLiveChart /> : <div></div>
                 }
+                <h6>Last update: {
+                  sensorType === 'air' && airSensor !== undefined ? airSensor.updateTime : ""
+                }{
+                  sensorType === 'visual' && visualSensor !== undefined ? visualSensor.updateTime : ""
+                }</h6>
               </div>
             </div>
           }

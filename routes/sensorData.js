@@ -54,7 +54,11 @@ router.get('/air/live/:id', (req, res, next) => {
   }
   
   db.query(query)
-    .then(result => res.json(result.rows[0]))
+    .then (result => ({
+      ...result.rows[0],
+      updateTime: moment().format('DD-MM-YYYY HH:mm:ss')
+    }))
+    .then(result => res.json(result))
     .catch(next)
 })
 
@@ -95,7 +99,6 @@ router.get('/visual/:long,:lat', (req, res, next) => {
 
 // retrieve live visual data of a sensor based on coordinates
 router.get('/visual/live/:id', (req, res, next) => {
-
   let query = {
     text: `SELECT id, name, description, to_char(ts, 'DD-MM-YYYY HH24:MI:SS'), pedestrians, vehicles, bicycles, reso_x, reso_y FROM vs_sensor
     WHERE id=$1`,
@@ -103,7 +106,11 @@ router.get('/visual/live/:id', (req, res, next) => {
   }
   
   db.query(query)
-    .then(result => res.json(result.rows[0]))
+    .then (result => ({
+      ...result.rows[0],
+      updateTime: moment().format('DD-MM-YYYY HH:mm:ss')
+    }))
+    .then(result => res.json(result))
     .catch(next)
 })
 
