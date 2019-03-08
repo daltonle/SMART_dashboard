@@ -12,11 +12,19 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // set up logger
-const accessLogStream = fs.createWriteStream('/access.log', { flags: 'a' })
+const accessLogStream = fs.createWriteStream('access.log', { flags: 'a' })
 if (app.get('env') === 'production')
   app.use(morgan('combined'))
 else app.use(morgan('dev', {stream: accessLogStream}))
 
+// immport routers
+const sensors = require('./routes/sensors')
+const sensorData = require('./routes/sensorData')
+const compare = require('./routes/compare')
+
+app.use('/api/sensors', sensors)
+app.use('/api/sensor-data', sensorData)
+app.use('/api/compare', compare)
 
 // start server
 const server = app.listen(port, () => {

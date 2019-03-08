@@ -1,0 +1,258 @@
+@import '../../../../styles/colors.scss';
+@import '../../../../styles/font.scss';
+
+.bttn {
+  background-color: $background-color;
+  height: 2.5em;
+  width: 2.5em;
+  border-radius: .2em;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-block-end: 1em;
+  box-shadow: 0.185em 0.1875em 0.75em rgba(0, 0, 0, .3);
+  border: 0;
+  text-decoration: none;
+
+  .icon {
+    stroke: $black;
+    width: 1.25em;
+    height: 1.25em;
+  }
+
+  &:hover {
+    cursor: pointer;
+    .icon {
+      stroke: $primary-color;
+    }
+  }
+}
+
+.bttnMobile {
+  background-color: $background-color;
+  height: 2.5em;
+  width: 2.5em;
+  border-radius: .2em;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-block-end: 1em;
+  box-shadow: 0.185em 0.1875em 0.75em rgba(0, 0, 0, .3);
+  border: 0;
+  text-decoration: none;
+
+  .icon {
+    stroke: $black;
+    width: 1.25em;
+    height: 1.25em;
+  }
+}
+
+.settingsContainer {
+  position: relative;
+
+  .dialogue {
+    padding: 2.5rem 2rem 2rem 2.5rem;
+    position: absolute;
+    width: 22.5rem;
+    background-color: $background-color;
+    top: 0;
+    transform: translate(-28rem, 0);
+    box-shadow: 0.185em 0.1875em 0.75em rgba(0, 0, 0, .3);
+    border-radius: 5px;
+
+    &>h4 {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .options {
+      font-size: .875rem;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 1rem 0 1rem 0;
+
+      &>* {
+        flex-shrink: 0;
+      }
+
+      .item {
+        background-color: $neutral-color-3;
+        border-radius: 3px;
+        padding: 0.5rem 1rem .5rem 1rem;
+        margin-right: .5rem;
+        cursor: pointer;
+
+        h5 {
+          margin: 0;
+          color: $neutral-color-8;
+        }
+      }
+
+      .chosen {
+        background-color: $primary-color;
+        h5 {
+          color: $background-color;
+        }
+      }
+
+      .attrName {
+        flex-grow: 1;
+        &>h5 {
+          margin: 0;
+          font-weight: $font-weight-heavy;
+        }
+      }
+    }
+
+    .header {
+      margin: 0;
+      align-self: stretch;
+      position: relative;
+      z-index: 1001;
+
+      h4 {
+        margin: 0;
+        display: inline-block;
+      }
+    }
+
+    .sensorType {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+
+      .layerItem {
+        flex-shrink: none;
+        position: relative;
+        width: 10rem;
+        height: 2rem;
+        border-radius: 3px;
+        cursor: pointer;
+    
+        h4 {
+          margin: 0;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%)
+        }
+      }
+
+      .layerItemActive {
+        @extend .layerItem;
+        background-color: $primary-color;
+    
+        h4 {
+          color: $background-color;
+        }
+      }
+  
+      .layerItemInactive {
+        @extend .layerItem;
+        background-color: $neutral-color-3;
+  
+        h4 {
+          color: $neutral-color-8;
+        }
+      }
+    }
+  }
+  
+
+  .hidden {
+    display: none;
+  }
+}
+
+.legendContainer {
+  position: relative;
+
+  .info {
+    padding: 2rem 0rem 2rem 2rem;
+    position: absolute;
+    width: 18rem;
+    background-color: $background-color;
+    top: 0;
+    transform: translate(-21rem, 0);
+    box-shadow: 0.185em 0.1875em 0.75em rgba(0, 0, 0, .3);
+    border-radius: 5px;
+
+    h3 {
+      margin: 0;
+      margin-bottom: 1.5rem;
+    }
+
+    &>h5 {
+      margin: 0;
+      margin-bottom: .5rem;
+      font-weight: $font-weight-heavy;
+    }
+
+    .sensorType {
+      display: flex;
+      flex-flow: row wrap;
+      margin-bottom: 1rem;
+
+      .sensorTypeItem {
+        flex-shrink: 0;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        margin-right: 4.5rem;
+        margin-bottom: .5rem;
+
+        h5 {
+          margin: 0;
+          margin-left: 1rem;
+        }
+      }
+    }
+
+    .sensorColor {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: flex-start;
+
+      .sensorColorItem {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-right: 2.5rem;
+
+        h5 { 
+          margin: 0; 
+          margin-bottom: .5rem;
+        }
+
+        .sensorColorRow {
+          display: flex;
+          flex-flow: row nowrap;
+          align-items: center;
+          margin-bottom: .5rem;
+
+          h5 {
+            margin: 0;
+            margin-left: .5rem;
+          }
+
+          .colorBlock {
+            flex-shrink: 0;
+            height: 1rem;
+            width: 2rem;
+            border-radius: 3px;
+          }
+        }
+      }
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+}

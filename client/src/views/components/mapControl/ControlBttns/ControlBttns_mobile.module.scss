@@ -1,0 +1,137 @@
+@import '../../../../styles/colors.scss';
+@import '../../../../styles/font.scss';
+
+.settingsContainer {
+  position: relative;
+
+  .dialogue {
+    padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+    position: absolute;
+    width: 80vw;
+    background-color: $background-color;
+    bottom: 0;
+    right: 0;
+    box-shadow: 0.185em 0.1875em 0.75em rgba(0, 0, 0, .3);
+    border-radius: 5px;
+
+    .options {
+      font-size: .875rem;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 1rem 0 1rem 0;
+
+      .item {
+        background-color: $neutral-color-3;
+        border-radius: 3px;
+        padding: 0.5rem 1rem .5rem 1rem;
+        margin-right: .5rem;
+        cursor: pointer;
+
+        h5 {
+          margin: 0;
+          color: $neutral-color-8;
+        }
+      }
+
+      .chosen {
+        background-color: $primary-color;
+        h5 {
+          color: $background-color;
+        }
+      }
+
+      .attrName {
+        flex-grow: 1;
+        &>h5 {
+          margin: 0;
+          font-weight: $font-weight-heavy;
+        }
+      }
+    }
+
+    .header {
+      margin: 0;
+      align-self: stretch;
+      position: relative;
+      z-index: 1001;
+
+      h4 {
+        margin: 0;
+        display: inline-block;
+      }
+
+      .icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+    }
+
+    .sensorType {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-top: .5rem;
+      margin-bottom: 1rem;
+
+      .layerItem {
+        position: relative;
+        width: 45%;
+        height: 2rem;
+        border-radius: 3px;
+        cursor: pointer;
+    
+        h4 {
+          margin: 0;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%)
+        }
+      }
+
+      .layerItemActive {
+        @extend .layerItem;
+        background-color: $primary-color;
+    
+        h4 {
+          color: $background-color;
+        }
+      }
+  
+      .layerItemInactive {
+        @extend .layerItem;
+        background-color: $neutral-color-3;
+  
+        h4 {
+          color: $neutral-color-8;
+        }
+      }
+    }
+  }
+  
+
+  .hidden {
+    display: none;
+  }
+}
+
+.legendHeader {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  z-index: 1001;
+  margin-right: 1.5rem;
+
+  .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}

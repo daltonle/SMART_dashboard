@@ -1,0 +1,29 @@
+.outer {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  width: 100vw;
+  display: flex;
+  flex-flow: column;
+}
+
+.appbar {
+  z-index: 1;
+}
+
+.mapContainer {
+  z-index: 0;
+  flex-grow: 1;
+  position: relative;
+
+  .controlButton {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 1rem;
+  }
+
+  .layerButton {
+    position: absolute;
+    top: 1.5rem;
+    right: 1rem;
+  }
+}

@@ -1,0 +1,40 @@
+@import '../../../styles/colors.scss';
+@import '../../../styles/font.scss';
+
+.wrapper {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+  width: initial;
+  min-height: 20rem;
+  max-height: 30rem;
+  z-index: 1001;
+  margin-bottom: 2rem;
+}
+
+.container {
+  z-index: 3;
+}
+
+.options {
+  z-index: 1001 !important;
+
+  h5 {
+    font-weight: $font-weight-heavy;
+    display: inline;
+    margin-left: 2.5rem;
+    cursor: default;
+  }
+
+  .datepicker {
+    width: 8rem;
+    border-color: $neutral-color-3;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    color: $black;
+    font-size: .875em;
+    padding: .25rem 0 .25rem 1rem;
+    margin: 0 0 1rem 1.5rem;
+    display: inline-block;
+  }
+}

@@ -1,0 +1,31 @@
+@import '../../../styles/colors';
+@import '../../../styles/font';
+
+h1, h2 {
+  font-weight: $font-weight-heavy;
+  margin-block-end: 1rem;
+  margin-block-start: 0;
+}
+
+.icon {
+  flex-shrink: 0;
+  display: inline-block;
+  stroke: $neutral-color-7;
+  height: 1em;
+  width: 1em;
+}
+
+div.info {
+  margin-block-end: .5em;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  height: 1.5em;
+
+  h5 {
+    display: inline;
+    color: $neutral-color-7;
+    margin-left: 1.5rem;
+  }
+}
+

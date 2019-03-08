@@ -1,0 +1,17 @@
+@import '../../../styles/colors.scss';
+
+.wrapper {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+  height: auto !important;
+
+  h5.sum {
+    color: $neutral-color-5;
+    margin: 0 0 0 2.5rem;
+  }
+
+  h5.m_sum {
+    color: $neutral-color-5;
+    margin: 0 0 0 1.5rem;
+  }
+}

@@ -1,0 +1,108 @@
+@import '../../../styles/colors.scss';
+@import '../../../styles//font.scss';
+
+.container {
+  width: 50%;
+  position: absolute;
+  top: 2.5rem;
+  left: 2.5rem;
+  background-color: $background-color;
+  padding: 2.5rem 4.5rem 4rem 2rem;
+  border-radius: 5px;
+  box-shadow: 0.1875em 0 2em rgba(0, 0, 0, .3);
+
+  .exitButton {
+    stroke: $black;
+    height: 1.25rem;
+    width: 1.25rem;
+    margin: 0;
+    flex-shrink: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 2.5rem;
+    right: 2.5rem;
+  }
+
+  .addButton {
+    position: absolute;
+    padding: .25rem .75rem;
+    bottom: 2rem;
+    right: 2.5rem;
+    cursor: pointer;
+
+    h4 {
+      margin: 0;
+      font-weight: $font-weight-heavy;
+    }
+  }
+
+  .addButtonDisabled {
+    position: absolute;
+    padding: .25rem .75rem;
+    border-radius: 3px;
+    bottom: 2rem;
+    right: 2.5rem;
+    cursor: not-allowed;
+    background-color: $neutral-color-3;
+
+    h4 {
+      margin: 0;
+      font-weight: $font-weight-heavy;
+      color: $neutral-color-7;
+    }
+  }
+
+  .addButtonAdded {
+    position: absolute;
+    padding: .25rem .75rem;
+    border-radius: 3px;
+    box-shadow: 0.1em 0 1em rgba(0, 0, 0, .3);
+    bottom: 2rem;
+    right: 2.5rem;
+    cursor: not-allowed;
+    background-color: $green;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+
+    h4 {
+      margin: 0;
+      display: inline;
+      font-weight: $font-weight-heavy;
+      color: $background-color;
+    }
+
+    .icon {
+      transform: translateY(10%);
+      margin-left: .5rem;
+      stroke: $background-color;
+      height: 1.25rem;
+      width: 1.25rem;
+    }
+  }
+}
+
+.web {
+  @extend .container;
+
+}
+
+.mobile {
+  @extend .container;
+  z-index: 1001;
+  position: absolute;
+  width: calc(100% - 2rem - 6.5rem);
+  top: 4.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}
+

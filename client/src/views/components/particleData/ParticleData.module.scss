@@ -1,0 +1,48 @@
+@import '../../../styles/colors.scss';
+
+.circle {
+  border-radius: 50%;
+  height: 5rem;
+  width: 5rem;
+  padding: 0;
+  line-height: 5rem;
+  border-width: .25rem;
+  border-style: solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    margin: 0;
+  }
+
+  h6 {
+    margin: 0;
+    color: $neutral-color-7;
+  }
+}
+
+.lvl1 {
+  border-color: $green;
+}
+
+.lvl2 {
+  border-color: $yellow-dark;
+}
+
+.lvl3 {
+  border-color: $orange;
+}
+
+.lvl4 {
+  border-color: $red;
+}
+
+.lvl5 {
+  border-color: $purple;
+}
+
+.lvl6 {
+  border-color: $maroon;
+}

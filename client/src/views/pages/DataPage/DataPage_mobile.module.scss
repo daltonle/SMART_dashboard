@@ -1,0 +1,177 @@
+@import '../../../styles/colors.scss';
+@import '../../../styles/font.scss';
+
+.outer {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  width: 100vw;
+  display: flex;
+  flex-flow: column;
+}
+
+.appbar {
+  z-index: 1;
+}
+
+.content {
+  z-index: 0;
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  .data {
+    z-index: 1;
+    box-shadow: 0 -0.1875em 2em rgba(0, 0, 0, .3);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow: hidden;
+    background-color: $background-color;
+    height: 60vh;
+
+    .expandButton {
+      width: 2.5rem;
+      height: 2.5rem;
+      align-self: center;
+      margin-bottom: .375rem;
+
+      .icon {
+        margin: .625rem;
+        stroke: $black;
+        height: 1.25rem;
+        width: 1.25rem;
+      }
+    }
+
+    .titleCard {
+      margin-left: 1.5rem;
+      margin-right: 1rem;
+    }
+
+    h4 {
+      margin: 1.5rem;
+      margin-bottom: .5rem;
+      font-weight: $font-weight-heavy;
+    }
+
+    h5.noVisual, h5.noAir {
+      margin-block-start: 0;
+      margin-block-end: 1.5rem;
+      align-self: center;
+      color: $neutral-color-5;
+      font-style: italic;
+    }
+
+    &>h6 {
+      margin: 0;
+      margin-right: 1.5rem;
+      margin-bottom: 1.5rem;
+      align-self: flex-end;
+      color: $neutral-color-3;
+      font-style: italic;
+    }
+  }
+
+  .mapContainer {
+    z-index: 0;
+    flex-grow: 1;
+    position: relative;
+
+    .backButton {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      height: 2.5rem;
+      width:2.5rem;
+      border-radius: 50%;
+      border: 1px transparent; 
+      box-shadow: 0.1875em 0 2em rgba(0, 0, 0, .3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.3);
+
+      .icon {
+        stroke: $black;
+        height: 1.25rem;
+        width: 1.25rem;
+        margin: .5em 0 .5em 0;
+        flex-shrink: 0;
+      }
+    }
+  
+    .layerButton {
+      position: absolute;
+      top: 1.5rem;
+      right: 1rem;
+    }
+  }
+}
+
+.chartDetails {
+  z-index: 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  background-color: $background-color;
+
+  .backButton {
+    margin: 1.5rem;
+    width: 2.5rem;
+
+    .icon {
+      stroke: $black;
+      height: 1.25rem;
+      width: 1.25rem;
+    }
+  }
+
+  .titleCard {
+    margin-left: 1.5rem;
+    margin-right: 1rem;
+  }
+
+  h4 {
+    margin: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: $font-weight-heavy;
+  }
+
+  h5.noVisual, h5.noAir {
+    margin-block-start: 0;
+    margin-block-end: 1.5rem;
+    align-self: center;
+    color: $neutral-color-5;
+    font-style: italic;
+  }
+
+  .header {
+    margin: 1rem 1.5rem 2rem 1.5rem;
+    align-self: stretch;
+    position: relative;
+    z-index: 1001;
+
+    h3 {
+      margin: 0;
+      font-weight: $font-weight-heavy;
+      display: inline-block;
+    }
+  }
+
+  &>h6 {
+    margin: 0;
+    margin-right: 1.5rem;
+    margin-bottom: 1.5rem;
+    align-self: flex-end;
+    color: $neutral-color-3;
+    font-style: italic;
+  }
+}
+
+div.periodPicker {
+  margin: 1.5rem 1.5rem 1rem 1.5rem;
+  z-index: 1002;
+}
+
