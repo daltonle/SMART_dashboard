@@ -95,7 +95,7 @@ class TrajectoryChart extends Component {
 
     return (
       <div>
-        <h5 className={media==='MOBILE' ? styles.m_sum : styles.sum}>{count} objects detected.</h5>
+        <h5 className={media==='MOBILE' ? styles.m_sum : styles.sum}>{data.length} displayed out of {count} objects detected.</h5>
         <Plot
           data={chartData}
           layout={media === MOBILE ? mobileLayout : webLayout}
