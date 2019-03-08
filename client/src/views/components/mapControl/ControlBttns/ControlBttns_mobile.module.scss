@@ -1,7 +1,7 @@
 @import '../../../../styles/colors.scss';
 @import '../../../../styles/font.scss';
 
-.container {
+.settingsContainer {
   position: relative;
 
   .dialogue {
@@ -117,5 +117,21 @@
 
   .hidden {
     display: none;
+  }
+}
+
+.legendHeader {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  z-index: 1001;
+  margin-right: 1.5rem;
+
+  .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1.25rem;
+    height: 1.25rem;
   }
 }

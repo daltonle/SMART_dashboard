@@ -50,7 +50,7 @@
   }
 }
 
-.container {
+.settingsContainer {
   position: relative;
 
   .dialogue {
@@ -164,6 +164,93 @@
     }
   }
   
+
+  .hidden {
+    display: none;
+  }
+}
+
+.legendContainer {
+  position: relative;
+
+  .info {
+    padding: 2rem 0rem 2rem 2rem;
+    position: absolute;
+    width: 18rem;
+    background-color: $background-color;
+    top: 0;
+    transform: translate(-21rem, 0);
+    box-shadow: 0.185em 0.1875em 0.75em rgba(0, 0, 0, .3);
+    border-radius: 5px;
+
+    h3 {
+      margin: 0;
+      margin-bottom: 1.5rem;
+    }
+
+    &>h5 {
+      margin: 0;
+      margin-bottom: .5rem;
+      font-weight: $font-weight-heavy;
+    }
+
+    .sensorType {
+      display: flex;
+      flex-flow: row wrap;
+      margin-bottom: 1rem;
+
+      .sensorTypeItem {
+        flex-shrink: 0;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        margin-right: 4.5rem;
+        margin-bottom: .5rem;
+
+        h5 {
+          margin: 0;
+          margin-left: 1rem;
+        }
+      }
+    }
+
+    .sensorColor {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: flex-start;
+
+      .sensorColorItem {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-right: 2.5rem;
+
+        h5 { 
+          margin: 0; 
+          margin-bottom: .5rem;
+        }
+
+        .sensorColorRow {
+          display: flex;
+          flex-flow: row nowrap;
+          align-items: center;
+          margin-bottom: .5rem;
+
+          h5 {
+            margin: 0;
+            margin-left: .5rem;
+          }
+
+          .colorBlock {
+            flex-shrink: 0;
+            height: 1rem;
+            width: 2rem;
+            border-radius: 3px;
+          }
+        }
+      }
+    }
+  }
 
   .hidden {
     display: none;

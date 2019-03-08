@@ -13,13 +13,13 @@ export const customMarkerLabelStyle = {
  * Use these objects to define the thresholds of PM and traffic levels.
  * Maximum number of thresholds is 5.
  */
-const airLevels = {
+export const airLevels = {
   num: 4,
   pm2_5: [50, 100, 150, 200],
   pm10: [100, 200, 300, 400]
 }
 
-const visualLevels = {
+export const visualLevels = {
   num: 5,
   pedestrian: [10, 20, 30, 40, 50],
   bicycle: [10, 20, 30, 40, 50],

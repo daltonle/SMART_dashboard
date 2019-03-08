@@ -10,6 +10,10 @@ import classNames from 'classnames'
 import { HelpBttn } from '../../help-button/HelpBttn'
 import { compose, withState, withHandlers } from 'recompose'
 import { changeLayer, changeAirAttr, changeVisualAttr } from '../../../../state/ducks/map/actions'
+import { ReactComponent as VisualLegend } from '../../../../assets/icons/visual_legend.svg'
+import { ReactComponent as AirLegend } from '../../../../assets/icons/air_legend.svg'
+import { airLevels, visualLevels } from '../../../../utils/markers'
+import { markerColorScale } from '../../../../styles/colors'
 import styles from './ControlBttns_desktop.module.scss'
 import m_styles from './ControlBttns_mobile.module.scss'
 
@@ -17,22 +21,120 @@ import m_styles from './ControlBttns_mobile.module.scss'
  * Control buttons used for map
  */
 
-export const LegendsBttn = ({ media }) => {
+export const LegendsBttn = compose(
+  withState('hidden', 'toggleDialogue', true),
+  connect(state => ({
+    airAttr: state.map.airAttr,
+    visualAttr: state.map.visualAttr
+  }), {})
+)(({ media, hidden, toggleDialogue, airAttr, visualAttr }) => {
+  const airColors = airLevels[airAttr].map((threshold, index) => (
+    <div className={styles.sensorColorRow}>
+      <div className={styles.colorBlock} style={{backgroundColor: markerColorScale[index]}}></div>
+      <h5>{
+        index === 0 ? (`0-${threshold}`) : (`${airLevels[airAttr][index-1]}-${threshold}`)
+      }</h5>
+    </div>
+  ))
+  airColors.push(
+    <div className={styles.sensorColorRow}>
+      <div className={styles.colorBlock} style={{backgroundColor: markerColorScale[airLevels[airAttr].length]}}></div>
+      <h5>{
+        `>${airLevels[airAttr][airLevels[airAttr].length-1]}`
+      }</h5>
+    </div>
+  )
+  const visualColors = visualLevels[visualAttr].map((threshold, index) => (
+    <div className={styles.sensorColorRow}>
+      <div className={styles.colorBlock} style={{backgroundColor: markerColorScale[index]}}></div>
+      <h5>{
+        index === 0 ? (`0-${threshold}`) : (`${visualLevels[visualAttr][index-1]}-${threshold}`)
+      }</h5>
+    </div>
+  ))
+  visualColors.push(
+    <div className={styles.sensorColorRow}>
+      <div className={styles.colorBlock} style={{backgroundColor: markerColorScale[visualLevels[visualAttr].length]}}></div>
+      <h5>{
+        `>${visualLevels[visualAttr][visualLevels[visualAttr].length-1]}`
+      }</h5>
+    </div>
+  )
+
   if (media === DESK)
     return (
-      <button className={styles.bttn} data-tip data-for='legends'>
-        <InfoIcon className={styles.icon} />
-        <ReactTooltip id='legends' place="left" type="light" effect="solid">
-          <span>Legends</span>
-        </ReactTooltip>
-      </button>
+      <div className={styles.legendContainer}>
+        <button className={styles.bttn} data-tip data-for='legends'
+        onClick={() => toggleDialogue(n => !n)}>
+          <InfoIcon className={styles.icon} />
+          <ReactTooltip id='legends' place="left" type="light" effect="solid">
+            <span>Legends</span>
+          </ReactTooltip>
+        </button>
+        <div className={classNames({ [styles.info]: true, [styles.hidden]: hidden })}>
+          <h3>Legends</h3>
+          <h5>Sensor type</h5>
+          <div className={styles.sensorType}>
+            <div className={styles.sensorTypeItem}>
+              <AirLegend />
+              <h5>Air</h5>
+            </div>
+            <div className={styles.sensorTypeItem}>
+              <VisualLegend />
+              <h5>Visual</h5>
+            </div>
+          </div>
+          <h5>Number of objects/particles detected</h5>
+          <div className={styles.sensorColor}>
+            <div className={styles.sensorColorItem}>
+              <h5>Air</h5>
+              {airColors}
+            </div>
+            <div className={styles.sensorColorItem}>
+              <h5>Visual</h5>
+              {visualColors}
+            </div>
+          </div>
+        </div>
+      </div>
     )
   else return (
-    <button className={styles.bttnMobile}>
-      <InfoIcon className={styles.icon} />
-    </button>
+    <div className={styles.legendContainer}>
+      <button className={styles.bttn} onClick={() => toggleDialogue(n => !n)}>
+        <InfoIcon className={styles.icon} />
+      </button>
+      <div className={classNames({ [styles.info]: true, [styles.hidden]: hidden })}
+      style={{top: `initial`, bottom: 0, right: 0, transform: `none`}}>
+        <div className={m_styles.legendHeader}>
+          <h3>Legend</h3>
+          <ExitIcon onClick={() => toggleDialogue(n => !n)} className={m_styles.icon}/>
+        </div>
+        <h5>Sensor type</h5>
+        <div className={styles.sensorType}>
+          <div className={styles.sensorTypeItem}>
+            <AirLegend />
+            <h5>Air</h5>
+          </div>
+          <div className={styles.sensorTypeItem}>
+            <VisualLegend />
+            <h5>Visual</h5>
+          </div>
+        </div>
+        <h5>Number of objects/particles detected</h5>
+        <div className={styles.sensorColor}>
+          <div className={styles.sensorColorItem}>
+            <h5>Air</h5>
+            {airColors}
+          </div>
+          <div className={styles.sensorColorItem}>
+            <h5>Visual</h5>
+            {visualColors}
+          </div>
+        </div>
+      </div>
+    </div>
   )
-}
+})
 
 export const SettingsBttn = compose(
   withState('hidden', 'toggleDialogue', true),
@@ -67,7 +169,7 @@ export const SettingsBttn = compose(
   
   if (media === DESK)
     return (
-      <div className={styles.container}>
+      <div className={styles.settingsContainer}>
         <button className={styles.bttn} data-tip data-for='layers' 
         onClick={() => toggleDialogue(n => !n)} >
           <SettingsIcon className={styles.icon} />
@@ -127,7 +229,7 @@ export const SettingsBttn = compose(
       </div>
     )
   else return (
-    <div className={m_styles.container}>
+    <div className={m_styles.settingsContainer}>
       <button className={styles.bttnMobile} data-tip data-for='layers' 
       onClick={() => toggleDialogue(n => !n)} >
         <SettingsIcon className={m_styles.icon} />
