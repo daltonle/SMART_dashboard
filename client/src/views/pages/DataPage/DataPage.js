@@ -123,7 +123,18 @@ class DataPage extends Component {
           </div>
           <div className={styles.content}>
             <div className={classNames(styles.data, { [styles.detailsShown]: doShowDetails })}>
-              <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick} />
+              {sensorType === 'air' && airSensor !== undefined ?
+                <ArrowLeftIcon className={styles.backButton} onClick={this.handleBackClick} /> : <div></div>
+              }
+              {sensorType === 'visual' && visualSensor !== undefined ?
+                <div className={styles.headerImg}>
+                  <img src="https://upload.wikimedia.org/wikipedia/en/archive/c/cc/20120907012005%21SMART_Infrastructure_Facility.JPG" 
+                    style={{width: `100%`, height: `11rem`, objectFit: `cover`, objectPosition: `0 0`}} />
+                  <div className={styles.backButton}  onClick={this.handleBackClick}>
+                    <ArrowLeftIcon className={styles.icon}/>
+                  </div>
+                </div> : <div></div>
+              }
               <div className={styles.titleCard}>
                 <TitleCard
                   suburb={(sensorType === undefined) ? "No location data" :
@@ -276,10 +287,19 @@ class DataPage extends Component {
         <div className={m_styles.outer}>
           {doShowDetails ?
             <div className={m_styles.chartDetails}>
-              <div className={m_styles.backButton} onClick={this.handleBackClick}>
-                <ArrowLeftIcon className={m_styles.icon} />
-              </div>
-              <div className={m_styles.titleCard}>
+                {sensorType === 'air' && airSensor !== undefined ?
+                  <ArrowLeftIcon className={m_styles.backButton} onClick={this.handleBackClick} /> : <div></div>
+                }
+                {sensorType === 'visual' && visualSensor !== undefined ?
+                  <div className={m_styles.headerImg}>
+                    <img src="https://upload.wikimedia.org/wikipedia/en/archive/c/cc/20120907012005%21SMART_Infrastructure_Facility.JPG" 
+                      style={{width: `100%`, height: `11rem`, objectFit: `cover`, objectPosition: `0 0`}} />
+                    <div className={m_styles.backButton}  onClick={this.handleBackClick}>
+                      <ArrowLeftIcon className={m_styles.icon}/>
+                    </div>
+                  </div> : <div></div>
+                }
+                <div className={m_styles.titleCard}>
                 <TitleCard
                   suburb={(sensorType === undefined) ? "No location data" :
                     (sensorType === 'air') ?

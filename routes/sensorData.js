@@ -339,7 +339,7 @@ router.get('/visual/trajectory/:id/:startDate,:endDate', async (req, res, next) 
   let data = await db.query(query).then(result => result.rows)
 
   let count = await db.query({
-    text: `SELECT COUNT(id_obj) FROM vs_detections
+    text: `SELECT COUNT(DISTINCT id_obj) FROM vs_detections
     WHERE id_obj IN (SELECT id FROM vs_object WHERE id_sensor=$1) AND '[${req.params.startDate}, ${req.params.endDate}]'::daterange @> ts::date`,
     values: [req.params.id]
   }).then(result => result.rows[0].count)

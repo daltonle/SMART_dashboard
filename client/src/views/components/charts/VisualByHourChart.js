@@ -158,11 +158,17 @@ class VisualByHourChart extends Component {
             />
           </div>
         </div>
-        <Plot
-          data={chartData}
-          layout={media===MOBILE ? mobileLayout : webLayout}
-          config={media===MOBILE ? mobileCongig : webConfig}
-        />
+        {
+          (chartData[0].x.length===0 && chartData[1].x.length===0 && chartData[2].x.length===0) ?
+          <div className={styles.noData}>
+            <p>No data.</p>
+          </div> :
+          <Plot
+            data={chartData}
+            layout={media===MOBILE ? mobileLayout : webLayout}
+            config={media===MOBILE ? mobileCongig : webConfig}
+          />
+        }
       </div>
     )
   }

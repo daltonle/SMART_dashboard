@@ -34,3 +34,19 @@
     font-size: .875rem;
   }
 }
+
+.noData {
+  margin-left: 2.5rem;
+  margin-right: 2rem;
+  padding-top: 2rem;
+  
+  p {
+    color: $neutral-color-5;
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-style: italic;
+  }
+  
+}
