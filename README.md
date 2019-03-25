@@ -24,6 +24,12 @@ PGDATABASE=mydb
 PGPORT=3211
 ```
 
+### Insert Google Maps API key in `/client/public/index.html`
+
+```
+<script src="https://maps.googleapis.com/maps/api/js?key=API_KEY"></script>
+```
+
 ### Start
 
 ```powershell
